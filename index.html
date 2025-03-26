@@ -1,32 +1,197 @@
 <!DOCTYPE html>
 <html>
+<link rel="stylesheet" href="styles.css">
 
 <!-- the string inside the title tag is what will show inside the chrome browser tab at the top-->
 <head>
-    <title id="top">MyFirstWebpage</title>
+    <title>Bear Space Adventure</title>
 </head>
 
 <body>
-    <div id="Links">
-        <h1>Links to websites</h1>
-        <a href="https://www.amazon.com/" target="_blank">This is a link to amazon</a>
+    <!-- Single background layer instead of multiple -->
+    <div class="stars-background"></div>
+
+    <div class="content">
+        <!-- Top scroll button -->
+        <div id="top-button" class="scroll-button">
+            <div class="rocket-container">
+                <div class="rocket">🚀</div>
+                <div class="flame"></div>
+            </div>
+            <p>Blast to Bottom</p>
+        </div>
+
+        <!-- Main bear container with prominent position -->
+        <div id="main-bear">
+            <h1>Space Bear Explorer</h1>
+            <div class="bear-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Ours_brun_parcanimalierpyrenees_1.jpg"
+                    alt="Giant Space Bear" class="bear-image">
+                <div class="orbit-circle"></div>
+            </div>
+            <p>Majestic bear floating through the cosmos</p>
+        </div>
+
+        <!-- Navigation section moved below the bear -->
+        <div class="nav-section">
+            <div class="container" id="Links">
+                <h2>Links to websites</h2>
+                <a href="https://www.amazon.com/" target="_blank">This is a link to amazon</a>
+            </div>
+
+            <div id="referencetootherfiles">
+                <h2>References to other files</h2>
+                <a href="about.html">About</a>
+            </div>
+        </div>
+
+        <!-- Bottom scroll button -->
+        <div id="bottom-button" class="scroll-button">
+            <div class="portal-container">
+                <div class="portal">
+                    <div class="portal-inner"></div>
+                </div>
+            </div>
+            <p>Warp to Top</p>
+        </div>
     </div>
 
+    <script>
+        // Enhanced scroll functions
+        const topButton = document.getElementById('top-button');
+        const bottomButton = document.getElementById('bottom-button');
+        const rocket = document.querySelector('.rocket');
+        const portal = document.querySelector('.portal');
 
-    <div id="referencetootherfiles">
-        <h1>Refrences to other files</h1>
-        <a href="about.html">About</a>
-    </div>
+        // Function to animate scroll to top
+        function scrollToTop() {
+            // Activate rocket animation
+            rocket.classList.add('blast-off');
 
-    <div id="picture and video practice">
-        <p>this a mf bear</p>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Ours_brun_parcanimalierpyrenees_1.jpg"
-            alt="Giant Cute Puppy" width="300" height="200">
-    </div>
+            // Create stars effect during scroll
+            createScrollStars();
 
-    <div id="bottom">
-        <p>End of Page</p>
-    </div>
+            // Scroll with delay for animation to be visible
+            setTimeout(() => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }, 300);
+
+            // Remove animation class after completion
+            setTimeout(() => {
+                rocket.classList.remove('blast-off');
+            }, 2000);
+        }
+
+        // Function to animate scroll to bottom
+        function scrollToBottom() {
+            // Activate portal animation
+            portal.classList.add('portal-activate');
+
+            // Create warp effect
+            createWarpEffect();
+
+            // Calculate document height
+            const docHeight = Math.max(
+                document.body.scrollHeight,
+                document.body.offsetHeight,
+                document.documentElement.clientHeight,
+                document.documentElement.scrollHeight,
+                document.documentElement.offsetHeight
+            );
+
+            // Scroll with delay for animation to be visible
+            setTimeout(() => {
+                window.scrollTo({
+                    top: docHeight,
+                    behavior: 'smooth'
+                });
+            }, 300);
+
+            // Remove animation class after completion
+            setTimeout(() => {
+                portal.classList.remove('portal-activate');
+            }, 2000);
+        }
+
+        // Create stars during scrolling effect
+        function createScrollStars() {
+            for (let i = 0; i < 20; i++) {
+                const star = document.createElement('div');
+                star.classList.add('scroll-star');
+
+                // Random positioning
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.animationDuration = `${0.5 + Math.random() * 1}s`;
+                star.style.animationDelay = `${Math.random() * 0.5}s`;
+
+                document.body.appendChild(star);
+
+                // Remove stars after animation
+                setTimeout(() => {
+                    star.remove();
+                }, 2000);
+            }
+        }
+
+        // Create warp effect
+        function createWarpEffect() {
+            const warpOverlay = document.createElement('div');
+            warpOverlay.classList.add('warp-overlay');
+            document.body.appendChild(warpOverlay);
+
+            // Remove overlay after animation
+            setTimeout(() => {
+                warpOverlay.remove();
+            }, 2000);
+        }
+
+        // Add event listeners - swapped to make top button go to bottom
+        topButton.addEventListener('click', scrollToBottom);
+        bottomButton.addEventListener('click', scrollToTop);
+
+        // Add interactive hover sounds
+        topButton.addEventListener('mouseenter', () => {
+            playSound('hover');
+        });
+
+        bottomButton.addEventListener('mouseenter', () => {
+            playSound('hover');
+        });
+
+        // Play sound effect function
+        function playSound(type) {
+            const audio = new Audio();
+
+            if (type === 'hover') {
+                audio.src = 'data:audio/wav;base64,UklGRjQnAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YRAnAACA'; // Base64 encoded short beep
+                audio.volume = 0.2;
+            }
+
+            audio.play().catch(e => {
+                // Silently fail if audio can't play (often due to browser autoplay restrictions)
+                console.log('Audio playback failed:', e);
+            });
+        }
+
+        // Add floating animation to the bear
+        const bearImage = document.querySelector('.bear-image');
+        let angle = 0;
+
+        function animateBear() {
+            angle += 0.01;
+            const floatY = Math.sin(angle) * 10;
+            const rotation = Math.sin(angle/2) * 3;
+
+            bearImage.style.transform = `translateY(${floatY}px) rotate(${rotation}deg)`;
+
+            requestAnimationFrame(animateBear);
+        }
+
+        animateBear();
+    </script>
 </body>
 
 </html>
