@@ -1,0 +1,499 @@
+/* ======================================================
+   CSS FUNDAMENTALS TUTORIAL
+   ====================================================== */
+
+/* =========================
+   1. CSS INTRODUCTION
+   ========================= */
+
+/* CSS (Cascading Style Sheets) controls the visual appearance of HTML elements
+   There are three ways to add CSS to HTML:
+   1. Inline styles (using the style attribute in HTML tags)
+   2. Internal stylesheet (using <style> tags in HTML head)
+   3. External stylesheet (linking a .css file) - most recommended! */
+
+/* Basic CSS syntax: */
+selector {
+  property: value;
+  another-property: value;
+}
+
+/* =========================
+   2. SELECTORS
+   ========================= */
+
+/* Element selector - selects all instances of an element */
+p {
+  color: blue;
+  font-size: 16px;
+}
+
+/* Class selector - selects elements with specific class */
+.highlight {
+  background-color: yellow;
+  padding: 5px;
+}
+
+/* ID selector - selects element with specific ID (should be unique) */
+#header {
+  background-color: black;
+  color: white;
+  padding: 10px;
+}
+
+/* Descendant selector - selects elements inside other elements */
+article p {
+  line-height: 1.5;
+}
+
+/* Child selector - selects direct children only */
+ul > li {
+  list-style-type: square;
+}
+
+/* Attribute selector */
+input[type="text"] {
+  border: 1px solid gray;
+}
+
+/* Pseudo-classes - special states of elements */
+a:hover {
+  color: red;
+  text-decoration: underline;
+}
+
+button:focus {
+  outline: 2px solid blue;
+}
+
+li:first-child {
+  font-weight: bold;
+}
+
+/* Pseudo-elements - special parts of elements */
+p::first-letter {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+p::selection {
+  background-color: lightblue;
+}
+
+/* =========================
+   3. COLORS
+   ========================= */
+
+.color-examples {
+  /* Named colors */
+  color: red;
+
+  /* Hexadecimal */
+  color: #ff0000; /* Full red */
+  color: #00ff00; /* Full green */
+  color: #0000ff; /* Full blue */
+  color: #f00;    /* Shorthand for #ff0000 */
+
+  /* RGB function */
+  color: rgb(255, 0, 0);     /* Full red */
+
+  /* RGBA (with alpha/transparency) */
+  color: rgba(255, 0, 0, 0.5); /* Semi-transparent red */
+
+  /* HSL (hue, saturation, lightness) */
+  color: hsl(0, 100%, 50%);    /* Red */
+  color: hsl(120, 100%, 50%);  /* Green */
+
+  /* HSLA (with alpha/transparency) */
+  color: hsla(240, 100%, 50%, 0.5); /* Semi-transparent blue */
+}
+
+/* =========================
+   4. BOX MODEL
+   ========================= */
+
+/* The Box Model is fundamental to CSS layout.
+   Every element is a box with:
+   - Content (the text, image, etc.)
+   - Padding (space between content and border)
+   - Border (line around the padding)
+   - Margin (space outside the border) */
+
+.box-model-example {
+  width: 300px;
+  height: 200px;
+  padding: 20px;
+  border: 5px solid black;
+  margin: 30px;
+  background-color: lightgray;
+}
+
+/* Box-sizing property changes how width/height are calculated */
+.default-box-sizing {
+  box-sizing: content-box; /* Default - width/height apply to content only */
+  width: 200px;
+  padding: 20px;
+  border: 5px solid black;
+  /* Total width: 200px + 40px padding + 10px border = 250px */
+}
+
+.border-box-sizing {
+  box-sizing: border-box; /* Width/height include padding and border */
+  width: 200px;
+  padding: 20px;
+  border: 5px solid black;
+  /* Total width: exactly 200px */
+}
+
+/* =========================
+   5. TYPOGRAPHY
+   ========================= */
+
+.typography-example {
+  /* Font family */
+  font-family: Arial, Helvetica, sans-serif;
+
+  /* Font size */
+  font-size: 16px;        /* Pixels */
+  font-size: 1.2em;       /* Relative to parent */
+  font-size: 1.2rem;      /* Relative to root (html) */
+
+  /* Font weight */
+  font-weight: normal;    /* or 400 */
+  font-weight: bold;      /* or 700 */
+  font-weight: 600;       /* Range from 100-900 */
+
+  /* Font style */
+  font-style: normal;
+  font-style: italic;
+
+  /* Text properties */
+  text-align: left;       /* also: right, center, justify */
+  text-decoration: none;  /* also: underline, line-through */
+  text-transform: uppercase; /* also: lowercase, capitalize */
+  line-height: 1.5;       /* Spacing between lines */
+  letter-spacing: 1px;    /* Spacing between letters */
+  word-spacing: 2px;      /* Spacing between words */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* horizontal, vertical, blur, color */
+}
+
+/* Web fonts using @font-face */
+@font-face {
+  font-family: 'CustomFont';
+  src: url('path/to/font.woff2') format('woff2'),
+       url('path/to/font.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.custom-font {
+  font-family: 'CustomFont', Arial, sans-serif;
+}
+
+/* =========================
+   6. LAYOUT
+   ========================= */
+
+/* Display property */
+.display-examples {
+  display: block;      /* Takes full width, creates line break */
+  display: inline;     /* Takes only needed width, no line break */
+  display: inline-block; /* Inline but can have width/height */
+  display: none;       /* Removes element completely */
+  display: flex;       /* Flexbox container */
+  display: grid;       /* Grid container */
+}
+
+/* Position property */
+.position-examples {
+  position: static;    /* Default - follows normal flow */
+  position: relative;  /* Positioned relative to normal position */
+  position: absolute;  /* Positioned relative to nearest positioned ancestor */
+  position: fixed;     /* Positioned relative to viewport */
+  position: sticky;    /* Hybrid of relative and fixed */
+
+  /* Used with top, right, bottom, left properties */
+  top: 10px;
+  right: 20px;
+  bottom: 30px;
+  left: 40px;
+
+  /* Z-index controls stacking order (higher numbers appear on top) */
+  z-index: 10;
+}
+
+/* Floats (older layout method, less used now) */
+.float-example {
+  float: left;     /* Element floats to the left */
+  float: right;    /* Element floats to the right */
+}
+
+/* Clear floats */
+.clear-example {
+  clear: both;     /* No floating elements allowed on either side */
+}
+
+/* =========================
+   7. FLEXBOX
+   ========================= */
+
+/* Flexbox is a one-dimensional layout method */
+.flex-container {
+  display: flex;
+
+  /* Main axis direction */
+  flex-direction: row;           /* Default - horizontal left to right */
+  /* flex-direction: row-reverse;   /* Horizontal right to left */
+  /* flex-direction: column;        /* Vertical top to bottom */
+  /* flex-direction: column-reverse; /* Vertical bottom to top */
+
+  /* Wrapping */
+  flex-wrap: nowrap;      /* Default - no wrapping */
+  /* flex-wrap: wrap;        /* Wrap to next line */
+
+  /* Shorthand for flex-direction and flex-wrap */
+  /* flex-flow: row wrap; */
+
+  /* Alignment along main axis */
+  justify-content: flex-start;    /* Default - items at start */
+  /* justify-content: flex-end;      /* Items at end */
+  /* justify-content: center;        /* Items at center */
+  /* justify-content: space-between; /* Items with space between */
+  /* justify-content: space-around;  /* Items with space around */
+
+  /* Alignment along cross axis */
+  align-items: stretch;      /* Default - stretch to fill container */
+  /* align-items: flex-start;   /* Items at start */
+  /* align-items: flex-end;     /* Items at end */
+  /* align-items: center;       /* Items at center */
+
+  /* Alignment of multiple lines */
+  /* align-content: flex-start; /* Lines packed at start */
+  /* align-content: space-between; /* Lines evenly distributed */
+}
+
+.flex-item {
+  /* Flexibility ratio */
+  flex-grow: 0;    /* Default - don't grow */
+  flex-shrink: 1;  /* Default - can shrink */
+  flex-basis: auto; /* Default - use item's size */
+
+  /* Shorthand for flex-grow, flex-shrink, flex-basis */
+  flex: 0 1 auto;  /* Default */
+  /* flex: 1;       /* Grow and shrink equally with siblings */
+
+  /* Override alignment for specific item */
+  /* align-self: center; */
+}
+
+/* =========================
+   8. CSS GRID
+   ========================= */
+
+/* Grid is a two-dimensional layout method */
+.grid-container {
+  display: grid;
+
+  /* Define columns */
+  grid-template-columns: 100px 200px 100px;  /* 3 columns with fixed widths */
+  /* grid-template-columns: 1fr 2fr 1fr;       /* 3 columns with fractional units */
+  /* grid-template-columns: repeat(3, 1fr);    /* 3 equal columns */
+
+  /* Define rows */
+  grid-template-rows: 50px 100px;           /* 2 rows with fixed heights */
+
+  /* Gap between grid items */
+  gap: 10px;                  /* Equal gap for rows and columns */
+  /* column-gap: 10px;          /* Gap between columns */
+  /* row-gap: 15px;             /* Gap between rows */
+
+  /* Alignment of all items inside cells */
+  justify-items: stretch;     /* Default - stretch horizontally */
+  align-items: stretch;       /* Default - stretch vertically */
+
+  /* Alignment of entire grid within container */
+  justify-content: start;     /* Default - align grid to left */
+  align-content: start;       /* Default - align grid to top */
+}
+
+.grid-item {
+  /* Specify which grid lines the item should start and end at */
+  grid-column-start: 1;
+  grid-column-end: 3;         /* Span from line 1 to line 3 (2 columns) */
+
+  /* Shorthand for grid-column-start and grid-column-end */
+  grid-column: 1 / 3;         /* Same as above */
+  /* grid-column: 1 / span 2;   /* Start at line 1 and span 2 columns */
+
+  /* Same properties exist for rows */
+  grid-row: 1 / 2;
+
+  /* Shorthand for both grid-column and grid-row */
+  /* grid-area: 1 / 1 / 2 / 3;  /* row-start/col-start/row-end/col-end */
+
+  /* Override alignment for specific item */
+  /* justify-self: center;      /* Horizontal alignment within cell */
+  /* align-self: center;        /* Vertical alignment within cell */
+}
+
+/* =========================
+   9. RESPONSIVE DESIGN
+   ========================= */
+
+/* Media queries allow different styles for different devices/screen sizes */
+@media screen and (max-width: 600px) {
+  /* These styles apply when screen width is 600px or less */
+  body {
+    background-color: lightblue;
+  }
+
+  .responsive-example {
+    flex-direction: column;
+    font-size: 14px;
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+  /* These styles apply when screen width is between 601px and 1024px */
+  body {
+    background-color: lightgreen;
+  }
+}
+
+/* Responsive units */
+.responsive-units {
+  /* Relative to viewport size */
+  width: 80vw;       /* 80% of viewport width */
+  height: 50vh;      /* 50% of viewport height */
+  font-size: 5vmin;  /* 5% of viewport's smaller dimension */
+
+  /* Relative to parent/root */
+  width: 80%;        /* 80% of parent width */
+  font-size: 1.2em;  /* 1.2 times parent font size */
+  font-size: 1.2rem; /* 1.2 times root font size */
+}
+
+/* =========================
+   10. TRANSITIONS & ANIMATIONS
+   ========================= */
+
+/* Transitions create smooth changes between property values */
+.transition-example {
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  /* transition-property: background-color; /* Property to transition */
+  /* transition-duration: 0.5s;           /* Duration of transition */
+  /* transition-timing-function: ease;    /* Speed curve of transition */
+  /* transition-delay: 0.2s;              /* Delay before starting */
+
+  /* Shorthand */
+  transition: background-color 0.5s ease 0.2s;
+}
+
+.transition-example:hover {
+  background-color: darkblue;
+}
+
+/* Animations create more complex, keyframe-based animations */
+@keyframes slide-in {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animation-example {
+  /* animation-name: slide-in;            /* Name of @keyframes */
+  /* animation-duration: 1s;              /* Duration of animation */
+  /* animation-timing-function: ease-out; /* Speed curve */
+  /* animation-delay: 0s;                 /* Delay before starting */
+  /* animation-iteration-count: 1;        /* Number of times to play (infinite) */
+  /* animation-direction: normal;         /* Direction (alternate, reverse) */
+  /* animation-fill-mode: forwards;       /* Styles after animation completes */
+
+  /* Shorthand */
+  animation: slide-in 1s ease-out 0s 1 normal forwards;
+}
+
+/* =========================
+   11. TRANSFORMS
+   ========================= */
+
+.transform-examples {
+  /* 2D Transforms */
+  transform: translateX(20px);            /* Move right 20px */
+  /* transform: translateY(20px);            /* Move down 20px */
+  /* transform: translate(20px, 20px);       /* Move right and down 20px */
+  /* transform: scale(1.5);                  /* Scale to 150% */
+  /* transform: rotate(45deg);               /* Rotate 45 degrees */
+  /* transform: skew(10deg, 5deg);           /* Skew along X and Y axes */
+
+  /* 3D Transforms */
+  /* transform: rotateX(45deg);              /* Rotate around X axis */
+  /* transform: perspective(500px) rotateY(45deg); /* 3D effect with perspective */
+
+  /* Multiple transforms */
+  /* transform: translate(20px, 20px) rotate(45deg) scale(1.5); */
+}
+
+/* =========================
+   12. BEST PRACTICES
+   ========================= */
+
+/*
+1. Use a CSS reset or normalize.css to ensure consistent rendering across browsers
+2. Organize CSS with a methodology like BEM, SMACSS, or OOCSS
+3. Use meaningful class names (e.g., .primary-button instead of .btn1)
+4. Prefer classes over IDs for styling (IDs should be reserved for JavaScript)
+5. Minimize specificity conflicts with careful selector usage
+6. Avoid !important (except in utility classes)
+7. Group related properties together for readability
+8. Add comments for complex sections
+9. Use shorthand properties when possible
+10. Separate layout and component styles
+11. Use mobile-first approach for responsive design
+12. Consider using CSS variables for consistent values
+*/
+
+:root {
+  /* CSS variables (custom properties) */
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --font-stack: 'Helvetica Neue', Arial, sans-serif;
+  --base-padding: 15px;
+}
+
+.using-variables {
+  color: var(--primary-color);
+  font-family: var(--font-stack);
+  padding: var(--base-padding);
+  background-color: var(--secondary-color);
+}
+
+/* Mobile-first approach */
+.responsive-component {
+  /* Base styles for mobile */
+  width: 100%;
+  font-size: 16px;
+}
+
+@media (min-width: 768px) {
+  /* Tablet styles */
+  .responsive-component {
+    width: 50%;
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Desktop styles */
+  .responsive-component {
+    width: 33.333%;
+    font-size: 20px;
+  }
+}
