@@ -442,7 +442,167 @@ p::selection {
 }
 
 /* =========================
-   12. BEST PRACTICES
+   12. CSS CLASSES IN-DEPTH
+   ========================= */
+
+/* CSS Classes are reusable style identifiers prefixed with a dot (.) 
+   They allow you to apply the same styles to multiple elements
+   Classes are one of the most powerful and flexible selectors in CSS */
+
+/* Basic class syntax */
+.my-class {
+  color: purple;
+  font-weight: bold;
+}
+
+/* Using a class in HTML: <div class="my-class">Text</div> */
+
+/* Multiple classes on one element */
+/* In HTML: <div class="box rounded shadow">Content</div> */
+.box {
+  width: 200px;
+  height: 100px;
+  background-color: white;
+  padding: 20px;
+}
+
+.rounded {
+  border-radius: 10px; /* Apply rounded corners */
+}
+
+.shadow {
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Apply drop shadow */
+}
+
+/* Classes vs Element selectors */
+p {
+  /* Selects ALL paragraph elements */
+  line-height: 1.5;
+}
+
+.special-paragraph {
+  /* Selects only elements with class="special-paragraph" */
+  color: darkred;
+  font-style: italic;
+}
+
+/* Element with specific class */
+p.special-paragraph {
+  /* Selects only paragraphs with class="special-paragraph" */
+  border-left: 3px solid darkred;
+  padding-left: 10px;
+}
+
+/* Combining multiple classes for component variations */
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button.large {
+  padding: 15px 30px;
+  font-size: 18px;
+}
+
+.button.primary {
+  background-color: #3498db;
+}
+
+.button.secondary {
+  background-color: #2ecc71;
+}
+
+.button.danger {
+  background-color: #e74c3c;
+}
+
+/* BEM (Block Element Modifier) naming convention */
+.card {
+  /* Block: The standalone component */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+}
+
+.card__title {
+  /* Element: A part of the block (uses double underscore) */
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card__image {
+  /* Element: Another part of the block */
+  width: 100%;
+  height: auto;
+}
+
+.card--featured {
+  /* Modifier: A different state/version of the block (uses double dash) */
+  border-color: gold;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Class specificity and inheritance */
+.parent {
+  color: blue;
+}
+
+.parent .child {
+  /* More specific - will override general .child styles */
+  color: darkblue;
+}
+
+/* Using classes with pseudo-classes */
+.nav-link {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #3498db;
+}
+
+.nav-link.active {
+  color: #3498db;
+  font-weight: bold;
+}
+
+/* Class naming best practices */
+/*
+1. Use meaningful names that describe purpose, not appearance
+   Good: .error-message (describes purpose)
+   Bad:  .red-text (describes appearance)
+
+2. Use kebab-case (hyphen-separated) for multi-word names
+   .main-navigation, .featured-product, .user-profile
+
+3. Keep names concise but descriptive
+   Good: .nav-item
+   Bad:  .navigation-item-in-the-top-menu
+
+4. Use consistent naming conventions across your project
+   Could be BEM (.block__element--modifier) or other patterns
+
+5. Avoid excessive nesting of class selectors (max 2-3 levels)
+   Gets hard to read: .header .nav .nav-list .nav-item .nav-link
+*/
+
+/* UTILITY CLASSES: small, single-purpose classes */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.margin-top { margin-top: 20px; }
+.hidden { display: none; }
+.visible { display: block; }
+
+/* =========================
+   13. BEST PRACTICES
    ========================= */
 
 /*
