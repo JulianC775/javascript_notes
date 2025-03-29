@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<!-- ======================================================
+     HTML FUNDAMENTALS TUTORIAL
+     ====================================================== -->
+
+<!-- =========================
+     1. HTML INTRODUCTION
+     ========================= -->
+
+<!-- HTML (HyperText Markup Language) is the standard markup language for creating web pages
+     HTML describes the structure of a web page using elements (tags)
+     Browsers don't display HTML tags, but use them to render the content -->
+
+<!-- Basic HTML Structure: -->
+<!DOCTYPE html> <!-- Declares the document type and HTML version -->
+<html lang="en"> <!-- Root element with language attribute -->
+<head>
+    <!-- Contains meta information, links to CSS, JS, etc. -->
+    <meta charset="UTF-8"> <!-- Character encoding -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive design -->
+    <title>Document Title</title> <!-- Page title shown in browser tab -->
+</head>
+<body>
+    <!-- Visible page content goes here -->
+</body>
+</html>
+
+<!-- =========================
+     2. HTML ELEMENTS
+     ========================= -->
+
+<!-- HTML elements are defined by tags: -->
+<tagname>Content goes here...</tagname>
+
+<!-- Some elements are empty (self-closing): -->
+<tagname />
+
+<!-- HTML elements can have attributes: -->
+<tagname attribute="value">Content</tagname>
+
+<!-- =========================
+     3. DOCUMENT STRUCTURE
+     ========================= -->
+
+<!-- Heading elements define different levels of headings -->
+<h1>Main Heading</h1> <!-- Most important heading -->
+<h2>Secondary Heading</h2>
+<h3>Tertiary Heading</h3>
+<h4>Heading Level 4</h4>
+<h5>Heading Level 5</h5>
+<h6>Heading Level 6</h6> <!-- Least important heading -->
+
+<!-- Paragraph element -->
+<p>This is a paragraph of text. Paragraphs are block elements that automatically
+   add space before and after the content.</p>
+
+<!-- Line break (empty element) -->
+<p>This line will<br>break here.</p>
+
+<!-- Horizontal rule (horizontal line, empty element) -->
+<hr>
+
+<!-- Comments are not displayed in the browser -->
+<!-- This is a comment -->
+
+<!-- =========================
+     4. TEXT FORMATTING
+     ========================= -->
+
+<!-- Bold text -->
+<b>Bold text</b> <!-- No semantic meaning, just bold -->
+<strong>Important text</strong> <!-- Semantic importance (screen readers) -->
+
+<!-- Italic text -->
+<i>Italic text</i> <!-- No semantic meaning, just italic -->
+<em>Emphasized text</em> <!-- Semantic emphasis (screen readers) -->
+
+<!-- Underlined text -->
+<u>Underlined text</u>
+
+<!-- Strikethrough text -->
+<s>Strikethrough text</s>
+<del>Deleted text</del> <!-- With semantic meaning of deletion -->
+
+<!-- Subscript and superscript -->
+H<sub>2</sub>O <!-- Subscript -->
+E=mc<sup>2</sup> <!-- Superscript -->
+
+<!-- Code formatting -->
+<code>var x = 10;</code> <!-- Inline code -->
+<pre><code>
+function example() {
+    return "This preserves whitespace and formatting";
+}
+</code></pre> <!-- Code block with preserved formatting -->
+
+<!-- Marked/highlighted text -->
+<mark>Highlighted text</mark>
+
+<!-- =========================
+     5. LISTS
+     ========================= -->
+
+<!-- Unordered list (bullet points) -->
+<ul>
+    <li>First item</li>
+    <li>Second item</li>
+    <li>Third item</li>
+</ul>
+
+<!-- Ordered list (numbered) -->
+<ol>
+    <li>First item</li>
+    <li>Second item</li>
+    <li>Third item</li>
+</ol>
+
+<!-- Definition list -->
+<dl>
+    <dt>HTML</dt> <!-- Definition term -->
+    <dd>HyperText Markup Language</dd> <!-- Definition description -->
+    
+    <dt>CSS</dt>
+    <dd>Cascading Style Sheets</dd>
+</dl>
+
+<!-- Nested lists -->
+<ul>
+    <li>First item</li>
+    <li>Second item
+        <ul>
+            <li>Nested item 1</li>
+            <li>Nested item 2</li>
+        </ul>
+    </li>
+    <li>Third item</li>
+</ul>
+
+<!-- =========================
+     6. LINKS
+     ========================= -->
+
+<!-- Basic link -->
+<a href="https://www.example.com">Visit Example</a>
+
+<!-- Link to email address -->
+<a href="mailto:example@example.com">Send Email</a>
+
+<!-- Link to phone number -->
+<a href="tel:+1234567890">Call Us</a>
+
+<!-- Link to a specific part of the page (using id) -->
+<a href="#section-id">Jump to Section</a>
+
+<!-- Target attribute specifies where to open the link -->
+<a href="https://www.example.com" target="_blank">Open in New Tab</a>
+<!-- Target values: _blank, _self, _parent, _top -->
+
+<!-- =========================
+     7. IMAGES
+     ========================= -->
+
+<!-- Basic image (empty element) -->
+<img src="image.jpg" alt="Description of image">
+
+<!-- Image with size attributes -->
+<img src="image.jpg" alt="Description" width="300" height="200">
+
+<!-- Image with title (tooltip) -->
+<img src="image.jpg" alt="Description" title="Image tooltip">
+
+<!-- Image link -->
+<a href="https://www.example.com">
+    <img src="button.jpg" alt="Click here">
+</a>
+
+<!-- Responsive image -->
+<img src="image.jpg" alt="Description" style="max-width:100%; height:auto;">
+
+<!-- Figure with caption -->
+<figure>
+    <img src="image.jpg" alt="Description">
+    <figcaption>This is an image caption</figcaption>
+</figure>
+
+<!-- =========================
+     8. TABLES
+     ========================= -->
+
+<!-- Basic table structure -->
+<table>
+    <thead> <!-- Table header -->
+        <tr> <!-- Table row -->
+            <th>Header 1</th> <!-- Table header cell -->
+            <th>Header 2</th>
+        </tr>
+    </thead>
+    <tbody> <!-- Table body -->
+        <tr>
+            <td>Data 1</td> <!-- Table data cell -->
+            <td>Data 2</td>
+        </tr>
+        <tr>
+            <td>Data 3</td>
+            <td>Data 4</td>
+        </tr>
+    </tbody>
+    <tfoot> <!-- Table footer -->
+        <tr>
+            <td>Footer 1</td>
+            <td>Footer 2</td>
+        </tr>
+    </tfoot>
+</table>
+
+<!-- Table with colspan and rowspan -->
+<table border="1">
+    <tr>
+        <td>Regular cell</td>
+        <td colspan="2">This cell spans 2 columns</td>
+    </tr>
+    <tr>
+        <td rowspan="2">This cell spans 2 rows</td>
+        <td>Regular cell</td>
+        <td>Regular cell</td>
+    </tr>
+    <tr>
+        <td>Regular cell</td>
+        <td>Regular cell</td>
+    </tr>
+</table>
+
+<!-- =========================
+     9. FORMS
+     ========================= -->
+
+<!-- Basic form -->
+<form action="/submit-form" method="post">
+    <!-- form elements go here -->
+</form>
+
+<!-- Text input -->
+<label for="username">Username:</label>
+<input type="text" id="username" name="username" placeholder="Enter your username">
+
+<!-- Password input -->
+<label for="password">Password:</label>
+<input type="password" id="password" name="password">
+
+<!-- Email input -->
+<input type="email" id="email" name="email" placeholder="email@example.com">
+
+<!-- Number input -->
+<input type="number" id="quantity" name="quantity" min="1" max="10" value="1">
+
+<!-- Date input -->
+<input type="date" id="birthday" name="birthday">
+
+<!-- Checkbox -->
+<input type="checkbox" id="subscribe" name="subscribe" value="yes">
+<label for="subscribe">Subscribe to newsletter</label>
+
+<!-- Radio buttons -->
+<input type="radio" id="male" name="gender" value="male">
+<label for="male">Male</label>
+<input type="radio" id="female" name="gender" value="female">
+<label for="female">Female</label>
+
+<!-- Dropdown select -->
+<label for="country">Country:</label>
+<select id="country" name="country">
+    <option value="usa">United States</option>
+    <option value="canada">Canada</option>
+    <option value="uk">United Kingdom</option>
+</select>
+
+<!-- Multi-select -->
+<label for="fruits">Select fruits:</label>
+<select id="fruits" name="fruits" multiple>
+    <option value="apple">Apple</option>
+    <option value="banana">Banana</option>
+    <option value="orange">Orange</option>
+</select>
+
+<!-- Text area -->
+<label for="message">Message:</label>
+<textarea id="message" name="message" rows="4" cols="50"></textarea>
+
+<!-- File upload -->
+<label for="file">Select a file:</label>
+<input type="file" id="file" name="file">
+
+<!-- Hidden input -->
+<input type="hidden" id="user_id" name="user_id" value="123">
+
+<!-- Submit button -->
+<input type="submit" value="Submit">
+
+<!-- Reset button -->
+<input type="reset" value="Reset">
+
+<!-- Button (more customizable than input type="submit") -->
+<button type="submit">Submit Form</button>
+
+<!-- =========================
+     10. SEMANTIC HTML
+     ========================= -->
+
+<!-- Semantic elements describe their meaning to both the browser and developer -->
+
+<!-- Document sections -->
+<header>
+    <!-- Header content: logo, navigation, etc. -->
+    <h1>Website Title</h1>
+</header>
+
+<nav>
+    <!-- Navigation links -->
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+    </ul>
+</nav>
+
+<main>
+    <!-- Main content of the document -->
+    <article>
+        <!-- Self-contained content (could be distributed independently) -->
+        <h2>Article Title</h2>
+        <p>Article content...</p>
+    </article>
+    
+    <section>
+        <!-- Thematic grouping of content -->
+        <h2>Section Title</h2>
+        <p>Section content...</p>
+    </section>
+    
+    <aside>
+        <!-- Content tangentially related to the main content -->
+        <h3>Related Information</h3>
+        <p>Sidebar content...</p>
+    </aside>
+</main>
+
+<footer>
+    <!-- Footer content: copyright, site links, etc. -->
+    <p>&copy; 2023 My Website</p>
+</footer>
+
+<!-- Other semantic elements -->
+<address>
+    <!-- Contact information -->
+    Written by <a href="mailto:john@example.com">John Doe</a><br>
+    Visit us at: Example.com<br>
+    Box 564, Disneyland<br>
+    USA
+</address>
+
+<time datetime="2023-01-01">January 1, 2023</time>
+
+<details>
+    <summary>Click to expand</summary>
+    <p>Additional information that is initially hidden.</p>
+</details>
+
+<!-- =========================
+     11. MULTIMEDIA
+     ========================= -->
+
+<!-- Audio -->
+<audio controls>
+    <source src="audio.mp3" type="audio/mpeg">
+    <source src="audio.ogg" type="audio/ogg">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Video -->
+<video width="320" height="240" controls>
+    <source src="video.mp4" type="video/mp4">
+    <source src="video.webm" type="video/webm">
+    Your browser does not support the video element.
+</video>
+
+<!-- Embedded content (iframe) -->
+<iframe src="https://www.example.com" width="600" height="400"></iframe>
+
+<!-- YouTube video embed -->
+<iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID" 
+        frameborder="0" allowfullscreen></iframe>
+
+<!-- =========================
+     12. METADATA
+     ========================= -->
+
+<!-- These tags go in the <head> section -->
+
+<!-- Character encoding -->
+<meta charset="UTF-8">
+
+<!-- Viewport for responsive design -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Page description (used by search engines) -->
+<meta name="description" content="A brief description of the page content">
+
+<!-- Keywords (less important for SEO now) -->
+<meta name="keywords" content="HTML, CSS, JavaScript, tutorial">
+
+<!-- Author information -->
+<meta name="author" content="John Doe">
+
+<!-- Favicon -->
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+
+<!-- Stylesheet link -->
+<link rel="stylesheet" href="styles.css">
+
+<!-- JavaScript -->
+<script src="script.js"></script>
+<!-- Or inline JavaScript -->
+<script>
+    function greet() {
+        alert('Hello, world!');
+    }
+</script>
+
+<!-- Open Graph meta tags (for social media sharing) -->
+<meta property="og:title" content="Page Title">
+<meta property="og:description" content="Page description">
+<meta property="og:image" content="image.jpg">
+<meta property="og:url" content="https://www.example.com/page">
+
+<!-- =========================
+     13. ACCESSIBILITY
+     ========================= -->
+
+<!-- Accessibility helps make websites usable by people with disabilities -->
+
+<!-- Language definition -->
+<html lang="en">
+
+<!-- WAI-ARIA roles and attributes -->
+<div role="alert">Important notification</div>
+
+<button aria-label="Close" aria-pressed="false">X</button>
+
+<!-- Skip navigation for screen readers -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- Accessible images -->
+<img src="image.jpg" alt="Descriptive text"> <!-- Always include alt text -->
+
+<!-- Accessible form labels -->
+<label for="name">Name:</label>
+<input type="text" id="name" name="name">
+
+<!-- Tabindex controls keyboard navigation order -->
+<a href="#" tabindex="1">First focus</a>
+<a href="#" tabindex="2">Second focus</a>
+
+<!-- =========================
+     14. HTML BEST PRACTICES
+     ========================= -->
+
+<!-- 
+1. Always declare the document type with <!DOCTYPE html>
+2. Always include lang attribute in <html> tag
+3. Always specify character encoding <meta charset="UTF-8">
+4. Always include viewport settings for responsive design
+5. Use semantic HTML elements when possible
+6. Always add alternative text to images
+7. Be consistent with indentation and formatting
+8. Keep markup clean and minimal
+9. Validate your HTML with W3C Validator
+10. Use lowercase for element names and attributes
+11. Quote attribute values
+12. Close all HTML elements properly
+13. Avoid excessive use of divs ("div soup")
+14. Test on multiple browsers
+15. Make your site accessible
+-->
