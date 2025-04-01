@@ -10,7 +10,8 @@
    There are three ways to add CSS to HTML:
    1. Inline styles (using the style attribute in HTML tags)
    2. Internal stylesheet (using <style> tags in HTML head)
-   3. External stylesheet (linking a .css file) - most recommended! */
+   3. External stylesheet (linking a .css file) - most recommended! 
+   You can select elements by their tag name, class, id, attribute, etc. */
 
 /* Basic CSS syntax: */
 selector {
@@ -19,7 +20,28 @@ selector {
 }
 
 /* =========================
-   2. SELECTORS
+   2. SPECIFICITY
+   ========================= */
+
+/* Specificity determines which CSS rules are applied when multiple rules
+   target the same element. Higher specificity rules override lower ones.
+   
+   Specificity hierarchy (from lowest to highest):
+   1. Element selectors (h1, p): 0,0,0,1
+   2. Class selectors (.headline), attribute selectors, pseudo-classes: 0,0,1,0
+   3. ID selectors (#header): 0,1,0,0
+   4. Inline styles: 1,0,0,0
+   
+   Examples:
+   h1 { color: red; }                 - Specificity: 0,0,0,1
+   .headline { color: firebrick; }    - Specificity: 0,0,1,0 (wins over h1)
+   #header { color: blue; }           - Specificity: 0,1,0,0 (wins over both)
+   
+   Best practice: Use the lowest possible specificity to keep styles maintainable
+   and easy to override when needed. */
+
+/* =========================
+   3. SELECTORS
    ========================= */
 
 /* Element selector - selects all instances of an element */
@@ -81,7 +103,7 @@ p::selection {
 }
 
 /* =========================
-   3. COLORS
+   4. COLORS
    ========================= */
 
 .color-examples {
@@ -109,7 +131,7 @@ p::selection {
 }
 
 /* =========================
-   4. BOX MODEL
+   5. BOX MODEL
    ========================= */
 
 /* The Box Model is fundamental to CSS layout.
@@ -146,7 +168,7 @@ p::selection {
 }
 
 /* =========================
-   5. TYPOGRAPHY
+   6. TYPOGRAPHY
    ========================= */
 
 .typography-example {
@@ -191,7 +213,7 @@ p::selection {
 }
 
 /* =========================
-   6. LAYOUT
+   7. LAYOUT
    ========================= */
 
 /* Display property */
@@ -234,7 +256,7 @@ p::selection {
 }
 
 /* =========================
-   7. FLEXBOX
+   8. FLEXBOX
    ========================= */
 
 /* Flexbox is a one-dimensional layout method */
@@ -287,7 +309,7 @@ p::selection {
 }
 
 /* =========================
-   8. CSS GRID
+   9. CSS GRID
    ========================= */
 
 /* Grid is a two-dimensional layout method */
@@ -337,7 +359,7 @@ p::selection {
 }
 
 /* =========================
-   9. RESPONSIVE DESIGN
+   10. RESPONSIVE DESIGN
    ========================= */
 
 /* Media queries allow different styles for different devices/screen sizes */
@@ -374,7 +396,7 @@ p::selection {
 }
 
 /* =========================
-   10. TRANSITIONS & ANIMATIONS
+   11. TRANSITIONS & ANIMATIONS
    ========================= */
 
 /* Transitions create smooth changes between property values */
@@ -421,7 +443,7 @@ p::selection {
 }
 
 /* =========================
-   11. TRANSFORMS
+   12. TRANSFORMS
    ========================= */
 
 .transform-examples {
@@ -442,7 +464,7 @@ p::selection {
 }
 
 /* =========================
-   12. CSS CLASSES IN-DEPTH
+   13. CSS CLASSES IN-DEPTH
    ========================= */
 
 /* CSS Classes are reusable style identifiers prefixed with a dot (.) 
@@ -602,7 +624,7 @@ p.special-paragraph {
 .visible { display: block; }
 
 /* =========================
-   13. BEST PRACTICES
+   14. BEST PRACTICES
    ========================= */
 
 /*
