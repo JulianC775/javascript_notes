@@ -1,0 +1,119 @@
+/* CSS Specificity Examples */
+
+/* Basic Specificity Rules:
+   - Element selectors: 0,0,0,1 (lowest)
+   - Class selectors: 0,0,1,0
+   - ID selectors: 0,1,0,0 (higher)
+   - Inline styles: 1,0,0,0 (highest)
+   - !important overrides all of the above
+*/
+
+/* Example 1: Element vs Class vs ID */
+p {
+  color: red; /* Specificity: 0,0,0,1 */
+}
+
+.text {
+  color: green; /* Specificity: 0,0,1,0 - Wins over element selector */
+}
+
+#unique {
+  color: blue; /* Specificity: 0,1,0,0 - Wins over class and element selectors */
+}
+
+/* Example 2: Multiple classes vs ID */
+.important.text {
+  color: purple; /* Specificity: 0,0,2,0 (two classes) */
+}
+
+#unique {
+  color: blue; /* Specificity: 0,1,0,0 - Still wins over multiple classes */
+}
+
+/* Example 3: Descendant selectors */
+body div p {
+  color: brown; /* Specificity: 0,0,0,3 (three elements) */
+}
+
+div .text {
+  color: orange; /* Specificity: 0,0,1,1 - Wins over three elements */
+}
+
+/* Example 4: Direct child vs general descendant */
+div > p {
+  font-weight: bold; /* Specificity: 0,0,0,2 */
+}
+
+div p {
+  font-style: italic; /* Same specificity: 0,0,0,2 - Last defined wins */
+}
+
+/* Example 5: Attribute selectors */
+p[class] {
+  background-color: lightgray; /* Specificity: 0,0,1,1 */
+}
+
+p.text {
+  background-color: yellow; /* Specificity: 0,0,1,1 - Same specificity, last defined wins */
+}
+
+/* Example 6: Pseudo-classes */
+a:hover {
+  text-decoration: underline; /* Specificity: 0,0,1,1 */
+}
+
+.nav a {
+  text-decoration: none; /* Specificity: 0,0,1,1 - Same specificity, depends on order */
+}
+
+/* Example 7: !important overrides */
+p {
+  font-size: 12px !important; /* Will override any other font-size for p tags */
+}
+
+#unique {
+  font-size: 16px; /* Won't apply to p#unique due to !important above */
+}
+
+/* Example 8: Combination of selectors */
+body .container #unique p.text {
+  margin: 20px; /* Specificity: 0,1,1,2 - Very specific selector */
+}
+
+/* Common layout styling */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px;
+  background-color: #f9f9f9;
+}
+
+/* Button styling with specificity examples */
+button {
+  padding: 8px 16px;
+  background-color: #ddd;
+  border: none;
+  cursor: pointer;
+}
+
+.btn {
+  background-color: #4285f4;
+  color: white;
+  border-radius: 4px;
+}
+
+.btn.primary {
+  background-color: #34a853;
+}
+
+#submit-btn {
+  background-color: #ea4335;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
