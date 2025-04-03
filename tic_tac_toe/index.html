@@ -1,31 +1,43 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>  
-    <div class="row">
-        <div id="cell-0"></div>
-        <div id="cell-1"></div>
-        <div id="cell-2"></div>
-    </div>
+    <div class="game-container">
+        <h1 class="game-title">Tic Tac Toe</h1>
+        
+        <div class="game-status">
+            <div class="player-turn">Player <span id="current-player">X</span>'s turn</div>
+        </div>
+        
+        <div class="game-board">
+            <div class="row">
+                <div id="cell-0" class="cell"></div>
+                <div id="cell-1" class="cell"></div>
+                <div id="cell-2" class="cell"></div>
+            </div>
 
-    <div class="row">
-        <div id="cell-3"></div>
-        <div id="cell-4"></div>
-        <div id="cell-5"></div>
-    </div>
-    
-    <div class="row">
-        <div id="cell-6"></div>
-        <div id="cell-7"></div>
-        <div id="cell-8"></div>
+            <div class="row">
+                <div id="cell-3" class="cell"></div>
+                <div id="cell-4" class="cell"></div>
+                <div id="cell-5" class="cell"></div>
+            </div>
+            
+            <div class="row">
+                <div id="cell-6" class="cell"></div>
+                <div id="cell-7" class="cell"></div>
+                <div id="cell-8" class="cell"></div>
+            </div>
+        </div>
+        
+        <button id="restart-btn" class="restart-button">Restart Game</button>
     </div>
 
     <script src="script.js"></script>
 </body>
-
 </html>

@@ -1,16 +1,191 @@
-.row {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
+:root {
+    --primary-color: #6c5ce7;
+    --secondary-color: #00cec9;
+    --background-color: #121212;
+    --text-color: #e2e2e2;
+    --cell-background: #1e1e1e;
+    --card-background: #2d2d2d;
+    --game-board-bg: #252525;
+    --x-color: #e84393;
+    --o-color: #00b894;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --cell-hover-bg: #333333;
 }
 
-.row div {
-    width: 100px;
-    height: 100px;
-    border: 1px solid black;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, var(--background-color), #1a1a1a);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
+    color: var(--text-color);
+}
+
+.game-container {
+    background-color: var(--card-background);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px var(--shadow-color);
+    max-width: 500px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.game-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.game-status {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+#current-player {
+    color: var(--x-color);
+    font-weight: 700;
+}
+
+.game-board {
+    width: 100%;
+    max-width: 350px;
+    aspect-ratio: 1/1;
+    background: var(--game-board-bg);
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: inset 0 5px 10px var(--shadow-color);
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+    height: calc(100% / 3);
+    margin-bottom: 10px;
+}
+
+.row:last-child {
+    margin-bottom: 0;
+}
+
+.cell {
+    flex: 1;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    font-weight: 700;
     cursor: pointer;
+    background-color: var(--cell-background);
+    box-shadow: 0 5px 10px var(--shadow-color);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.cell:hover {
+    transform: translateY(-3px);
+    background-color: var(--cell-hover-bg);
+    box-shadow: 0 8px 15px var(--shadow-color);
+}
+
+.cell.x::before, 
+.cell.x::after {
+    content: '';
+    position: absolute;
+    width: 80%;
+    height: 10%;
+    background-color: var(--x-color);
+    border-radius: 5px;
+}
+
+.cell.x::before {
+    transform: rotate(45deg);
+}
+
+.cell.x::after {
+    transform: rotate(-45deg);
+}
+
+.cell.o::before {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    border: 8px solid var(--o-color);
+    border-radius: 50%;
+}
+
+.restart-button {
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+}
+
+.restart-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(108, 92, 231, 0.6);
+}
+
+.restart-button:active {
+    transform: translateY(0);
+}
+
+.win-animation {
+    animation: winPulse 1s ease infinite;
+}
+
+@keyframes winPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 184, 148, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 184, 148, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 184, 148, 0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 2rem;
+    }
+    
+    .game-status {
+        font-size: 1rem;
+    }
+    
+    .cell {
+        font-size: 2rem;
+    }
+    
+    .restart-button {
+        padding: 0.6rem 1.5rem;
+        font-size: 1rem;
+    }
 }
