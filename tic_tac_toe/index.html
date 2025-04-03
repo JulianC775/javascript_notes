@@ -8,6 +8,50 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>  
+    <!-- Theme Selector Button -->
+    <button id="theme-toggle" class="theme-toggle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"></path></svg>
+    </button>
+    
+    <!-- Theme Menu Panel -->
+    <div class="theme-menu">
+        <div class="theme-menu-header">
+            <h2>Choose Theme</h2>
+            <button id="close-theme-menu" class="close-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="theme-options">
+            <div class="theme-option" data-theme="default">
+                <div class="theme-preview default-theme"></div>
+                <span>Default</span>
+            </div>
+            <div class="theme-option" data-theme="neon">
+                <div class="theme-preview neon-theme"></div>
+                <span>Neon</span>
+            </div>
+            <div class="theme-option" data-theme="retro">
+                <div class="theme-preview retro-theme"></div>
+                <span>Retro</span>
+            </div>
+            <div class="theme-option" data-theme="pastel">
+                <div class="theme-preview pastel-theme"></div>
+                <span>Pastel</span>
+            </div>
+            <div class="theme-option" data-theme="dark">
+                <div class="theme-preview dark-theme"></div>
+                <span>Dark</span>
+            </div>
+            <div class="theme-option" data-theme="candy">
+                <div class="theme-preview candy-theme"></div>
+                <span>Candy</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overlay for when theme menu is open -->
+    <div class="overlay"></div>
+
     <div class="games-wrapper">
         <!-- Tic Tac Toe Game -->
         <div class="game-container">
@@ -86,5 +130,6 @@
     <script src="script.js"></script>
     <script src="connect4.js"></script>
     <script src="chess.js"></script>
+    <script src="themes.js"></script>
 </body>
 </html>

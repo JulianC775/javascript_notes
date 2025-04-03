@@ -19,6 +19,17 @@
     --chess-highlight: rgba(108, 92, 231, 0.7);
     --chess-move-highlight: rgba(0, 184, 148, 0.4);
     --chess-check-highlight: rgba(232, 67, 147, 0.6);
+    
+    /* Theme variables */
+    --theme-menu-bg: #1a1a1a;
+    --theme-menu-text: #ffffff;
+    --theme-hover: rgba(108, 92, 231, 0.2);
+    --theme-active: rgba(108, 92, 231, 0.4);
+    --button-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    
+    /* Animation durations */
+    --animation-speed: 0.3s;
+    --board-animation: 0.5s;
 }
 
 * {
@@ -578,4 +589,741 @@ body {
     .c4-grid {
         gap: 5px;
     }
+}
+
+/* Theme button styles */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    border: none;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: var(--button-shadow);
+    transition: all var(--animation-speed) ease;
+}
+
+.theme-toggle:hover {
+    transform: rotate(30deg) scale(1.1);
+}
+
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Overlay for backdrop */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 15;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--animation-speed) ease;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Theme menu panel */
+.theme-menu {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 320px;
+    height: 100%;
+    background-color: var(--theme-menu-bg);
+    z-index: 20;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    transition: right var(--animation-speed) ease;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.theme-menu.active {
+    right: 0;
+}
+
+.theme-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-menu-header h2 {
+    color: var(--theme-menu-text);
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: var(--theme-menu-text);
+    cursor: pointer;
+    transition: transform var(--animation-speed) ease;
+}
+
+.close-button:hover {
+    transform: rotate(90deg);
+}
+
+/* Theme options */
+.theme-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+    transition: background-color var(--animation-speed) ease;
+}
+
+.theme-option:hover {
+    background-color: var(--theme-hover);
+}
+
+.theme-option.active {
+    background-color: var(--theme-active);
+}
+
+.theme-preview {
+    width: 100%;
+    height: 100px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.theme-option span {
+    color: var(--theme-menu-text);
+    font-weight: 600;
+}
+
+/* Media queries for theme menu responsiveness */
+@media (max-width: 480px) {
+    .theme-menu {
+        width: 280px;
+    }
+    
+    .theme-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .theme-toggle {
+        width: 45px;
+        height: 45px;
+        top: 15px;
+        right: 15px;
+    }
+}
+
+/* Theme Preview Styles */
+.theme-preview.default-theme {
+    background: linear-gradient(135deg, #121212, #1a1a1a);
+}
+
+.theme-preview.default-theme::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 35px;
+    left: 40px;
+    background-color: var(--x-color);
+    border-radius: 5px;
+    transform: rotate(45deg);
+}
+
+.theme-preview.default-theme::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 37px;
+    right: 40px;
+    border: 4px solid var(--o-color);
+    border-radius: 50%;
+}
+
+.theme-preview.neon-theme {
+    background-color: #0f0f30;
+    box-shadow: 0 0 10px #00f7ff, 0 0 20px #00f7ff inset;
+}
+
+.theme-preview.neon-theme::before,
+.theme-preview.neon-theme::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 4px;
+    background-color: #ff00ff;
+    top: 50%;
+    left: 50%;
+    box-shadow: 0 0 10px 2px #ff00ff;
+}
+
+.theme-preview.neon-theme::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.theme-preview.neon-theme::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.theme-preview.retro-theme {
+    background-color: #3c3836;
+    background-image: repeating-linear-gradient(
+        45deg, 
+        rgba(200, 156, 50, 0.1), 
+        rgba(200, 156, 50, 0.1) 10px, 
+        transparent 10px, 
+        transparent 20px
+    );
+}
+
+.theme-preview.retro-theme::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 35px;
+    left: 40px;
+    background-color: #f9a11b;
+    border-radius: 0;
+}
+
+.theme-preview.retro-theme::after {
+    content: '';
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    top: 36px;
+    right: 40px;
+    border: 4px solid #6aa84f;
+    border-radius: 0;
+}
+
+.theme-preview.pastel-theme {
+    background-color: #f0f5ff;
+    background-image: radial-gradient(#ffcce0 15%, transparent 15%),
+                      radial-gradient(#ccf5ff 15%, transparent 15%);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+}
+
+.theme-preview.pastel-theme::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 6px;
+    background-color: #ffaac9;
+    top: 45px;
+    left: 40px;
+    box-shadow: 0 12px 0 #ffaac9, 0 24px 0 #ffaac9;
+}
+
+.theme-preview.pastel-theme::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 37px;
+    right: 40px;
+    border: 4px solid #77c3ec;
+    border-radius: 50%;
+}
+
+.theme-preview.dark-theme {
+    background-color: #000000;
+    background-image: radial-gradient(rgba(40, 40, 40, 0.8) 1px, transparent 1px);
+    background-size: 10px 10px;
+}
+
+.theme-preview.dark-theme::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 35px;
+    left: 40px;
+    background: linear-gradient(45deg, #ff4757, #ff6b81);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.theme-preview.dark-theme::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 37px;
+    right: 40px;
+    background: linear-gradient(45deg, #1e90ff, #70a1ff);
+    border-radius: 50%;
+}
+
+.theme-preview.candy-theme {
+    background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+}
+
+.theme-preview.candy-theme::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 35px;
+    left: 40px;
+    background: linear-gradient(45deg, #fd79a8, #e84393);
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
+.theme-preview.candy-theme::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 37px;
+    right: 40px;
+    border: 4px solid #a29bfe;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #a29bfe;
+}
+
+/* Theme Definitions */
+/* Default Theme - Already defined in :root */
+
+/* Neon Theme */
+body.neon-theme {
+    --primary-color: #00f7ff;
+    --secondary-color: #ff00ff;
+    --background-color: #0f0f30;
+    --text-color: #ffffff;
+    --cell-background: #141450;
+    --card-background: #1a1a4a;
+    --game-board-bg: #202060;
+    --x-color: #ff00ff;
+    --o-color: #00f7ff;
+    --red-player: #ff00ff;
+    --yellow-player: #00f7ff;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --cell-hover-bg: #303080;
+    --chess-white: #8be9fd;
+    --chess-black: #45009D;
+    --chess-white-square: #202060;
+    --chess-black-square: #141450;
+    --chess-highlight: rgba(255, 0, 255, 0.7);
+    --chess-move-highlight: rgba(0, 247, 255, 0.5);
+    --chess-check-highlight: rgba(255, 0, 85, 0.7);
+    background: linear-gradient(135deg, #0f0f30, #1a1a4a);
+}
+
+body.neon-theme .cell.x::before,
+body.neon-theme .cell.x::after {
+    box-shadow: 0 0 10px var(--x-color), 0 0 20px var(--x-color);
+}
+
+body.neon-theme .cell.o::before {
+    box-shadow: 0 0 10px var(--o-color), 0 0 20px var(--o-color);
+}
+
+body.neon-theme .game-container {
+    border: 1px solid rgba(0, 247, 255, 0.2);
+    box-shadow: 0 0 20px rgba(0, 247, 255, 0.2);
+}
+
+body.neon-theme .game-board {
+    box-shadow: 0 0 15px rgba(0, 247, 255, 0.3) inset;
+}
+
+/* Retro Theme */
+body.retro-theme {
+    --primary-color: #f9a11b;
+    --secondary-color: #6aa84f;
+    --background-color: #3c3836;
+    --text-color: #f5deb3;
+    --cell-background: #5c5955;
+    --card-background: #4a4846;
+    --game-board-bg: #2c2826;
+    --x-color: #f9a11b;
+    --o-color: #6aa84f;
+    --red-player: #bf4130;
+    --yellow-player: #daa520;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --cell-hover-bg: #6a6866;
+    --chess-white: #daa520;
+    --chess-black: #8b4513;
+    --chess-white-square: #5c5955;
+    --chess-black-square: #2c2826;
+    --chess-highlight: rgba(249, 161, 27, 0.7);
+    --chess-move-highlight: rgba(106, 168, 79, 0.4);
+    --chess-check-highlight: rgba(191, 65, 48, 0.6);
+    background: #3c3836;
+    background-image: repeating-linear-gradient(
+        45deg, 
+        rgba(200, 156, 50, 0.05), 
+        rgba(200, 156, 50, 0.05) 10px, 
+        transparent 10px, 
+        transparent 20px
+    );
+}
+
+body.retro-theme .cell.x::before, 
+body.retro-theme .cell.x::after {
+    border-radius: 0;
+}
+
+body.retro-theme .cell.o::before {
+    border-radius: 0;
+}
+
+body.retro-theme .game-container {
+    border: 2px solid var(--primary-color);
+}
+
+body.retro-theme .restart-button {
+    background: var(--primary-color);
+    border-radius: 0;
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+}
+
+/* Pastel Theme */
+body.pastel-theme {
+    --primary-color: #77c3ec;
+    --secondary-color: #ffaac9;
+    --background-color: #f0f5ff;
+    --text-color: #5a5a5a;
+    --cell-background: #ffffff;
+    --card-background: #ffffff;
+    --game-board-bg: #e9f0ff;
+    --x-color: #ffaac9;
+    --o-color: #77c3ec;
+    --red-player: #ffaac9;
+    --yellow-player: #fdfd96;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --cell-hover-bg: #f5f5f5;
+    --chess-white: #ffcce0;
+    --chess-black: #494d5f;
+    --chess-white-square: #e6eeff;
+    --chess-black-square: #c9d6ff;
+    --chess-highlight: rgba(119, 195, 236, 0.7);
+    --chess-move-highlight: rgba(255, 170, 201, 0.4);
+    --chess-check-highlight: rgba(255, 130, 146, 0.6);
+    background: #f0f5ff;
+    background-image: 
+        radial-gradient(#ffcce0 10%, transparent 10%),
+        radial-gradient(#ccf5ff 10%, transparent 10%);
+    background-size: 40px 40px;
+    background-position: 0 0, 20px 20px;
+}
+
+body.pastel-theme .game-container {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+}
+
+body.pastel-theme .game-title {
+    color: #5a5a5a;
+}
+
+body.pastel-theme .restart-button {
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+}
+
+/* Dark Theme */
+body.dark-theme {
+    --primary-color: #ff4757;
+    --secondary-color: #1e90ff;
+    --background-color: #000000;
+    --text-color: #e2e2e2;
+    --cell-background: #0a0a0a;
+    --card-background: #0f0f0f;
+    --game-board-bg: #050505;
+    --x-color: #ff4757;
+    --o-color: #1e90ff;
+    --red-player: #ff4757;
+    --yellow-player: #ffa502;
+    --shadow-color: rgba(0, 0, 0, 0.8);
+    --cell-hover-bg: #151515;
+    --chess-white: #e2e2e2;
+    --chess-black: #333333;
+    --chess-white-square: #151515;
+    --chess-black-square: #000000;
+    --chess-highlight: rgba(255, 71, 87, 0.7);
+    --chess-move-highlight: rgba(30, 144, 255, 0.4);
+    --chess-check-highlight: rgba(255, 71, 87, 0.6);
+    background-color: #000000;
+    background-image: radial-gradient(rgba(40, 40, 40, 0.8) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+body.dark-theme .game-container {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+}
+
+body.dark-theme .cell {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+}
+
+/* Candy Theme */
+body.candy-theme {
+    --primary-color: #fd79a8;
+    --secondary-color: #a29bfe;
+    --background-color: #fff0f3;
+    --text-color: #6c567b;
+    --cell-background: #ffffff;
+    --card-background: #ffffff;
+    --game-board-bg: #fff0f5;
+    --x-color: #fd79a8;
+    --o-color: #a29bfe;
+    --red-player: #fd79a8;
+    --yellow-player: #ffeaa7;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --cell-hover-bg: #ffeef4;
+    --chess-white: #fff0f5;
+    --chess-black: #6c567b;
+    --chess-white-square: #ffd3e1;
+    --chess-black-square: #ffa9c6;
+    --chess-highlight: rgba(253, 121, 168, 0.7);
+    --chess-move-highlight: rgba(162, 155, 254, 0.4);
+    --chess-check-highlight: rgba(255, 107, 129, 0.6);
+    background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+}
+
+body.candy-theme .game-container {
+    background: linear-gradient(to bottom right, #ffffff, #ffeef4);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+}
+
+body.candy-theme .game-title {
+    background: linear-gradient(45deg, #fd79a8, #a29bfe);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+body.candy-theme .restart-button {
+    background: linear-gradient(45deg, #fd79a8, #a29bfe);
+}
+
+body.candy-theme .cell.x::before, 
+body.candy-theme .cell.x::after {
+    border-radius: 10px;
+}
+
+/* Animation keyframes for themes */
+@keyframes neonPulse {
+    0% {
+        box-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--primary-color);
+    }
+    100% {
+        box-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color);
+    }
+}
+
+@keyframes retroScan {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
+@keyframes pastelFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes darkBreathing {
+    0%, 100% {
+        background-size: 20px 20px;
+    }
+    50% {
+        background-size: 25px 25px;
+    }
+}
+
+@keyframes candyRotate {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Apply theme animations */
+body.neon-theme .cell:hover {
+    animation: neonPulse 1.5s infinite;
+}
+
+body.retro-theme {
+    animation: retroScan 30s linear infinite;
+}
+
+body.pastel-theme .game-container {
+    animation: pastelFloat 6s ease-in-out infinite;
+}
+
+body.dark-theme {
+    animation: darkBreathing 10s ease infinite;
+}
+
+body.candy-theme .game-title {
+    background-size: 200% auto;
+    animation: candyRotate 5s linear infinite;
+}
+
+/* Theme Transition Animations */
+.theme-transition {
+    animation: themeChange 0.5s ease-in-out;
+    transform-origin: center;
+}
+
+@keyframes themeChange {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.95);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Interactive animations for game elements */
+body.neon-theme .restart-button {
+    position: relative;
+    overflow: hidden;
+}
+
+body.neon-theme .restart-button::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+    background-size: 200% 200%;
+    animation: gradientFlow 3s ease infinite;
+    z-index: -1;
+    border-radius: 60px;
+    filter: blur(10px);
+}
+
+@keyframes gradientFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+body.retro-theme .cell::after {
+    transition: all 0.3s steps(5) !important;
+}
+
+body.retro-theme .game-title {
+    position: relative;
+}
+
+body.retro-theme .game-title::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-color);
+    animation: scanline 2s linear infinite;
+}
+
+@keyframes scanline {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(30px);
+    }
+}
+
+body.pastel-theme .cell.x::before,
+body.pastel-theme .cell.x::after,
+body.pastel-theme .cell.o::before {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+body.candy-theme .cell {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+body.candy-theme .cell:hover {
+    transform: translateY(-5px) scale(1.05);
+}
+
+body.candy-theme .cell.x::before,
+body.candy-theme .cell.x::after {
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+body.dark-theme .cell.x::before,
+body.dark-theme .cell.x::after {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+body.dark-theme .cell.o::before {
+    border-color: var(--o-color);
+    box-shadow: 0 0 10px var(--o-color), inset 0 0 5px var(--o-color);
+    opacity: 0.9;
+}
+
+/* Making sure all transitions are smooth */
+.game-container, .game-board, .cell, .restart-button {
+    transition: background-color var(--animation-speed) ease,
+                box-shadow var(--animation-speed) ease,
+                transform var(--animation-speed) ease,
+                color var(--animation-speed) ease,
+                border-color var(--animation-speed) ease;
 }
