@@ -76,7 +76,15 @@ document.addEventListener('DOMContentLoaded', () => {
             'retro-theme',
             'pastel-theme',
             'dark-theme',
-            'candy-theme'
+            'candy-theme',
+            'space-theme',
+            'cyberpunk-theme',
+            'tropical-theme',
+            'halloween-theme',
+            'winter-theme',
+            'christmas-theme',
+            'socks-theme',
+            'horror-theme'
         );
         
         // Apply selected theme
@@ -94,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function updateThemeButtonAppearance(theme) {
         // Adjust button appearance based on theme
-        if (theme === 'pastel-theme' || theme === 'candy-theme') {
+        if (theme === 'pastel-theme' || theme === 'candy-theme' || theme === 'tropical-theme' || theme === 'winter-theme' || theme === 'christmas-theme' || theme === 'socks-theme') {
             themeToggle.style.color = '#6c567b';
         } else {
             themeToggle.style.color = '';
@@ -116,6 +124,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'candy-theme':
                 themeToggle.style.backgroundColor = '#fd79a8';
+                break;
+            case 'space-theme':
+                themeToggle.style.backgroundColor = '#9d4edd';
+                break;
+            case 'cyberpunk-theme':
+                themeToggle.style.backgroundColor = '#f706cf';
+                break;
+            case 'tropical-theme':
+                themeToggle.style.backgroundColor = '#06d6a0';
+                break;
+            case 'halloween-theme':
+                themeToggle.style.backgroundColor = '#ff6b00';
+                break;
+            case 'winter-theme':
+                themeToggle.style.backgroundColor = '#a0c4ff';
+                break;
+            case 'christmas-theme':
+                themeToggle.style.backgroundColor = '#d92121';
+                break;
+            case 'socks-theme':
+                themeToggle.style.backgroundColor = '#f4a7b9';
+                break;
+            case 'horror-theme':
+                themeToggle.style.backgroundColor = '#8a0303';
                 break;
             default:
                 themeToggle.style.backgroundColor = '';
