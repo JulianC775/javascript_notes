@@ -2269,3 +2269,181 @@ body.horror-theme .win-animation {
     0% { box-shadow: 0 0 0 2px rgba(138, 3, 3, 0.7), 0 0 10px rgba(138, 3, 3, 0.7); }
     100% { box-shadow: 0 0 0 5px rgba(138, 3, 3, 0.7), 0 0 20px rgba(138, 3, 3, 1); }
 }
+
+/* Snake Game Styles */
+.snake-board {
+    aspect-ratio: 1/1;
+    position: relative;
+    overflow: hidden;
+}
+
+.snake-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    width: 100%;
+    height: 100%;
+    gap: 2px;
+}
+
+.snake-cell {
+    background-color: var(--cell-background);
+    border-radius: 2px;
+    transition: background-color 0.1s ease;
+}
+
+.snake-cell.snake-head {
+    background-color: var(--x-color);
+    border-radius: 4px;
+    z-index: 2;
+    position: relative;
+}
+
+.snake-cell.snake-body {
+    background-color: var(--x-color);
+    opacity: 0.85;
+}
+
+.snake-cell.snake-food {
+    background-color: var(--o-color);
+    border-radius: 50%;
+    animation: foodPulse 1.5s infinite ease-in-out;
+}
+
+.game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 10;
+    border-radius: 15px;
+    color: var(--text-color);
+}
+
+.game-over-screen.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.game-over-screen h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.game-over-screen p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.score-display {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.control-info {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.8;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.game-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+@keyframes foodPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Theme-specific snake styles */
+body.neon-theme .snake-cell.snake-head {
+    box-shadow: 0 0 10px var(--x-color), 0 0 5px var(--x-color);
+}
+
+body.neon-theme .snake-cell.snake-food {
+    box-shadow: 0 0 10px var(--o-color), 0 0 5px var(--o-color);
+}
+
+body.retro-theme .snake-cell {
+    border-radius: 0;
+}
+
+body.retro-theme .snake-cell.snake-food {
+    border-radius: 0;
+}
+
+body.christmas-theme .snake-cell.snake-head {
+    background-image: linear-gradient(
+        45deg,
+        var(--x-color),
+        #f53e3e 20%,
+        var(--x-color) 40%,
+        #f53e3e 60%,
+        var(--x-color) 80%
+    );
+}
+
+body.christmas-theme .snake-cell.snake-food {
+    background-image: radial-gradient(circle, var(--o-color) 70%, #0a3b25 90%);
+}
+
+body.horror-theme .snake-cell.snake-head,
+body.horror-theme .snake-cell.snake-body {
+    animation: horrorFlicker 3s infinite alternate;
+}
+
+body.socks-theme .snake-cell.snake-head,
+body.socks-theme .snake-cell.snake-body {
+    background-image: 
+        linear-gradient(90deg, var(--primary-color) 50%, var(--secondary-color) 50%),
+        linear-gradient(90deg, var(--secondary-color) 50%, var(--primary-color) 50%);
+    background-size: 8px 100%, 8px 100%;
+    background-position: 0 0, 4px 0;
+}
+
+body.cyberpunk-theme .snake-cell.snake-head {
+    box-shadow: 0 0 10px var(--primary-color);
+}
+
+body.cyberpunk-theme .snake-cell.snake-food {
+    box-shadow: 0 0 10px var(--secondary-color);
+    background-image: linear-gradient(45deg, var(--secondary-color), #08e0a8);
+}
+
+/* Responsive adaptations for snake game */
+@media (max-width: 480px) {
+    .snake-grid {
+        gap: 1px;
+    }
+    
+    .control-info {
+        font-size: 0.8rem;
+    }
+    
+    .game-over-screen h2 {
+        font-size: 1.5rem;
+    }
+}
