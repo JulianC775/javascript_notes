@@ -8,4 +8,25 @@
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
+
+    
 }
+
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+#test-div:hover {
+    background-color: blue;
+}
+
+#test-div:active {
+    background-color: red;
+}
+
+
+
