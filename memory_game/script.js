@@ -14,4 +14,3 @@ div.addEventListener("click", ()=>handleThingClicked('div clicked'));
 
 
 
-// test commit
