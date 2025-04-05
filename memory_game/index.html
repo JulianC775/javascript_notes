@@ -3,63 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A memory card matching game to test and improve your memory skills">
     <title>Memory Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-   <h2>Memory Game</h2>
-    <div id="game-container">
-        <div id="game-board"></div>
-        <div id="game-controls">
-            <button id="start-button">Start Game</button>
-            <button id="reset-button">Reset Game</button>
+    <header>
+        <h1>Memory Game</h1>
+    </header>
+
+    <main>
+        <section id="game-container" aria-labelledby="game-heading">
+            <h2 id="game-heading" class="visually-hidden">Memory Card Game Board</h2>
+            
+            <div id="difficulty-controls" aria-labelledby="difficulty-heading">
+                <h3 id="difficulty-heading" class="control-label">Difficulty</h3>
+                <div class="button-group">
+                    <button id="easy-button" class="difficulty-button" aria-pressed="true">Easy</button>
+                    <button id="medium-button" class="difficulty-button" aria-pressed="false">Medium</button>
+                    <button id="hard-button" class="difficulty-button" aria-pressed="false">Hard</button>
+                </div>
+            </div>
+            
+            <div id="game-board" tabindex="0" aria-label="Memory card grid"></div>
+            
+            <div id="game-controls">
+                <button id="start-button" aria-label="Start game">Start Game</button>
+                <button id="reset-button" aria-label="Reset game">Reset Game</button>
+            </div>
+            
+            <div id="game-stats" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="current-year"></span> Memory Game - Learning Project</p>
+    </footer>
+
+    <!-- Templates -->
+    <template id="card-template">
+        <div class="card" tabindex="0" role="button" aria-label="Memory card">
+            <div class="card-back" aria-hidden="true">?</div>
+            <div class="card-front" aria-hidden="true"></div>
         </div>
-    </div>
-    <div id="game-stats"></div>
+    </template>
 
-    <button id="test-button">hello</button>
-    <div id="test-div">hello</div>
-
-    <div class="row">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-
-    <div class="row">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-
-    <div class="row">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-
-    <div class="row">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-
-    <div class="row">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-
-    <script src="script.js"></script>
+    <!-- Scripts -->
+    <script type="module" src="script.js"></script>
 </body>
 </html>
