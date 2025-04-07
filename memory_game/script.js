@@ -565,6 +565,25 @@ const UI = (() => {
 // Initialize the game when DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
   MemoryGame.init();
+  
+  // Click counter functionality
+  const clickButton = document.getElementById('click-counter-button');
+  const clickCount = document.getElementById('click-count');
+  console.log('Click button:', clickButton);
+  console.log('Click count:', clickCount);
+  
+  let count = 0;
+  
+  if (clickButton && clickCount) {
+    clickButton.addEventListener('click', () => {
+      count++;
+      clickCount.textContent = count;
+      console.log('Button clicked, new count:', count);
+    });
+    console.log('Click event listener added successfully');
+  } else {
+    console.error('Click counter elements not found');
+  }
 });
 
 
