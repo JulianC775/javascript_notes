@@ -3,6 +3,32 @@
 // ======================================================
 
 // =========================
+//  1. NAMING CONVENTIONS
+// =========================
+
+// Camel Case: First word lowercase, subsequent words capitalize first letter
+// Used for: variables, functions, methods, properties, parameters
+let userName = "john_doe";
+function calculateTotal() { }
+const getUserData = () => { };
+object.propertyName = value;
+
+// Pascal Case (Upper Camel Case): Capitalize first letter of every word
+// Used for: classes, constructor functions, React components
+class UserProfile { }
+function Person(name) { }
+const ButtonComponent = () => { };
+
+// Other naming conventions:
+// - UPPER_SNAKE_CASE: For constants that are truly unchanging
+const MAX_USERS = 50;
+// - Private variables/methods: Prefix with underscore (convention only)
+let _privateVariable = "hidden";
+// - Boolean variables: Prefix with "is", "has", "can"
+let isActive = true;
+let hasPermission = false;
+
+// =========================
 //  1. JAVASCRIPT INTRODUCTION
 // =========================
 
@@ -35,14 +61,14 @@ const constant = "Cannot be reassigned"; // Block-scoped constant
 // Data Types
 
 // Primitive types
-let string = "This is a string"; // String
-let number = 42; // Number
-let decimal = 42.5; // Also a number
-let boolean = true; // Boolean (true or false)
-let nullValue = null; // Null (explicit absence of value)
-let undefinedValue; // Undefined (variable declared but not assigned)
-let bigInt = 9007199254740991n; // BigInt for large integers
-let symbol = Symbol("unique"); // Symbol (unique and immutable)
+let string = "This is a string"; // String - sequence of characters with no size limit (limited by memory)
+let number = 42; // Number - 64-bit floating point (±5.0x10^-324 to ±1.7977x10^308, integers precise up to ±2^53-1)
+let decimal = 42.5; // Also a number - same 64-bit floating point format as above
+let boolean = true; // Boolean - only two possible values: true or false
+let nullValue = null; // Null - intentional absence of any object value (only one value: null)
+let undefinedValue; // Undefined - variable declared but not assigned (only one value: undefined)
+let bigInt = 9007199254740991n; // BigInt - for integers beyond Number.MAX_SAFE_INTEGER (±2^53-1), no theoretical upper limit (memory-bound)
+let symbol = Symbol("unique"); // Symbol - unique and immutable identifier, can have optional description string
 
 // Complex types
 let array = [1, 2, 3, "four", true]; // Array
