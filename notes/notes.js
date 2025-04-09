@@ -68,10 +68,52 @@ let hasPermission = false;            // Boolean prefixed with "has"
 //  3. VARIABLES & DATA TYPES
 // =========================
 
-// Variable declarations - ways to create named storage locations for data
-var oldVariable = "This is the older way to declare variables"; // Function-scoped, can be redeclared and hoisted
-let modernVariable = "Modern variable declaration";             // Block-scoped, introduced in ES6 (2015), cannot be redeclared in same scope
-const constant = "Cannot be reassigned";                        // Block-scoped constant, must be initialized at declaration and cannot be reassigned
+// Variable Declaration Methods - Different ways to create variables in JavaScript
+// 1. var - OUTDATED/LEGACY: Function-scoped, hoisted with initial value of undefined
+var oldVariable = "This is the older way to declare variables"; 
+// Problems with var:
+// - Function-scoped (not block-scoped), which can cause unexpected behavior
+// - Variables are hoisted to the top of their scope and initialized as undefined
+// - Can be redeclared multiple times in the same scope
+// - Creates properties on the global object when declared globally
+// Example of var problems:
+// if (true) {
+//   var scopeTest = "I'm visible outside the block"; 
+// }
+// console.log(scopeTest); // Works - var is not block-scoped
+
+// 2. let - RECOMMENDED: Modern block-scoped variable that can be reassigned
+let modernVariable = "Modern variable declaration";
+// Benefits of let:
+// - Block-scoped (only accessible within declaring block)
+// - Hoisted but not initialized (in "temporal dead zone" until declaration)
+// - Cannot be redeclared in the same scope
+// - Does not create properties on the global object
+// Example of let benefits:
+// if (true) {
+//   let blockScoped = "I'm only visible in this block";
+// }
+// console.log(blockScoped); // Error - let is block-scoped
+
+// 3. const - RECOMMENDED: Block-scoped variable that cannot be reassigned
+const constant = "Cannot be reassigned";
+// Properties of const:
+// - Must be initialized at declaration
+// - Cannot be reassigned (but object/array contents can still be modified)
+// - Same scoping rules as let (block-scoped)
+// Example of const behavior:
+// const obj = { prop: "value" };
+// obj.prop = "new value"; // Valid - changing property
+// obj = {}; // Error - cannot reassign const
+
+// 4. No keyword (implicit global) - AVOID: Creates global variables
+// implicitGlobal = "Never do this"; // Creates a property on the global object
+// Always use let, const, or var (in legacy code only) to declare variables
+
+// 5. Using Window/globalThis object - AVOID except for specific purposes
+// window.explicitGlobal = "Also avoid"; // Browser-only, explicitly creates global property
+
+// Best practice: Use const by default, let when reassignment is needed, avoid var completely
 
 // Data Types - JavaScript has 8 basic data types (7 primitive + objects)
 
@@ -293,23 +335,100 @@ for (let i = 0; i < 10; i++) {
 //  7. FUNCTIONS
 // =========================
 
-// Function declaration - defines a named function
-// Hoisted to the top of its scope, can be called before declaration in code
-function greet(name) {                // Function name followed by parameters in parentheses
-    return `Hello, ${name}!`;         // Return statement defines the value returned by the function
+// JavaScript offers multiple ways to declare functions, each with different behaviors
+
+// 1. Function Declaration - Hoisted, named function
+function greet(name) {                // Classic syntax, function name required
+    return `Hello, ${name}!`;         // Can be called before its declaration (hoisted)
 }                                     // Without return, function returns undefined
 
-// Function expression - assigns anonymous function to a variable
-// Not hoisted, can only be used after definition in code
-const sayHello = function(name) {       // Anonymous function assigned to constant sayHello
-    return `Hello, ${name}!`;           // Behaves like function declaration but with different hoisting behavior
-};                                      // Semicolon needed as this is a variable assignment
+// 2. Function Expression - Not hoisted, can be anonymous or named
+// 2a. Anonymous Function Expression
+const sayHello = function(name) {       // Anonymous function assigned to variable
+    return `Hello, ${name}!`;           // Must be defined before use (not hoisted)
+};                                      // Semicolon needed as this is an assignment
 
-// Arrow function (ES6) - shorter syntax for function expressions
-// Uses => syntax, lexically binds this value
-const greetArrow = (name) => `Hello, ${name}!`;  // Parentheses for parameters (can be omitted with single parameter)
-                                                // Implicit return when no braces used (value after arrow is returned)
-                                                // With braces, explicit return statement is required
+// 2b. Named Function Expression 
+const sayHi = function greetUser(name) { // Named function expression
+    return `Hi, ${name}!`;              // Name is only available inside function for recursion
+};                                       // External code uses variable name (sayHi)
+
+// 3. Arrow Function (ES6) - No 'this' binding, shorter syntax
+// 3a. Arrow function with implicit return (no braces)
+const greetArrow = (name) => `Hello, ${name}!`;  // Single expression is returned without 'return'
+                                                // No 'this' binding, inherits from parent scope
+
+// 3b. Arrow function with block body (requires explicit return)
+const greetArrowBlock = (name) => {
+    // Multiple statements need braces
+    const message = `Hello, ${name}!`;
+    return message;  // Explicit return required with braces
+};
+
+// 3c. Arrow function with single parameter (can omit parentheses)
+const squareFunc = x => x * x;  // Parentheses can be omitted with exactly one parameter
+
+// 3d. Arrow function with no parameters (requires parentheses)
+const greetSimple = () => "Hello!";  // Empty parentheses required with no parameters
+
+// 4. Method definition in object literals (ES6)
+const greeter = {
+    name: "Friendly Greeter",
+    greet(person) {              // Shorthand method definition (same as greet: function(person))
+        return `Hello, ${person}!`;
+    }
+};
+
+// 5. Class methods (ES6) - methods in class definitions
+class Greeter {
+    constructor(name) {
+        this.name = name;
+    }
+    
+    greet(person) {              // Method in a class
+        return `${this.name} says hello to ${person}!`;
+    }
+    
+    // Static method belongs to class itself, not instances
+    static create(name) {
+        return new Greeter(name);
+    }
+}
+
+// 6. Generator functions (ES6) - functions that can yield multiple values
+function* idGenerator() {        // Asterisk marks it as a generator
+    let id = 0;
+    while (true) {
+        yield id++;              // yield returns a value and pauses execution
+    }
+}
+
+// 7. Async functions (ES2017) - functions that return promises
+async function fetchData() {      // async keyword makes function return a promise
+    try {
+        const response = await fetch('https://api.example.com/data');
+        return await response.json();
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// 8. Immediately Invoked Function Expression (IIFE) - self-executing function
+(function() {                           // Function expression wrapped in parentheses
+    let privateVar = "I'm private";     // Variables inside are not accessible from outside
+    console.log("This runs immediately!"); 
+})();                                   // Parentheses immediately invoke the function
+
+// 9. Function constructor - AVOID except for very specific cases
+// const dynamicFn = new Function('a', 'b', 'return a + b');  // Creates function from string
+// console.log(dynamicFn(2, 3));  // 5
+
+// Best practices:
+// - Use function declarations for core functions that need hoisting
+// - Use arrow functions for callbacks and short methods
+// - Use method shorthand in objects
+// - Avoid the Function constructor (security and performance issues)
+// - Prefer named functions for better debugging and stack traces
 
 // Default parameters - provide fallback values for parameters
 function greetWithDefault(name = "Guest") {     // If name argument is undefined, "Guest" is used
@@ -330,13 +449,6 @@ function testScope() {
     console.log(localVar);                 // Can access local variables
 }
 // console.log(localVar);                  // Error: localVar is not defined in this scope
-
-// Immediately Invoked Function Expression (IIFE) - function executed immediately after definition
-// Used to create private scope and avoid polluting global namespace
-(function() {                           // Function expression wrapped in parentheses
-    let privateVar = "I'm private";     // Variables inside are not accessible from outside
-    console.log("This runs immediately!"); 
-})();                                   // Parentheses immediately invoke the function
 
 // Callback functions - functions passed as arguments to other functions
 // Fundamental for asynchronous programming in JavaScript
