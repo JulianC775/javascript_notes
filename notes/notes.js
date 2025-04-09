@@ -1,38 +1,50 @@
 // ======================================================
 //  JAVASCRIPT FUNDAMENTALS NOTES
 // ======================================================
+// This file contains comprehensive notes on JavaScript fundamentals
+// covering syntax, data types, control structures, and more
 
 // =========================
 //  1. NAMING CONVENTIONS
 // =========================
+// JavaScript naming conventions help maintain code consistency and readability
 
 // Camel Case: First word lowercase, subsequent words capitalize first letter
 // Used for: variables, functions, methods, properties, parameters
-let userName = "john_doe";
-function calculateTotal() { }
-const getUserData = () => { };
-object.propertyName = value;
+// This is the most common convention in JavaScript
+let userName = "john_doe";        // Variable using camel case
+function calculateTotal() { }     // Function using camel case
+const getUserData = () => { };    // Arrow function using camel case
+object.propertyName = value;      // Object property using camel case
 
 // Pascal Case (Upper Camel Case): Capitalize first letter of every word
 // Used for: classes, constructor functions, React components
-class UserProfile { }
-function Person(name) { }
-const ButtonComponent = () => { };
+// Helps distinguish class definitions from regular functions/variables
+class UserProfile { }                 // Class definition using Pascal case
+function Person(name) { }             // Constructor function using Pascal case
+const ButtonComponent = () => { };    // React component using Pascal case
 
 // Other naming conventions:
 // - UPPER_SNAKE_CASE: For constants that are truly unchanging
-const MAX_USERS = 50;
+// Used for values that are known at compile time and never change
+const MAX_USERS = 50;                 // Constant using UPPER_SNAKE_CASE
+
 // - Private variables/methods: Prefix with underscore (convention only)
-let _privateVariable = "hidden";
+// JavaScript doesn't have true private fields (until class # syntax), so _ is used to signal intent
+let _privateVariable = "hidden";      // Conventional way to indicate private variable
+
 // - Boolean variables: Prefix with "is", "has", "can"
-let isActive = true;
-let hasPermission = false;
+// Makes code more readable by explicitly indicating boolean nature
+let isActive = true;                  // Boolean prefixed with "is"
+let hasPermission = false;            // Boolean prefixed with "has"
 
 // =========================
-//  1. JAVASCRIPT INTRODUCTION
+//  2. JAVASCRIPT INTRODUCTION
 // =========================
 
 // JavaScript is a high-level, interpreted programming language primarily used for web development
+// It's single-threaded with non-blocking I/O, making it ideal for event-driven programming
+// JavaScript was created in 10 days in May 1995 by Brendan Eich while at Netscape
 // It allows you to implement complex features on web pages and make them interactive
 // JavaScript is one of the core technologies of the web, alongside HTML and CSS
 
@@ -40,484 +52,653 @@ let hasPermission = false;
 // 1. Internal JavaScript:
 /*
 <script>
-    // JavaScript code here
+    // JavaScript code here - embedded directly in HTML file
+    // Executes when the parser reaches this point in the HTML document
 </script>
 */
 
 // 2. External JavaScript:
 /*
 <script src="script.js"></script>
+<!-- External scripts are more maintainable and can be cached by browsers -->
+<!-- Can be placed in <head> (with defer/async) or at end of <body> to ensure DOM is loaded -->
 */
 
 // =========================
-//  2. VARIABLES & DATA TYPES
+//  3. VARIABLES & DATA TYPES
 // =========================
 
-// Variable declarations
-var oldVariable = "This is the older way to declare variables"; // Function-scoped, can be redeclared
-let modernVariable = "Modern variable declaration"; // Block-scoped
-const constant = "Cannot be reassigned"; // Block-scoped constant
+// Variable declarations - ways to create named storage locations for data
+var oldVariable = "This is the older way to declare variables"; // Function-scoped, can be redeclared and hoisted
+let modernVariable = "Modern variable declaration";             // Block-scoped, introduced in ES6 (2015), cannot be redeclared in same scope
+const constant = "Cannot be reassigned";                        // Block-scoped constant, must be initialized at declaration and cannot be reassigned
 
-// Data Types
+// Data Types - JavaScript has 8 basic data types (7 primitive + objects)
 
-// Primitive types
-let string = "This is a string"; // String - sequence of characters with no size limit (limited by memory)
-let number = 42; // Number - 64-bit floating point (±5.0x10^-324 to ±1.7977x10^308, integers precise up to ±2^53-1)
-let decimal = 42.5; // Also a number - same 64-bit floating point format as above
-let boolean = true; // Boolean - only two possible values: true or false
-let nullValue = null; // Null - intentional absence of any object value (only one value: null)
-let undefinedValue; // Undefined - variable declared but not assigned (only one value: undefined)
-let bigInt = 9007199254740991n; // BigInt - for integers beyond Number.MAX_SAFE_INTEGER (±2^53-1), no theoretical upper limit (memory-bound)
-let symbol = Symbol("unique"); // Symbol - unique and immutable identifier, can have optional description string
+// Primitive types - immutable data types that are passed by value
+let string = "This is a string";   // String - sequence of characters enclosed in quotes ('' or "")
+                                   // Used for text, no size limit (limited by memory)
+                                   // Has properties like .length and methods like .substring(), .toLowerCase()
 
-// Complex types
-let array = [1, 2, 3, "four", true]; // Array
-let object = { name: "John", age: 30 }; // Object
-let functionVar = function() { return "Hello"; }; // Function
+let number = 42;                   // Number - 64-bit floating point format (IEEE 754 standard)
+                                   // Range: ±5.0x10^-324 to ±1.7977x10^308
+                                   // Integers are precise up to ±2^53-1 (9,007,199,254,740,991)
+                                   // Special values: Infinity, -Infinity, NaN (Not a Number)
 
-// Type checking
-console.log(typeof string); // 'string'
-console.log(typeof number); // 'number'
-console.log(typeof object); // 'object'
-console.log(Array.isArray(array)); // true - special check for arrays
+let decimal = 42.5;                // Also a Number - JavaScript doesn't distinguish between integers and floating-point
+                                   // Decimal numbers use the same 64-bit floating point format
 
-// Type conversion
-let numString = "42";
-let convertedNum = Number(numString); // String to number
-let strFromNum = String(convertedNum); // Number to string
-let boolFromNum = Boolean(convertedNum); // Number to boolean (0 is false, all other numbers are true)
+let boolean = true;                // Boolean - logical data type with only two values: true or false
+                                   // Used for conditional logic, comparisons, and control flow
+
+let nullValue = null;              // Null - represents intentional absence of any object value
+                                   // Only one possible value: null
+                                   // typeof null returns 'object' (a longstanding JavaScript bug)
+
+let undefinedValue;                // Undefined - variable declared but not assigned a value
+                                   // Only one possible value: undefined
+                                   // Functions without return statements return undefined
+
+let bigInt = 9007199254740991n;    // BigInt - for integers larger than Number.MAX_SAFE_INTEGER (±2^53-1)
+                                   // Created by appending 'n' to an integer or using BigInt() constructor
+                                   // No upper theoretical limit (only limited by available memory)
+                                   // Cannot be mixed with Numbers in operations without explicit conversion
+
+let symbol = Symbol("unique");     // Symbol - unique and immutable primitive value used as object property identifiers
+                                   // Created using Symbol() function with optional description parameter
+                                   // Every Symbol value is unique, even with the same description
+                                   // Used for avoiding name collisions in object properties
+
+// Complex types - passed by reference
+let array = [1, 2, 3, "four", true];  // Array - ordered collection of values of any type
+                                      // Zero-indexed, dynamic size, accessed using bracket notation
+                                      // Has many built-in methods like push(), pop(), map(), filter()
+
+let object = { name: "John", age: 30 }; // Object - collection of key-value pairs (properties)
+                                        // Used to store related data and functionality
+                                        // Foundation for JavaScript's object-oriented capabilities
+                                        // Properties accessed via dot notation or bracket notation
+
+let functionVar = function() { return "Hello"; }; // Function - callable object that executes a block of code
+                                                  // Can be assigned to variables, passed as arguments, returned from other functions
+                                                  // Functions are first-class citizens in JavaScript
+
+// Type checking - methods to determine data types
+console.log(typeof string);       // 'string' - typeof operator returns a string indicating the data type
+console.log(typeof number);       // 'number' - works for primitive types but has limitations
+console.log(typeof object);       // 'object' - doesn't distinguish between object types (arrays, null, etc.)
+console.log(Array.isArray(array)); // true - special method to check if a value is an Array (typeof array returns 'object')
+
+// Type conversion - changing from one data type to another
+let numString = "42";                   // A string containing a number
+let convertedNum = Number(numString);   // String to number conversion using Number() constructor 
+                                        // Returns NaN if string can't be converted to a valid number
+
+let strFromNum = String(convertedNum);  // Number to string conversion using String() constructor
+                                        // Alternative: number.toString() method
+
+let boolFromNum = Boolean(convertedNum); // Number to boolean conversion using Boolean() constructor
+                                         // Falsy values: 0, NaN, "", null, undefined, false
+                                         // All other values convert to true
 
 // =========================
-//  3. OPERATORS
+//  4. OPERATORS
 // =========================
 
-// Arithmetic operators
-let sum = 10 + 5; // Addition
-let difference = 10 - 5; // Subtraction
-let product = 10 * 5; // Multiplication
-let quotient = 10 / 5; // Division
-let remainder = 10 % 3; // Modulus (remainder)
-let exponent = 10 ** 2; // Exponentiation (10 squared)
+// Arithmetic operators - perform mathematical operations on values
+let sum = 10 + 5;         // Addition operator (+) - adds values, returns their sum (15)
+let difference = 10 - 5;  // Subtraction operator (-) - subtracts right value from left value (5)
+let product = 10 * 5;     // Multiplication operator (*) - multiplies values, returns product (50)
+let quotient = 10 / 5;    // Division operator (/) - divides left value by right value (2)
+let remainder = 10 % 3;   // Modulus operator (%) - returns division remainder (1)
+let exponent = 10 ** 2;   // Exponentiation operator (**) - raises left value to power of right value (100)
 
-// Increment/Decrement
+// Increment/Decrement operators - increase or decrease a value by 1
 let counter = 0;
-counter++; // Increment by 1
-counter--; // Decrement by 1
+counter++;    // Increment operator (++) - increases value by 1 (post-increment: returns value then increments)
+counter--;    // Decrement operator (--) - decreases value by 1 (post-decrement: returns value then decrements)
+// Pre-increment (++counter) increments value then returns it
+// Post-increment (counter++) returns value then increments it
 
-// Assignment operators
-let x = 10;
-x += 5; // Same as: x = x + 5;
-x -= 5; // Same as: x = x - 5;
-x *= 2; // Same as: x = x * 2;
-x /= 2; // Same as: x = x / 2;
-x %= 3; // Same as: x = x % 3;
+// Assignment operators - assign values to variables
+let x = 10;     // Assignment operator (=) - assigns right value to left variable
+x += 5;         // Addition assignment (+=) - adds right value to variable and assigns result (x = x + 5; now x is 15)
+x -= 5;         // Subtraction assignment (-=) - subtracts right value from variable (x = x - 5; now x is 10)
+x *= 2;         // Multiplication assignment (*=) - multiplies variable by right value (x = x * 2; now x is 20)
+x /= 2;         // Division assignment (/=) - divides variable by right value (x = x / 2; now x is 10)
+x %= 3;         // Modulus assignment (%=) - assigns remainder of division to variable (x = x % 3; now x is 1)
 
-// Comparison operators
-let isEqual = 10 == "10"; // Equal in value (true)
-let isStrictEqual = 10 === "10"; // Equal in value and type (false)
-let isNotEqual = 10 != 5; // Not equal (true)
-let isStrictNotEqual = 10 !== "10"; // Not equal in value or type (true)
-let isGreater = 10 > 5; // Greater than
-let isLess = 5 < 10; // Less than
-let isGreaterOrEqual = 10 >= 10; // Greater than or equal
-let isLessOrEqual = 5 <= 10; // Less than or equal
+// Comparison operators - compare values and return boolean
+let isEqual = 10 == "10";              // Equal (==) - compares values, performs type coercion (true)
+                                       // Type coercion converts the string "10" to number 10 before comparison
 
-// Logical operators
-let and = true && false; // Logical AND (false)
-let or = true || false; // Logical OR (true)
-let not = !true; // Logical NOT (false)
+let isStrictEqual = 10 === "10";       // Strict equal (===) - compares values AND types, no coercion (false)
+                                       // 10 is a number, "10" is a string, so they're not strictly equal
 
-// String operators
+let isNotEqual = 10 != 5;              // Not equal (!=) - checks if values are not equal, with coercion (true)
+let isStrictNotEqual = 10 !== "10";    // Strict not equal (!==) - checks if values OR types are different (true)
+
+let isGreater = 10 > 5;                // Greater than (>) - checks if left value is greater than right (true)
+let isLess = 5 < 10;                   // Less than (<) - checks if left value is less than right (true)
+let isGreaterOrEqual = 10 >= 10;       // Greater than or equal (>=) - checks if left is greater or equal (true)
+let isLessOrEqual = 5 <= 10;           // Less than or equal (<=) - checks if left is less or equal (true)
+
+// Logical operators - perform logical operations and return boolean
+let and = true && false;   // Logical AND (&&) - returns true if both operands are true, otherwise false (false)
+                          // Short-circuits: if left operand is false, right operand isn't evaluated
+
+let or = true || false;    // Logical OR (||) - returns true if either operand is true (true)
+                          // Short-circuits: if left operand is true, right operand isn't evaluated
+
+let not = !true;           // Logical NOT (!) - returns the opposite boolean value (false)
+                          // Double negation (!!) can be used to convert any value to its boolean equivalent
+
+// String operators - work with text
 let firstNameEx = "John";
 let lastNameEx = "Doe";
-let fullName = firstNameEx + " " + lastNameEx; // String concatenation
-let template = `${firstNameEx} ${lastNameEx}`; // Template literals (ES6)
+let fullName = firstNameEx + " " + lastNameEx;   // String concatenation (+) - joins strings together ("John Doe")
+                                                // Plus operator becomes concatenation when any operand is a string
+
+let template = `${firstNameEx} ${lastNameEx}`;   // Template literals (ES6) - string interpolation using backticks
+                                                // Allows embedding expressions ${...} directly in strings
+                                                // Supports multi-line strings without explicit newlines
 
 // =========================
-//  4. CONTROL FLOW
+//  5. CONTROL FLOW
 // =========================
 
-// If statement
+// If statement - conditional execution based on boolean condition
 let age = 18;
-if (age >= 18) {
-    console.log("You are an adult");
-} else if (age >= 13) {
-    console.log("You are a teenager");
-} else {
-    console.log("You are a child");
+if (age >= 18) {                   // Evaluates condition in parentheses
+    console.log("You are an adult"); // Executes if condition is true (age is 18 or higher)
+} else if (age >= 13) {            // Optional additional condition, checked if previous conditions are false
+    console.log("You are a teenager"); // Executed if age is between 13 and 17
+} else {                           // Optional default case, runs if all conditions are false
+    console.log("You are a child");   // Executed if age is less than 13
 }
 
-// Ternary operator
-let status = age >= 18 ? "Adult" : "Minor";
+// Ternary operator - shorthand conditional expression
+// Syntax: condition ? expressionIfTrue : expressionIfFalse
+let status = age >= 18 ? "Adult" : "Minor";  // If age >= 18, status = "Adult", otherwise "Minor"
+                                            // Shorter alternative to if-else for simple conditional assignments
 
-// Switch statement
+// Switch statement - multi-way branch statement
 let day = "Monday";
-switch (day) {
-    case "Monday":
-        console.log("Start of work week");
-        break;
+switch (day) {                            // Evaluates expression in parentheses once
+    case "Monday":                        // Compares expression with case value using strict equality (===)
+        console.log("Start of work week"); // Executes if match is found
+        break;                            // Exits the switch statement (prevents fall-through to next case)
     case "Friday":
         console.log("End of work week");
         break;
-    case "Saturday":
-    case "Sunday":
+    case "Saturday":                      // Multiple cases without break statements
+    case "Sunday":                        // Fall-through: both cases execute the same code block
         console.log("Weekend!");
         break;
-    default:
-        console.log("Midweek");
+    default:                              // Optional default case, executes if no case matches
+        console.log("Midweek");           // Like else in if statement
 }
 
 // =========================
-//  5. LOOPS
+//  6. LOOPS
 // =========================
 
-// For loop
-for (let i = 0; i < 5; i++) {
-    console.log(`Iteration ${i}`);
-}
+// For loop - most common loop with initialization, condition, and increment/decrement
+// Syntax: for (initialization; condition; final-expression) { code block }
+for (let i = 0; i < 5; i++) {          // i is initialized to 0, loop runs while i < 5, i increases by 1 after each iteration
+    console.log(`Iteration ${i}`);     // Body executes 5 times with i values: 0, 1, 2, 3, 4
+}                                      // let i is block-scoped to the loop (not available outside)
 
-// While loop
-let count = 0;
-while (count < 5) {
-    console.log(`Count: ${count}`);
-    count++;
-}
+// While loop - repeats as long as condition is true
+// Syntax: while (condition) { code block }
+let count = 0;                     // Initialize counter before loop
+while (count < 5) {                // Check condition before each iteration
+    console.log(`Count: ${count}`); // Loop body
+    count++;                       // Update counter (must be done manually to avoid infinite loop)
+}                                  // Loop runs while count < 5 (5 times with values 0-4)
 
-// Do-while loop (executes at least once)
+// Do-while loop - variant of while loop that executes at least once
+// Syntax: do { code block } while (condition);
 let counter2 = 0;
 do {
-    console.log(`Number: ${counter2}`);
-    counter2++;
-} while (counter2 < 5);
+    console.log(`Number: ${counter2}`); // Body executes first
+    counter2++;                         // Then counter is updated
+} while (counter2 < 5);                 // Condition checked after execution
+                                       // Guarantees at least one execution even if condition is initially false
 
-// For...of loop (for iterables like arrays)
+// For...of loop - iterates over iterable objects (arrays, strings, maps, sets)
+// Syntax: for (variable of iterable) { code block }
 let colors = ["red", "green", "blue"];
-for (let color of colors) {
-    console.log(color);
-}
+for (let color of colors) {            // In each iteration, color gets the current value from colors
+    console.log(color);                // Simpler than for loop for iterating array elements
+}                                      // No need to access by index or track count
 
-// For...in loop (for object properties)
+// For...in loop - iterates over enumerable properties of an object
+// Syntax: for (variable in object) { code block }
 let person = { name: "John", age: 30, job: "Developer" };
-for (let key in person) {
-    console.log(`${key}: ${person[key]}`);
-}
+for (let key in person) {                 // key gets each property name ("name", "age", "job")
+    console.log(`${key}: ${person[key]}`); // Access value using bracket notation
+}                                         // Careful: also iterates over inherited properties
 
-// Breaking and continuing
+// Breaking and continuing - control loop execution
 for (let i = 0; i < 10; i++) {
-    if (i === 3) continue; // Skip this iteration
-    if (i === 8) break; // Exit the loop
-    console.log(i);
+    if (i === 3) continue;  // Skip the rest of the current iteration and move to next iteration
+                           // The value 3 won't be logged
+    if (i === 8) break;     // Exit the loop completely
+                           // The values 8 and 9 won't be logged
+    console.log(i);         // Outputs: 0, 1, 2, 4, 5, 6, 7
 }
 
 // =========================
-//  6. FUNCTIONS
+//  7. FUNCTIONS
 // =========================
 
-// Function declaration
-function greet(name) {
-    return `Hello, ${name}!`;
-}
+// Function declaration - defines a named function
+// Hoisted to the top of its scope, can be called before declaration in code
+function greet(name) {                // Function name followed by parameters in parentheses
+    return `Hello, ${name}!`;         // Return statement defines the value returned by the function
+}                                     // Without return, function returns undefined
 
-// Function expression
-const sayHello = function(name) {
-    return `Hello, ${name}!`;
-};
+// Function expression - assigns anonymous function to a variable
+// Not hoisted, can only be used after definition in code
+const sayHello = function(name) {       // Anonymous function assigned to constant sayHello
+    return `Hello, ${name}!`;           // Behaves like function declaration but with different hoisting behavior
+};                                      // Semicolon needed as this is a variable assignment
 
-// Arrow function (ES6)
-const greetArrow = (name) => `Hello, ${name}!`;
+// Arrow function (ES6) - shorter syntax for function expressions
+// Uses => syntax, lexically binds this value
+const greetArrow = (name) => `Hello, ${name}!`;  // Parentheses for parameters (can be omitted with single parameter)
+                                                // Implicit return when no braces used (value after arrow is returned)
+                                                // With braces, explicit return statement is required
 
-// Default parameters
-function greetWithDefault(name = "Guest") {
-    return `Hello, ${name}!`;
-}
+// Default parameters - provide fallback values for parameters
+function greetWithDefault(name = "Guest") {     // If name argument is undefined, "Guest" is used
+    return `Hello, ${name}!`;                   // Allows function to be called without arguments
+}                                               // greetWithDefault() returns "Hello, Guest!"
 
-// Rest parameters
-function sum(...numbers) {
-    return numbers.reduce((total, num) => total + num, 0);
-}
-console.log(sum(1, 2, 3, 4)); // 10
+// Rest parameters - represents indefinite number of arguments as an array
+function sum(...numbers) {                      // ...numbers collects all arguments into an array
+    return numbers.reduce((total, num) => total + num, 0); // Process the array using array methods
+}                                               // Useful for functions with variable argument count
+console.log(sum(1, 2, 3, 4));                   // Passes four arguments, collected into [1, 2, 3, 4], result: 10
 
-// Function scope
-let globalVar = "I'm global";
+// Function scope - variables declared inside function are only accessible inside that function
+let globalVar = "I'm global";              // Variable declared outside any function (global scope)
 function testScope() {
-    let localVar = "I'm local";
-    console.log(globalVar); // Accessible
-    console.log(localVar); // Accessible
+    let localVar = "I'm local";            // Variable declared inside function (local scope)
+    console.log(globalVar);                // Can access global variables from inner scope
+    console.log(localVar);                 // Can access local variables
 }
-// console.log(localVar); // Error: localVar is not defined
+// console.log(localVar);                  // Error: localVar is not defined in this scope
 
-// Immediately Invoked Function Expression (IIFE)
-(function() {
-    let privateVar = "I'm private";
-    console.log("This runs immediately!");
-})();
+// Immediately Invoked Function Expression (IIFE) - function executed immediately after definition
+// Used to create private scope and avoid polluting global namespace
+(function() {                           // Function expression wrapped in parentheses
+    let privateVar = "I'm private";     // Variables inside are not accessible from outside
+    console.log("This runs immediately!"); 
+})();                                   // Parentheses immediately invoke the function
 
-// Callback functions
-function processUserInput(callback) {
-    let name = "John"; // In real case, this might come from user input
-    callback(name);
+// Callback functions - functions passed as arguments to other functions
+// Fundamental for asynchronous programming in JavaScript
+function processUserInput(callback) {        // Takes function as parameter
+    let name = "John";                       // In real case, this might come from user input
+    callback(name);                          // Calls the provided function with name as argument
 }
 
-processUserInput(function(name) {
-    console.log(`Hello, ${name}`);
+processUserInput(function(name) {            // Passing anonymous function as callback
+    console.log(`Hello, ${name}`);           // Will be executed when callback is called in processUserInput
 });
 
 // =========================
-//  7. ARRAYS
+//  8. ARRAYS
 // =========================
 
-// Creating arrays
-let fruits = ["Apple", "Banana", "Orange"];
-let mixed = [1, "two", true, null, {name: "object"}, [1, 2]];
-let arrayConstructor = new Array(1, 2, 3);
+// Creating arrays - ordered, indexed collections of values
+let fruits = ["Apple", "Banana", "Orange"];     // Array literal - most common way to create arrays
+                                               // Elements can be of any type and mixed
 
-// Accessing elements
-let firstFruit = fruits[0]; // "Apple"
-let lastFruit = fruits[fruits.length - 1]; // "Orange"
+let mixed = [1, "two", true, null, {name: "object"}, [1, 2]];  // Array with mixed data types
+                                                             // Can contain primitives, objects, and other arrays
 
-// Array methods
-fruits.push("Mango"); // Add to end
-fruits.pop(); // Remove from end
-fruits.unshift("Strawberry"); // Add to beginning
-fruits.shift(); // Remove from beginning
-fruits.splice(1, 1, "Pear"); // Remove 1 element at index 1 and insert "Pear"
-let newFruits = fruits.slice(1, 3); // Copy elements from index 1 to 2 (3 non-inclusive)
-let combined = fruits.concat(["Kiwi", "Peach"]); // Combine arrays
-let joinedString = fruits.join(", "); // Join array elements into string
-let index = fruits.indexOf("Banana"); // Find element index
+let arrayConstructor = new Array(1, 2, 3);   // Array constructor - alternative way to create arrays
+                                            // Caution: new Array(5) creates array with 5 empty slots
 
-// Iterating over arrays
-fruits.forEach(function(fruit) {
-    console.log(fruit);
-});
+// Accessing elements - array elements are accessed by index (zero-based)
+let firstFruit = fruits[0];                 // Access first element (index 0) - "Apple"
+let lastFruit = fruits[fruits.length - 1];  // Access last element - "Orange"
+                                           // length property returns the number of elements
 
-// Map, filter, reduce
+// Array methods - built-in functions for array manipulation
+fruits.push("Mango");        // push() - adds one or more elements to end of array
+                            // Returns new array length, modifies original array
+
+fruits.pop();                // pop() - removes last element from array
+                            // Returns removed element, modifies original array
+
+fruits.unshift("Strawberry"); // unshift() - adds one or more elements to beginning of array
+                             // Returns new array length, modifies original array
+
+fruits.shift();              // shift() - removes first element from array
+                            // Returns removed element, modifies original array
+
+fruits.splice(1, 1, "Pear");  // splice() - changes array by removing and/or adding elements
+                             // First argument: start index
+                             // Second argument: delete count
+                             // Additional arguments: elements to add
+                             // Returns removed elements, modifies original array
+
+let newFruits = fruits.slice(1, 3);   // slice() - extracts section of array without modifying original
+                                     // First argument: start index (inclusive)
+                                     // Second argument: end index (exclusive)
+                                     // Returns new array with extracted elements
+
+let combined = fruits.concat(["Kiwi", "Peach"]);  // concat() - joins arrays into new array
+                                                 // Does not modify original arrays
+                                                 // Returns new combined array
+
+let joinedString = fruits.join(", ");   // join() - creates string from array elements
+                                       // Argument: separator between elements
+                                       // Returns string with all elements joined
+
+let index = fruits.indexOf("Banana");   // indexOf() - finds index of element in array
+                                       // Returns first matching index or -1 if not found
+
+// Iterating over arrays - different ways to process array elements
+fruits.forEach(function(fruit) {       // forEach() - executes function for each element
+    console.log(fruit);                // First parameter: current element
+});                                    // Additional parameters: index, array
+
+// Higher-order array methods - functional programming approaches
 let numbers = [1, 2, 3, 4, 5];
 
-// Map - transform each element
-let doubled = numbers.map(num => num * 2); // [2, 4, 6, 8, 10]
+// Map - transform each element according to a function
+let doubled = numbers.map(num => num * 2);  // map() - creates new array with results of calling function on each element
+                                           // Returns new array of same length with transformed elements
+                                           // Original array remains unchanged
+                                           // Result: [2, 4, 6, 8, 10]
 
 // Filter - create new array with elements that pass test
-let evens = numbers.filter(num => num % 2 === 0); // [2, 4]
+let evens = numbers.filter(num => num % 2 === 0);  // filter() - creates new array with elements that pass test function
+                                                  // Function should return boolean value
+                                                  // Returns new array with matching elements only
+                                                  // Original array remains unchanged
+                                                  // Result: [2, 4]
 
 // Reduce - reduce array to single value
-let sum2 = numbers.reduce((total, num) => total + num, 0); // 15
+let sum2 = numbers.reduce((total, num) => total + num, 0);  // reduce() - applies function to accumulator and each element
+                                                           // First parameter: callback function with accumulator and current value
+                                                           // Second parameter: initial accumulator value (0 in this case)
+                                                           // Returns final accumulated value
+                                                           // Result: 15 (1+2+3+4+5)
 
-// Sort
-let sortedNumbers = [5, 2, 8, 1].sort((a, b) => a - b); // [1, 2, 5, 8]
+// Sort - arranges elements in place
+let sortedNumbers = [5, 2, 8, 1].sort((a, b) => a - b);  // sort() - sorts elements in place and returns array
+                                                        // Without argument, sorts as strings lexicographically
+                                                        // Callback function for numeric sorting:
+                                                        // - Return negative: a comes before b
+                                                        // - Return positive: b comes before a
+                                                        // - Return 0: order unchanged
+                                                        // Result: [1, 2, 5, 8]
 
 // =========================
-//  8. OBJECTS
+//  9. OBJECTS
 // =========================
 
-// Creating objects
+// Creating objects - collections of key-value pairs
 let user = {
-    firstName: "John",
-    lastName: "Doe",
-    age: 30,
-    email: "john@example.com",
+    firstName: "John",             // Object literal - most common way to create objects
+    lastName: "Doe",               // Properties are key-value pairs
+    age: 30,                       // Keys are strings (quotation marks optional if valid identifier)
+    email: "john@example.com",     // Values can be any data type
     isAdmin: false,
-    address: {
+    address: {                     // Nested object as property value
         street: "123 Main St",
         city: "Anytown"
     },
-    greet: function() {
-        return `Hello, I'm ${this.firstName}`;
+    greet: function() {            // Method - function stored as property
+        return `Hello, I'm ${this.firstName}`; // this refers to current object
     }
 };
 
-// Accessing properties
-console.log(user.firstName); // Dot notation
-console.log(user["lastName"]); // Bracket notation
+// Accessing properties - two ways to access object properties
+console.log(user.firstName);      // Dot notation - simpler, more common
+                                 // Only works with valid identifiers as property names
 
-// Adding/modifying properties
-user.phone = "123-456-7890"; // Add new property
-user.age = 31; // Modify existing property
+console.log(user["lastName"]);    // Bracket notation - more flexible
+                                 // Works with any string as property name
+                                 // Required when property names have spaces or special characters
+                                 // Also allows dynamic property access: user[propertyName]
 
-// Deleting properties
-delete user.isAdmin;
+// Adding/modifying properties - objects are mutable
+user.phone = "123-456-7890";     // Add new property - create property if it doesn't exist
+user.age = 31;                   // Modify existing property - update value if property exists
 
-// Object methods
-console.log(user.greet()); // Method call
-console.log(Object.keys(user)); // Get array of property names
-console.log(Object.values(user)); // Get array of values
-console.log(Object.entries(user)); // Get array of [key, value] pairs
+// Deleting properties - remove properties from objects
+delete user.isAdmin;             // delete operator - removes property from object
+                                // Returns true if property could be deleted, false otherwise
 
-// Object destructuring
-let { firstName: fName, lastName: lName, age: userAge } = user; // Extract properties (with rename)
+// Object methods - built-in functions for object manipulation
+console.log(user.greet());                // Method call - invoking function stored as object property
+                                         // 'this' refers to the object the method belongs to
 
-// Spread operator
-let clonedUser = { ...user }; // Shallow copy
-let extendedUser = { ...user, role: "editor" }; // Copy and add property
+console.log(Object.keys(user));           // Object.keys() - returns array of property names (keys)
+                                         // Includes only own enumerable properties
 
-// Object constructor
-function Person(name, age) {
-    this.name = name;
-    this.age = age;
-    this.greet = function() {
+console.log(Object.values(user));         // Object.values() - returns array of property values
+                                         // Same order as Object.keys()
+
+console.log(Object.entries(user));        // Object.entries() - returns array of [key, value] pairs
+                                         // Useful for iterating through object properties
+
+// Object destructuring - extract multiple properties in a single statement
+let { firstName: fName, lastName: lName, age: userAge } = user;  // Extract properties with renaming
+                                                                // Creates variables fName, lName, userAge
+                                                                // Without renaming: let { firstName, lastName } = user;
+
+// Spread operator - copy properties from one object to another
+let clonedUser = { ...user };           // Shallow copy - creates new object with same properties
+                                       // Only copies own enumerable properties
+                                       // Nested objects are still referenced, not deeply copied
+
+let extendedUser = { ...user, role: "editor" };  // Copy properties and add new ones
+                                                // Existing properties come first, can be overridden by later properties
+
+// Object constructor - function used to create multiple similar objects
+function Person(name, age) {            // Constructor function - conventionally capitalized
+    this.name = name;                   // 'this' refers to the new object being created
+    this.age = age;                     // Properties assigned to 'this' become object properties
+    this.greet = function() {           // Methods assigned to 'this' become object methods
         return `Hello, I'm ${this.name}`;
     };
 }
 
-let john = new Person("John", 30);
+let john = new Person("John", 30);      // 'new' operator creates new object
+                                       // Calls Person constructor with new object as 'this'
+                                       // Returns the created object
 
 // =========================
-//  9. ERROR HANDLING
+//  10. ERROR HANDLING
 // =========================
 
-// Try...catch statement
+// Try...catch statement - handle errors without stopping program execution
 try {
     // Code that may throw an error
-    let result = nonExistentFunction();
+    let result = nonExistentFunction();  // This function doesn't exist - will throw ReferenceError
 } catch (error) {
-    console.error("An error occurred:", error.message);
+    // Code that executes if error occurs in try block
+    console.error("An error occurred:", error.message);  // error object contains details about the error
+                                                        // Common properties: message, name, stack
 } finally {
-    console.log("This always executes");
+    // Code that always executes, regardless of whether error occurred
+    console.log("This always executes");  // Used for cleanup operations (closing files, connections)
+                                         // Executes even if try or catch contain return statement
 }
 
-// Throwing errors
+// Throwing errors - create and trigger custom errors
 function divide(a, b) {
     if (b === 0) {
-        throw new Error("Division by zero");
+        // throw statement creates error object and triggers error handling
+        throw new Error("Division by zero");  // Error is built-in error constructor
+                                            // Program execution stops here unless caught
     }
     return a / b;
 }
 
-// Custom errors
-class ValidationError extends Error {
+// Custom errors - extend Error class for application-specific errors
+class ValidationError extends Error {  // Inherit from built-in Error class
     constructor(message) {
-        super(message);
-        this.name = "ValidationError";
+        super(message);               // Call parent constructor
+        this.name = "ValidationError"; // Customize error name
     }
 }
 
 // =========================
-//  10. ASYNCHRONOUS JAVASCRIPT
+//  11. ASYNCHRONOUS JAVASCRIPT
 // =========================
 
-// Callbacks
-function fetchData(callback) {
-    setTimeout(() => {
-        callback("Data received");
-    }, 1000);
+// Callbacks - functions passed as arguments to be executed later
+function fetchData(callback) {                  // Function that will execute asynchronously
+    setTimeout(() => {                          // setTimeout schedules function to run after delay
+        callback("Data received");              // Call the callback function with result
+    }, 1000);                                   // 1000ms (1 second) delay
 }
 
-fetchData(function(data) {
-    console.log(data);
-});
+fetchData(function(data) {                      // Passing callback function to handle result
+    console.log(data);                          // Executes when data is ready (after 1 second)
+});                                             // Program continues execution without waiting
 
-// Promises
-let promise = new Promise((resolve, reject) => {
-    let success = true;
+// Promises - objects representing eventual completion or failure of async operation
+let promise = new Promise((resolve, reject) => {  // Promise constructor takes executor function
+    let success = true;                          // Simulating async operation result
     if (success) {
-        resolve("Operation successful");
+        resolve("Operation successful");         // If operation succeeds, call resolve with result
     } else {
-        reject("Operation failed");
+        reject("Operation failed");              // If operation fails, call reject with error
     }
-});
+});                                              // Promise is immediately in "pending" state
 
 promise
-    .then(result => console.log(result))
-    .catch(error => console.error(error));
+    .then(result => console.log(result))         // .then() registers callback for fulfilled promise
+                                                // Receives value passed to resolve()
+    .catch(error => console.error(error));       // .catch() registers callback for rejected promise
+                                                // Receives value passed to reject()
 
-// Chaining promises
-fetch('https://api.example.com/data')
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
+// Chaining promises - sequence asynchronous operations
+fetch('https://api.example.com/data')            // fetch() returns promise for HTTP response
+    .then(response => response.json())           // .then() returns new promise for parsed JSON
+    .then(data => console.log(data))             // Chain another .then() to handle parsed data
+    .catch(error => console.error('Error:', error)); // Single catch handles errors in any previous step
 
-// Async/await
-async function fetchUserData() {
+// Async/await - syntactic sugar for working with promises
+async function fetchUserData() {                 // async keyword makes function return promise
     try {
-        let response = await fetch('https://api.example.com/user');
-        let userData = await response.json();
-        return userData;
+        let response = await fetch('https://api.example.com/user');  // await pauses execution until promise resolves
+                                                                    // Returns resolved value (not promise)
+        let userData = await response.json();                       // Can await multiple promises in sequence
+        return userData;                                            // Return value is wrapped in resolved promise
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error:', error);                             // try/catch works with await for error handling
     }
 }
 
 // =========================
-//  11. ES6+ FEATURES
+//  12. ES6+ FEATURES
 // =========================
 
 // Let and const (block-scoped variables)
 {
-    var varVariable = "var"; // Function-scoped
-    let letVariable = "let"; // Block-scoped
-    const constVariable = "const"; // Block-scoped, cannot be reassigned
+    var varVariable = "var";         // Function-scoped, can be redeclared, hoisted with initialization as undefined
+    let letVariable = "let";         // Block-scoped, cannot be redeclared in same scope, hoisted without initialization
+    const constVariable = "const";   // Block-scoped, cannot be reassigned, must be initialized at declaration
 }
-console.log(varVariable); // "var"
-// console.log(letVariable); // Error: letVariable is not defined
+console.log(varVariable);            // "var" - accessible outside block
+// console.log(letVariable);         // Error: letVariable is not defined - block-scoped variables not accessible outside
 
-// Template literals
+// Template literals - string interpolation and multi-line strings
 let name = "Alice";
-let greeting = `Hello, ${name}! Today is ${new Date().toLocaleDateString()}.`;
+let greeting = `Hello, ${name}! Today is ${new Date().toLocaleDateString()}.`;  // Backticks for template literals
+                                                                               // ${} for embedding expressions
+                                                                               // Supports multi-line strings without \n
 
-// Destructuring
-let [first, second, ...rest] = [1, 2, 3, 4, 5]; // Array destructuring
-let { title, author, year = 2023 } = { title: "Book", author: "Author" }; // Object destructuring with default
+// Destructuring - extract values from arrays or properties from objects
+let [first, second, ...rest] = [1, 2, 3, 4, 5];  // Array destructuring
+                                                // first = 1, second = 2, rest = [3, 4, 5]
+                                                // ...rest is rest parameter syntax for remaining elements
 
-// Spread operator
+let { title, author, year = 2023 } = { title: "Book", author: "Author" };  // Object destructuring with default value
+                                                                          // title = "Book", author = "Author", year = 2023
+                                                                          // Default value used if property undefined
+
+// Spread operator - expand iterables into individual elements
 let arr1 = [1, 2, 3];
-let arr2 = [...arr1, 4, 5]; // [1, 2, 3, 4, 5]
+let arr2 = [...arr1, 4, 5];           // Spread array elements: [1, 2, 3, 4, 5]
+                                      // Useful for array concatenation, cloning, function arguments
+
 let obj1 = { a: 1, b: 2 };
-let obj2 = { ...obj1, c: 3 }; // { a: 1, b: 2, c: 3 }
+let obj2 = { ...obj1, c: 3 };         // Spread object properties: { a: 1, b: 2, c: 3 }
+                                      // Useful for object cloning and merging
 
-// Default parameters
-function greet2(name = "Guest") {
-    return `Hello, ${name}!`;
+// Default parameters - provide fallback values for function parameters
+function greet2(name = "Guest") {     // Parameter has default value if undefined or omitted
+    return `Hello, ${name}!`;         // Makes functions more robust to missing arguments
 }
 
-// Arrow functions
-const multiply = (a, b) => a * b;
-const square = x => x * x; // Single parameter
-const greet3 = () => "Hello!"; // No parameters
+// Arrow functions - concise syntax for function expressions
+const multiply = (a, b) => a * b;     // Parentheses around parameters, arrow, expression body
+                                     // Implicit return with expression body (no braces)
+                                     // More concise than regular function expressions
 
-// Classes
-class Animal {
-    constructor(name) {
-        this.name = name;
+const square = x => x * x;            // Single parameter can omit parentheses
+const greet3 = () => "Hello!";        // Empty parameter list requires parentheses
+
+// Classes - syntactic sugar over prototype-based inheritance
+class Animal {                        // class keyword defines class
+    constructor(name) {               // constructor method called when creating instances
+        this.name = name;             // Initialize instance properties
     }
     
-    speak() {
-        return `${this.name} makes a sound`;
+    speak() {                         // Method defined in class body (prototype method)
+        return `${this.name} makes a sound`;  // All instances share these methods
     }
 }
 
-class Dog extends Animal {
+class Dog extends Animal {            // extends keyword for inheritance
     constructor(name, breed) {
-        super(name);
-        this.breed = breed;
+        super(name);                  // super calls parent class constructor
+        this.breed = breed;           // Add subclass-specific properties
     }
     
-    speak() {
-        return `${this.name} barks`;
+    speak() {                         // Override parent method
+        return `${this.name} barks`;  // Method with same name replaces parent version
     }
 }
 
-let dog = new Dog("Rex", "German Shepherd");
+let dog = new Dog("Rex", "German Shepherd");  // Create instance with new operator
 
 // Modules (in browser with type="module" or Node.js)
 /*
-// Exporting
-export const PI = 3.14159;
-export function square(x) { return x * x; }
-export default class Person { ... }
+// Exporting - make variables, functions, classes available to other modules
+export const PI = 3.14159;                    // Named export - can export multiple items
+export function square(x) { return x * x; }   // Function export
+export default class Person { ... }           // Default export - main export of module
 
-// Importing
-import { PI, square } from './math.js';
-import Person from './person.js';
-import * as utils from './utils.js';
+// Importing - use exports from other modules
+import { PI, square } from './math.js';       // Named imports - curly braces required
+import Person from './person.js';             // Default import - no curly braces
+import * as utils from './utils.js';          // Namespace import - all exports as properties
 */
 
-// Optional chaining
+// Optional chaining - safely access nested properties without error
 let deepObject = { a: { b: { c: 42 } } };
-let value = deepObject?.a?.b?.c; // 42 (no error if any property is undefined)
+let value = deepObject?.a?.b?.c;      // ?. returns undefined if any property in chain is null/undefined
+                                     // Without optional chaining: deepObject.a.b.c throws error if a or b is null/undefined
+                                     // Introduced in ES2020
 
-// Nullish coalescing
+// Nullish coalescing - provide default for null/undefined only
 let text = null;
-let displayText = text ?? "Default text"; // "Default text" (uses default if null or undefined)
+let displayText = text ?? "Default text";  // ?? returns right side only if left side is null or undefined
+                                          // Different from || which returns right side for all falsy values (0, "", false, etc.)
+                                          // Introduced in ES2020
 
 
 
