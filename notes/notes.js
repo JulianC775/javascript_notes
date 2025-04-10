@@ -334,6 +334,14 @@ for (let i = 0; i < 10; i++) {
 // =========================
 //  7. FUNCTIONS
 // =========================
+//arrow syntax
+// Arrow function with implicit return (no braces)
+const greetArrowExample = (name) => `Hello, ${name}!`;  // Single expression is returned without 'return'
+
+//function syntax
+const greet = function(name) {
+    return `Hello, ${name}!`;
+};
 
 // JavaScript offers multiple ways to declare functions, each with different behaviors
 
