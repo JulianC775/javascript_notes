@@ -15,8 +15,8 @@
 
 /* Basic CSS syntax: */
 selector {
-  property: value;
-  another-property: value;
+    property: value;
+    another-property: value;
 }
 
 /* =========================
