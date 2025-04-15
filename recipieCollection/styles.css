@@ -1,0 +1,22 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+header, footer {
+    padding: 1rem;
+}
+
+main {
+    padding: 1rem;
+    min-height: calc(100vh - 120px);
+}
+
+/* Add your custom styles below */
