@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Coding Quiz</h1>
+        </header>
+
+        <section id="quiz-setup">
+            <div id="language-selection">
+                <h2>Select Language</h2>
+                <div class="options">
+                    <button class="option selected" data-language="javascript">JavaScript</button>
+                    <button class="option disabled" data-language="python">Python (Coming Soon)</button>
+                    <button class="option disabled" data-language="java">Java (Coming Soon)</button>
+                </div>
+            </div>
+
+            <div id="difficulty-selection">
+                <h2>Select Difficulty</h2>
+                <div class="options">
+                    <button class="option" data-difficulty="beginner">Beginner</button>
+                    <button class="option" data-difficulty="intermediate">Intermediate</button>
+                    <button class="option" data-difficulty="advanced">Advanced</button>
+                </div>
+            </div>
+
+            <div id="module-selection">
+                <h2>Select Module</h2>
+                <div class="options">
+                    <button class="option" data-module="variables">Variables & Data Types</button>
+                    <button class="option" data-module="functions">Functions</button>
+                    <button class="option" data-module="loops">Loops</button>
+                    <button class="option" data-module="conditionals">Conditionals</button>
+                    <button class="option" data-module="arrays">Arrays</button>
+                    <button class="option" data-module="objects">Objects</button>
+                </div>
+            </div>
+
+            <button id="start-quiz">Start Quiz</button>
+            <button id="test-api" class="test-button">Test API Connection</button>
+        </section>
+
+        <section id="quiz-container" class="hidden">
+            <div id="quiz-info">
+                <div id="quiz-progress">Question <span id="current-question">1</span> of <span id="total-questions">10</span></div>
+                <div id="quiz-timer">Time: <span id="timer">0</span>s</div>
+            </div>
+
+            <div id="question-container">
+                <h2 id="question-text">Question goes here</h2>
+                <div id="code-snippet"></div>
+                
+                <div id="answer-options">
+                    <!-- Answer options will be inserted here dynamically -->
+                </div>
+                
+                <div id="fill-blank-container" class="hidden">
+                    <input type="text" id="fill-blank-answer" placeholder="Type your answer here">
+                </div>
+                
+                <div id="true-false-container" class="hidden">
+                    <button class="true-false-btn" data-answer="true">True</button>
+                    <button class="true-false-btn" data-answer="false">False</button>
+                </div>
+            </div>
+
+            <button id="submit-answer">Submit Answer</button>
+            <button id="next-question" class="hidden">Next Question</button>
+        </section>
+
+        <section id="results-container" class="hidden">
+            <h2>Quiz Results</h2>
+            <div id="score-display">
+                <p>You scored <span id="score">0</span> out of <span id="total-score">10</span></p>
+            </div>
+            <div id="time-taken">
+                <p>Time taken: <span id="total-time">0</span> seconds</p>
+            </div>
+            <div id="result-breakdown">
+                <!-- Results breakdown will be inserted here -->
+            </div>
+            <button id="restart-quiz">Take Another Quiz</button>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
