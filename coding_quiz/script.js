@@ -40,7 +40,7 @@ let useApiQuestions = true; // Flag to use QuizAPI
 const QUIZ_API_KEY = 'NTTMAF41jyMR2W69C1s0yE5Acg7AeaUJ1E0rEEOw'; // Replace with your actual API key
 const QUIZ_API_URL = 'https://quizapi.io/api/v1/questions';
 
-// Questions Database (JavaScript only for now) - Fallback for when API is unavailable
+// Questions Database - Fallback for when API is unavailable
 const jsQuestions = {
     variables: {
         beginner: [
@@ -369,6 +369,590 @@ const jsQuestions = {
     }
 };
 
+// HTML Questions Database
+const htmlQuestions = {
+    variables: {
+        beginner: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML tag is used to define the main content of an HTML document?',
+                options: ['<main>', '<body>', '<content>', '<section>'],
+                correctAnswer: '<main>',
+                explanation: 'The <main> tag specifies the main content of a document.'
+            },
+            {
+                type: 'true-false',
+                question: 'HTML stands for Hyper Text Markup Language.',
+                correctAnswer: true,
+                explanation: 'HTML (Hyper Text Markup Language) is the standard markup language for creating web pages.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The HTML tag used for the largest heading is _____.',
+                correctAnswer: '<h1>',
+                explanation: 'The <h1> tag is used to define the most important heading on a page.'
+            }
+        ],
+        intermediate: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML5 element should be used to mark up a blog article?',
+                options: ['<section>', '<blog>', '<article>', '<content>'],
+                correctAnswer: '<article>',
+                explanation: 'The <article> element represents a self-contained composition in a document that is independently distributable or reusable.'
+            },
+            {
+                type: 'true-false',
+                question: 'The <thead> element must be used with the <tbody> element.',
+                correctAnswer: false,
+                explanation: 'While it\'s good practice to use both, the <thead> element can be used without the <tbody> element.'
+            }
+        ],
+        advanced: [
+            {
+                type: 'multiple-choice',
+                question: 'Which attribute specifies an alternate text for an image if the image cannot be displayed?',
+                options: ['alt', 'title', 'src', 'href'],
+                correctAnswer: 'alt',
+                explanation: 'The alt attribute provides alternative information for an image if a user cannot view it.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The _____ attribute in HTML is used to provide a unique identifier for an element.',
+                correctAnswer: 'id',
+                explanation: 'The id attribute is used to specify a unique id for an HTML element.'
+            }
+        ]
+    },
+    functions: {
+        beginner: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML element is used to contain JavaScript code?',
+                options: ['<script>', '<javascript>', '<code>', '<js>'],
+                correctAnswer: '<script>',
+                explanation: 'The <script> tag is used to embed or reference JavaScript code in an HTML document.'
+            },
+            {
+                type: 'true-false',
+                question: 'The <head> element is a container for metadata in HTML.',
+                correctAnswer: true,
+                explanation: 'The <head> element is a container for metadata (data about data) and is placed between the <html> tag and the <body> tag.'
+            }
+        ],
+        intermediate: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML5 input type would you use for a date picker?',
+                options: ['<input type="date">', '<input type="calendar">', '<input type="datetime">', '<input type="time">'],
+                correctAnswer: '<input type="date">',
+                explanation: 'The <input type="date"> creates a date picker in supported browsers.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The _____ attribute in the <a> tag specifies where to open the linked document.',
+                correctAnswer: 'target',
+                explanation: 'The target attribute specifies where to open the linked document (e.g., _blank for a new tab).'
+            }
+        ],
+        advanced: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML element is used to draw graphics via JavaScript?',
+                options: ['<svg>', '<canvas>', '<draw>', '<graphic>'],
+                correctAnswer: '<canvas>',
+                explanation: 'The <canvas> element is used to draw graphics, on the fly, via JavaScript.'
+            },
+            {
+                type: 'true-false',
+                question: 'The srcset attribute is used with the <img> tag to provide responsive images.',
+                correctAnswer: true,
+                explanation: 'The srcset attribute allows you to specify different images for different device widths.'
+            }
+        ]
+    },
+    loops: {
+        beginner: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML tag is used to define an unordered list?',
+                options: ['<ul>', '<ol>', '<li>', '<list>'],
+                correctAnswer: '<ul>',
+                explanation: 'The <ul> tag defines an unordered (bulleted) list.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The _____ tag defines an item in an HTML list.',
+                correctAnswer: '<li>',
+                explanation: 'The <li> tag defines a list item in ordered or unordered lists.'
+            }
+        ],
+        intermediate: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML element is used to display data in a tabular form?',
+                options: ['<table>', '<tab>', '<grid>', '<tabular>'],
+                correctAnswer: '<table>',
+                explanation: 'The <table> tag is used to create a table in HTML.'
+            },
+            {
+                type: 'true-false',
+                question: 'The <tr> element defines a row in an HTML table.',
+                correctAnswer: true,
+                explanation: 'The <tr> tag defines a row in an HTML table, containing one or more <td> or <th> elements.'
+            }
+        ],
+        advanced: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML5 element is used to specify a footer for a document or section?',
+                options: ['<bottom>', '<footer>', '<foot>', '<end>'],
+                correctAnswer: '<footer>',
+                explanation: 'The <footer> element defines a footer for a document or section.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The _____ element represents a generic section of a document or application.',
+                correctAnswer: '<section>',
+                explanation: 'The <section> element defines a section in a document, typically with a heading.'
+            }
+        ]
+    },
+    conditionals: {
+        beginner: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML element is used to create an interactive control to select from options?',
+                options: ['<input>', '<select>', '<option>', '<form>'],
+                correctAnswer: '<select>',
+                explanation: 'The <select> element creates a drop-down list of options for users to select from.'
+            },
+            {
+                type: 'true-false',
+                question: 'The <label> element can be linked to a form control using the "for" attribute.',
+                correctAnswer: true,
+                explanation: 'The "for" attribute on the <label> links it to a form control with a matching id.'
+            }
+        ],
+        intermediate: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML attribute is used to specify inline CSS styles?',
+                options: ['class', 'style', 'css', 'format'],
+                correctAnswer: 'style',
+                explanation: 'The style attribute is used to apply inline CSS to an HTML element.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The _____ attribute is used to make a checkbox checked by default.',
+                correctAnswer: 'checked',
+                explanation: 'The checked attribute is a boolean attribute that makes a checkbox selected when the page loads.'
+            }
+        ],
+        advanced: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML5 element would you use to show a dialog box?',
+                options: ['<popup>', '<modal>', '<dialog>', '<alert>'],
+                correctAnswer: '<dialog>',
+                explanation: 'The <dialog> element represents a dialog box or other interactive component.'
+            },
+            {
+                type: 'true-false',
+                question: 'The HTML <datalist> element provides a set of predefined options for an <input> element.',
+                correctAnswer: true,
+                explanation: 'The <datalist> element provides autocomplete options for <input> elements.'
+            }
+        ]
+    },
+    arrays: {
+        beginner: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML tag creates hyperlinks?',
+                options: ['<link>', '<a>', '<href>', '<url>'],
+                correctAnswer: '<a>',
+                explanation: 'The <a> (anchor) tag defines a hyperlink, which is used to link from one page to another.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The _____ attribute specifies the URL of the page the link goes to.',
+                correctAnswer: 'href',
+                explanation: 'The href attribute specifies the link\'s destination.'
+            }
+        ],
+        intermediate: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML element is used to define navigation links?',
+                options: ['<navigation>', '<links>', '<nav>', '<menu>'],
+                correctAnswer: '<nav>',
+                explanation: 'The <nav> element defines a set of navigation links.'
+            },
+            {
+                type: 'true-false',
+                question: 'The <audio> element requires a closing tag in HTML5.',
+                correctAnswer: true,
+                explanation: 'The <audio> element requires a closing </audio> tag, unlike void elements like <img>.'
+            }
+        ],
+        advanced: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML attribute would you use to specify the encoding for an HTML document?',
+                options: ['encode', 'charset', 'encoding', 'type'],
+                correctAnswer: 'charset',
+                explanation: 'The charset attribute specifies the character encoding for the HTML document (e.g., UTF-8).'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The _____ meta tag is used to make websites responsive on all devices.',
+                correctAnswer: 'viewport',
+                explanation: 'The viewport meta tag controls how the page is displayed on varying device widths.'
+            }
+        ]
+    },
+    objects: {
+        beginner: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML tag is used to define an image?',
+                options: ['<picture>', '<img>', '<image>', '<graphic>'],
+                correctAnswer: '<img>',
+                explanation: 'The <img> tag is used to embed an image in an HTML page.'
+            },
+            {
+                type: 'true-false',
+                question: 'The <br> tag creates a line break in HTML.',
+                correctAnswer: true,
+                explanation: 'The <br> tag inserts a single line break.'
+            }
+        ],
+        intermediate: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML element is used to specify a header for a document or section?',
+                options: ['<top>', '<heading>', '<header>', '<head>'],
+                correctAnswer: '<header>',
+                explanation: 'The <header> element represents a container for introductory content or navigation links.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The _____ attribute in HTML form elements specifies which form the element belongs to.',
+                correctAnswer: 'form',
+                explanation: 'The form attribute specifies which form the element belongs to, allowing form elements to be placed anywhere on the page.'
+            }
+        ],
+        advanced: [
+            {
+                type: 'multiple-choice',
+                question: 'Which HTML element is used for client-side storage of data that persists after the browser is closed?',
+                options: ['<storage>', '<cache>', '<data>', 'None of these'],
+                correctAnswer: 'None of these',
+                explanation: 'HTML doesn\'t have a specific element for client-side storage; JavaScript APIs like localStorage are used instead.'
+            },
+            {
+                type: 'true-false',
+                question: 'The required attribute works with all HTML input types.',
+                correctAnswer: false,
+                explanation: 'The required attribute doesn\'t work with input types like hidden, range, color, and button.'
+            }
+        ]
+    }
+};
+
+// CSS Questions Database
+const cssQuestions = {
+    variables: {
+        beginner: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS property is used to change the text color of an element?',
+                options: ['text-color', 'color', 'font-color', 'text-style'],
+                correctAnswer: 'color',
+                explanation: 'The color property is used to set the color of text.'
+            },
+            {
+                type: 'true-false',
+                question: 'CSS stands for Cascading Style Sheets.',
+                correctAnswer: true,
+                explanation: 'CSS (Cascading Style Sheets) is used to style and layout web pages.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The CSS _____ property is used to change the background color of an element.',
+                correctAnswer: 'background-color',
+                explanation: 'The background-color property sets the background color of an element.'
+            }
+        ],
+        intermediate: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS property is used to create space between elements\' borders?',
+                options: ['spacing', 'margin', 'padding', 'border-spacing'],
+                correctAnswer: 'margin',
+                explanation: 'The margin property creates space around elements, outside of any defined borders.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The CSS _____ property is used to add space between an element\'s content and its border.',
+                correctAnswer: 'padding',
+                explanation: 'The padding property creates space around an element\'s content, inside of any defined borders.'
+            }
+        ],
+        advanced: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS feature allows you to define reusable pieces of CSS?',
+                options: ['Mixins', 'Variables', 'Custom Properties', 'Templates'],
+                correctAnswer: 'Custom Properties',
+                explanation: 'CSS Custom Properties (also known as CSS variables) let you store specific values to reuse throughout a document.'
+            },
+            {
+                type: 'true-false',
+                question: 'In CSS, variables must be declared within the :root selector to be globally available.',
+                correctAnswer: false,
+                explanation: 'While often declared in :root for global scope, CSS variables can be declared within any selector to create scoped variables.'
+            }
+        ]
+    },
+    functions: {
+        beginner: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS property controls the text size?',
+                options: ['text-size', 'font-size', 'text-style', 'size'],
+                correctAnswer: 'font-size',
+                explanation: 'The font-size property sets the size of the text.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The CSS _____ property specifies the font of text.',
+                correctAnswer: 'font-family',
+                explanation: 'The font-family property specifies the font for an element.'
+            }
+        ],
+        intermediate: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS function is used to blend two or more colors together?',
+                options: ['color-mix()', 'blend()', 'mix()', 'linear-gradient()'],
+                correctAnswer: 'linear-gradient()',
+                explanation: 'The linear-gradient() function creates an image consisting of a progressive transition between two or more colors along a straight line.'
+            },
+            {
+                type: 'true-false',
+                question: 'The calc() function in CSS can perform calculations to determine CSS property values.',
+                correctAnswer: true,
+                explanation: 'The calc() function lets you perform calculations when specifying CSS property values.'
+            }
+        ],
+        advanced: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS function is used to create a color with transparency?',
+                options: ['opacity()', 'alpha()', 'rgba()', 'transparent()'],
+                correctAnswer: 'rgba()',
+                explanation: 'The rgba() function defines a color using Red-Green-Blue-Alpha (transparency) model.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The CSS _____ function allows you to create custom shapes for the float area around an element.',
+                correctAnswer: 'shape-outside',
+                explanation: 'The shape-outside property defines a shape (often using a shape function) around which adjacent inline content should wrap.'
+            }
+        ]
+    },
+    loops: {
+        beginner: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS property is used to specify animation?',
+                options: ['animation', 'transition', 'transform', 'motion'],
+                correctAnswer: 'animation',
+                explanation: 'The animation property applies an animation between styles.'
+            },
+            {
+                type: 'true-false',
+                question: 'CSS has actual loop statements similar to programming languages.',
+                correctAnswer: false,
+                explanation: 'CSS doesn\'t have loop constructs; repetition is handled through selectors or preprocessor features.'
+            }
+        ],
+        intermediate: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS property specifies the speed curve of an animation?',
+                options: ['animation-curve', 'animation-speed', 'animation-timing-function', 'transition-timing'],
+                correctAnswer: 'animation-timing-function',
+                explanation: 'The animation-timing-function property specifies the speed curve of an animation.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The CSS @_____ rule specifies the keyframes for animations.',
+                correctAnswer: 'keyframes',
+                explanation: 'The @keyframes rule is used to create animations by gradually changing from one set of CSS styles to another.'
+            }
+        ],
+        advanced: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS feature can be used to repeat background images?',
+                options: ['background-loop', 'background-repeat', 'background-iteration', 'background-cycle'],
+                correctAnswer: 'background-repeat',
+                explanation: 'The background-repeat property sets how background images are repeated.'
+            },
+            {
+                type: 'true-false',
+                question: 'The CSS repeat() function is used with CSS Grid to repeat columns or rows.',
+                correctAnswer: true,
+                explanation: 'The repeat() function represents a repeated fragment of the track list, allowing a large number of columns or rows that exhibit a recurring pattern.'
+            }
+        ]
+    },
+    conditionals: {
+        beginner: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS selector is used to specify a style for a unique element?',
+                options: ['#id', '.class', 'element', '*'],
+                correctAnswer: '#id',
+                explanation: 'The id selector (#id) styles a specific element with the given ID attribute.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The _____ selector is used to select elements with a specific class attribute.',
+                correctAnswer: '.class',
+                explanation: 'The class selector (.class) selects all elements with the specified class attribute.'
+            }
+        ],
+        intermediate: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS pseudo-class selects elements based on a condition?',
+                options: [':hover', '::before', ':root', ':not()'],
+                correctAnswer: ':hover',
+                explanation: 'The :hover pseudo-class is applied when the user hovers over an element.'
+            },
+            {
+                type: 'true-false',
+                question: 'The @media rule is used to apply different styles for different devices or screen sizes.',
+                correctAnswer: true,
+                explanation: 'The @media rule is used for responsive design, applying different styles based on the device\'s characteristics.'
+            }
+        ],
+        advanced: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS selector would you use to select all inputs that are currently focused?',
+                options: ['input:focus', 'input.focus', 'input::focus', 'input[focus]'],
+                correctAnswer: 'input:focus',
+                explanation: 'The :focus pseudo-class selects the element that currently has focus.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The _____ CSS feature allows you to determine if certain CSS features are supported by the browser.',
+                correctAnswer: '@supports',
+                explanation: 'The @supports rule allows you to specify declarations that depend on a browser\'s support for CSS features.'
+            }
+        ]
+    },
+    arrays: {
+        beginner: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS property is used to specify the order of flex items?',
+                options: ['order', 'flex-order', 'z-index', 'position'],
+                correctAnswer: 'order',
+                explanation: 'The order property specifies the order of a flexible item relative to the rest.'
+            },
+            {
+                type: 'true-false',
+                question: 'CSS has built-in array data structures like JavaScript.',
+                correctAnswer: false,
+                explanation: 'CSS doesn\'t have arrays; the closest concept might be comma-separated lists in some properties.'
+            }
+        ],
+        intermediate: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS layout module is designed for one-dimensional layouts?',
+                options: ['Grid', 'Flexbox', 'Box Model', 'Float'],
+                correctAnswer: 'Flexbox',
+                explanation: 'Flexbox is a one-dimensional layout method for laying out items in rows or columns.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The CSS _____ property determines how flex items are placed in the flex container.',
+                correctAnswer: 'flex-direction',
+                explanation: 'The flex-direction property specifies the direction of the flexible items within a flex container.'
+            }
+        ],
+        advanced: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS Grid property is used to explicitly position a grid item?',
+                options: ['grid-position', 'grid-area', 'grid-place', 'grid-locate'],
+                correctAnswer: 'grid-area',
+                explanation: 'The grid-area property specifies a grid item\'s position and size within the grid.'
+            },
+            {
+                type: 'true-false',
+                question: 'The :nth-child() selector in CSS can be used to target specific elements in a sequence.',
+                correctAnswer: true,
+                explanation: 'The :nth-child() selector matches elements based on their position among a group of siblings.'
+            }
+        ]
+    },
+    objects: {
+        beginner: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS property is used to create rounded corners?',
+                options: ['corner-radius', 'border-round', 'border-radius', 'rounded-corners'],
+                correctAnswer: 'border-radius',
+                explanation: 'The border-radius property defines the radius of an element\'s corners.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The CSS _____ property is used to add shadow to elements.',
+                correctAnswer: 'box-shadow',
+                explanation: 'The box-shadow property attaches one or more shadows to an element.'
+            }
+        ],
+        intermediate: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS property would you use to change the position of an element?',
+                options: ['location', 'placement', 'position', 'transform'],
+                correctAnswer: 'position',
+                explanation: 'The position property specifies the type of positioning method used for an element.'
+            },
+            {
+                type: 'true-false',
+                question: 'The CSS transform property can modify an element\'s appearance without affecting document flow.',
+                correctAnswer: true,
+                explanation: 'The transform property lets you rotate, scale, skew, or translate an element without disrupting the normal document flow.'
+            }
+        ],
+        advanced: [
+            {
+                type: 'multiple-choice',
+                question: 'Which CSS property creates a clipping region and determines what part of an element should be visible?',
+                options: ['clip-path', 'visibility', 'display', 'opacity'],
+                correctAnswer: 'clip-path',
+                explanation: 'The clip-path property creates a clipping region that sets what part of an element should be shown.'
+            },
+            {
+                type: 'fill-blank',
+                question: 'The CSS _____ property defines how an element responds to the contents of its box being too large.',
+                correctAnswer: 'overflow',
+                explanation: 'The overflow property specifies what happens if content overflows an element\'s box.'
+            }
+        ]
+    }
+};
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
     // Setup selection handlers
@@ -451,14 +1035,28 @@ async function fetchQuestionsFromAPI(limit = 10) {
             'objects': 'JavaScript'
         };
         
+        // Map languages to QuizAPI tags
+        const languageMap = {
+            'javascript': 'JavaScript',
+            'html': 'HTML',
+            'css': 'CSS'
+        };
+        
         // Construct the API URL with query parameters
         const apiDifficulty = difficultyMap[currentDifficulty] || '';
-        const apiCategory = categoryMap[currentModule] || 'JavaScript';
+        const apiCategory = categoryMap[currentModule] || '';
+        const apiLanguage = languageMap[currentLanguage] || 'JavaScript';
+        
+        // Combine language and category for tags if both exist
+        let tags = apiLanguage;
+        if (apiCategory && apiCategory !== apiLanguage) {
+            tags += `,${apiCategory}`;
+        }
         
         const url = new URL(QUIZ_API_URL);
         url.searchParams.append('apiKey', QUIZ_API_KEY);
         url.searchParams.append('limit', limit);
-        url.searchParams.append('tags', apiCategory);
+        url.searchParams.append('tags', tags);
         if (apiDifficulty) {
             url.searchParams.append('difficulty', apiDifficulty);
         }
@@ -560,22 +1158,16 @@ async function startQuiz() {
             } else {
                 // Fall back to local questions if API fails
                 useApiQuestions = false;
-                if (currentLanguage === 'javascript') {
-                    currentQuestions = jsQuestions[currentModule][currentDifficulty];
-                }
+                currentQuestions = getLocalQuestions();
             }
         } catch (error) {
             // Fall back to local questions if API fails
             useApiQuestions = false;
-            if (currentLanguage === 'javascript') {
-                currentQuestions = jsQuestions[currentModule][currentDifficulty];
-            }
+            currentQuestions = getLocalQuestions();
         }
     } else {
         // Use local questions
-        if (currentLanguage === 'javascript') {
-            currentQuestions = jsQuestions[currentModule][currentDifficulty];
-        }
+        currentQuestions = getLocalQuestions();
     }
     
     if (!currentQuestions || currentQuestions.length === 0) {
@@ -593,6 +1185,20 @@ async function startQuiz() {
     
     // Load first question
     loadQuestion();
+}
+
+// Get local questions based on current language, module, and difficulty
+function getLocalQuestions() {
+    switch(currentLanguage) {
+        case 'javascript':
+            return jsQuestions[currentModule]?.[currentDifficulty] || [];
+        case 'html':
+            return htmlQuestions[currentModule]?.[currentDifficulty] || [];
+        case 'css':
+            return cssQuestions[currentModule]?.[currentDifficulty] || [];
+        default:
+            return [];
+    }
 }
 
 // Load the current question
