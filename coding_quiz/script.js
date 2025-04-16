@@ -37,7 +37,7 @@ let userAnswers = [];
 let useApiQuestions = true; // Flag to use QuizAPI
 
 // QuizAPI configuration
-const QUIZ_API_KEY = 'NTTMAF41jyMR2W69C1s0yE5Acg7AeaUJ1E0rEEOw'; // Replace with your actual API key
+const QUIZ_API_KEY = require('../envirokey.js'); // Replace with your actual API key
 const QUIZ_API_URL = 'https://quizapi.io/api/v1/questions';
 
 // Questions Database - Fallback for when API is unavailable
