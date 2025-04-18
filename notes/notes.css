@@ -2,9 +2,29 @@
    CSS FUNDAMENTALS TUTORIAL
    ====================================================== */
 
-/* =========================
+/* ======================================================
+   TABLE OF CONTENTS
+   ====================================================== 
+   1. CSS Introduction
+   2. Specificity
+   3. Selectors
+   4. Colors
+   5. Box Model
+   6. Typography
+   7. Layout
+   8. Flexbox
+   9. CSS Grid
+   10. Responsive Design
+   11. Transitions & Animations
+   12. Transforms
+   13. CSS Classes In-Depth
+   14. Best Practices
+   ====================================================== */
+
+
+/* ======================================================
    1. CSS INTRODUCTION
-   ========================= */
+   ====================================================== */
 
 /* CSS (Cascading Style Sheets) controls the visual appearance of HTML elements
    There are three ways to add CSS to HTML:
@@ -19,9 +39,10 @@ selector {
     another-property: value;
 }
 
-/* =========================
+
+/* ======================================================
    2. SPECIFICITY
-   ========================= */
+   ====================================================== */
 
 /* Specificity determines which CSS rules are applied when multiple rules
    target the same element. Higher specificity rules override lower ones.
@@ -40,9 +61,10 @@ selector {
    Best practice: Use the lowest possible specificity to keep styles maintainable
    and easy to override when needed. */
 
-/* =========================
+
+/* ======================================================
    3. SELECTORS
-   ========================= */
+   ====================================================== */
 
 /* Element selector - selects all instances of an element */
 p {
@@ -102,9 +124,10 @@ p::selection {
   background-color: lightblue;
 }
 
-/* =========================
+
+/* ======================================================
    4. COLORS
-   ========================= */
+   ====================================================== */
 
 .color-examples {
   /* Named colors */
@@ -130,9 +153,10 @@ p::selection {
   color: hsla(240, 100%, 50%, 0.5); /* Semi-transparent blue */
 }
 
-/* =========================
+
+/* ======================================================
    5. BOX MODEL
-   ========================= */
+   ====================================================== */
 
 /* The Box Model is fundamental to CSS layout.
    Every element is a box with:
@@ -167,9 +191,10 @@ p::selection {
   /* Total width: exactly 200px */
 }
 
-/* =========================
+
+/* ======================================================
    6. TYPOGRAPHY
-   ========================= */
+   ====================================================== */
 
 .typography-example {
   /* Font family */
@@ -212,9 +237,10 @@ p::selection {
   font-family: 'CustomFont', Arial, sans-serif;
 }
 
-/* =========================
+
+/* ======================================================
    7. LAYOUT
-   ========================= */
+   ====================================================== */
 
 /* Display property */
 .display-examples {
@@ -255,9 +281,10 @@ p::selection {
   clear: both;     /* No floating elements allowed on either side */
 }
 
-/* =========================
+
+/* ======================================================
    8. FLEXBOX
-   ========================= */
+   ====================================================== */
 
 /* Flexbox is a one-dimensional layout method */
 .flex-container {
@@ -308,9 +335,10 @@ p::selection {
   /* align-self: center; */
 }
 
-/* =========================
+
+/* ======================================================
    9. CSS GRID
-   ========================= */
+   ====================================================== */
 
 /* Grid is a two-dimensional layout method */
 .grid-container {
@@ -358,9 +386,10 @@ p::selection {
   /* align-self: center;        /* Vertical alignment within cell */
 }
 
-/* =========================
+
+/* ======================================================
    10. RESPONSIVE DESIGN
-   ========================= */
+   ====================================================== */
 
 /* Media queries allow different styles for different devices/screen sizes */
 @media screen and (max-width: 600px) {
@@ -395,9 +424,10 @@ p::selection {
   font-size: 1.2rem; /* 1.2 times root font size */
 }
 
-/* =========================
+
+/* ======================================================
    11. TRANSITIONS & ANIMATIONS
-   ========================= */
+   ====================================================== */
 
 /* Transitions create smooth changes between property values */
 .transition-example {
@@ -442,9 +472,10 @@ p::selection {
   animation: slide-in 1s ease-out 0s 1 normal forwards;
 }
 
-/* =========================
+
+/* ======================================================
    12. TRANSFORMS
-   ========================= */
+   ====================================================== */
 
 .transform-examples {
   /* 2D Transforms */
@@ -463,9 +494,10 @@ p::selection {
   /* transform: translate(20px, 20px) rotate(45deg) scale(1.5); */
 }
 
-/* =========================
+
+/* ======================================================
    13. CSS CLASSES IN-DEPTH
-   ========================= */
+   ====================================================== */
 
 /* CSS Classes are reusable style identifiers prefixed with a dot (.) 
    They allow you to apply the same styles to multiple elements
@@ -479,7 +511,7 @@ p::selection {
 
 /* Using a class in HTML: <div class="my-class">Text</div> */
 
-/* Multiple classes on one element */
+/* ----- Multiple classes on one element ----- */
 /* In HTML: <div class="box rounded shadow">Content</div> */
 .box {
   width: 200px;
@@ -496,7 +528,7 @@ p::selection {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Apply drop shadow */
 }
 
-/* Classes vs Element selectors */
+/* ----- Classes vs Element selectors ----- */
 p {
   /* Selects ALL paragraph elements */
   line-height: 1.5;
@@ -515,7 +547,7 @@ p.special-paragraph {
   padding-left: 10px;
 }
 
-/* Combining multiple classes for component variations */
+/* ----- Component variations with classes ----- */
 .button {
   display: inline-block;
   padding: 10px 20px;
@@ -543,7 +575,7 @@ p.special-paragraph {
   background-color: #e74c3c;
 }
 
-/* BEM (Block Element Modifier) naming convention */
+/* ----- BEM (Block Element Modifier) naming convention ----- */
 .card {
   /* Block: The standalone component */
   border: 1px solid #ddd;
@@ -570,7 +602,7 @@ p.special-paragraph {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Class specificity and inheritance */
+/* ----- Class specificity and inheritance ----- */
 .parent {
   color: blue;
 }
@@ -580,7 +612,7 @@ p.special-paragraph {
   color: darkblue;
 }
 
-/* Using classes with pseudo-classes */
+/* ----- Using classes with pseudo-classes ----- */
 .nav-link {
   color: #333;
   text-decoration: none;
@@ -596,7 +628,7 @@ p.special-paragraph {
   font-weight: bold;
 }
 
-/* Class naming best practices */
+/* ----- Class naming best practices ----- */
 /*
 1. Use meaningful names that describe purpose, not appearance
    Good: .error-message (describes purpose)
@@ -616,16 +648,17 @@ p.special-paragraph {
    Gets hard to read: .header .nav .nav-list .nav-item .nav-link
 */
 
-/* UTILITY CLASSES: small, single-purpose classes */
+/* ----- UTILITY CLASSES: small, single-purpose classes ----- */
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .margin-top { margin-top: 20px; }
 .hidden { display: none; }
 .visible { display: block; }
 
-/* =========================
+
+/* ======================================================
    14. BEST PRACTICES
-   ========================= */
+   ====================================================== */
 
 /*
 1. Use a CSS reset or normalize.css to ensure consistent rendering across browsers
