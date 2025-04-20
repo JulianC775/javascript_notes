@@ -218,7 +218,7 @@ p::selection {
   text-align: left;       /* also: right, center, justify */
   text-decoration: none;  /* also: underline, line-through */
   text-transform: uppercase; /* also: lowercase, capitalize */
-  line-height: 1.5;       /* Spacing between lines */
+  line-height: 1.5;       /* Spacing between lines (unitless is valid here) */
   letter-spacing: 1px;    /* Spacing between letters */
   word-spacing: 2px;      /* Spacing between words */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* horizontal, vertical, blur, color */
