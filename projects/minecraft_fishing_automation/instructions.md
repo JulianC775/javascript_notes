@@ -68,3 +68,17 @@ Create a script that monitors a specific pixel or small region on the screen whi
 *   **Accuracy:** Precisely timing the action after detection is crucial.
 *   **Detection Robustness:** Simple color matching might fail. More advanced image recognition might be necessary.
 *   **Anti-Cheat:** Be aware that automation scripts *can* be detected by servers or anti-cheat systems, potentially leading to bans. Use responsibly and primarily in single-player or on servers where it's permitted.
+
+## Progress Log
+
+*   **Initial Planning:** Outlined project goals, components, steps, and challenges in this document.
+*   **File Creation:**
+    *   Created `minecraft_auto_fisher.py` with basic structure and placeholder logic.
+    *   Created `requirements.txt` with necessary libraries.
+*   **Environment Setup:**
+    *   Created Python virtual environment (`venv`).
+    *   Updated root `.gitignore` to ignore `venv/`.
+    *   Untracked `venv/` files from Git staging (`git rm --cached`).
+    *   Activated `venv`.
+    *   Upgraded `pip` within `venv`.
+    *   Installed dependencies from `requirements.txt` into `venv`.
