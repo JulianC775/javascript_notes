@@ -5,9 +5,36 @@ import numpy as np
 import keyboard  # Using 'keyboard' library for listening to key presses
 
 # --- Configuration ---
+BOX_SIZE = 400 # Size of the square region around the center to monitor
+
+# Get screen dimensions
+try:
+    screenWidth, screenHeight = pyautogui.size()
+except Exception as e:
+    print(f"Error getting screen size: {e}")
+    print("Defaulting to 800x600 region at top-left. Please check pyautogui setup.")
+    screenWidth, screenHeight = 800, 600 # Fallback values
+    monitor_left = 0
+    monitor_top = 40
+    monitor_width = 800
+    monitor_height = 600
+else:
+    # Calculate the region centered on the screen
+    monitor_left = int(screenWidth / 2 - BOX_SIZE / 2)
+    monitor_top = int(screenHeight / 2 - BOX_SIZE / 2)
+    monitor_width = BOX_SIZE
+    monitor_height = BOX_SIZE
+
 # Define the screen region to monitor (top-left x, y, width, height)
 # TODO: Determine these coordinates
-MONITOR_REGION = {'top': 40, 'left': 0, 'width': 800, 'height': 600}
+# MONITOR_REGION = {'top': 40, 'left': 0, 'width': 800, 'height': 600}
+MONITOR_REGION = {
+    'top': monitor_top,
+    'left': monitor_left,
+    'width': monitor_width,
+    'height': monitor_height
+}
+print(f"Monitoring region set to: {MONITOR_REGION}")
 
 # TODO: Define the target pixel color (R, G, B) or feature to track
 TARGET_COLOR = (255, 0, 0) # Example: Bright Red
