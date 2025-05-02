@@ -40,13 +40,15 @@ MONITOR_REGION = {
 print(f"Monitoring region set to: {MONITOR_REGION}")
 
 # TODO: Define the target pixel color (R, G, B) or feature to track
-TARGET_COLOR = (255, 0, 0) # Example: Bright Red
+# TARGET_COLOR = (255, 0, 0) # Example: Bright Red
+TARGET_COLOR = (181, 36, 35)
+COLOR_TOLERANCE = 20 # Allowable difference +/- for each R,G,B channel
 
 # TODO: Define the vertical movement threshold (in pixels)
-MOVEMENT_THRESHOLD = 5
+MOVEMENT_THRESHOLD = 3
 
 # TODO: Define the action cooldown (in seconds)
-COOLDOWN = 1.0
+# COOLDOWN = 1.0
 
 # Control flag and key
 running = False
@@ -55,7 +57,7 @@ exit_key = 'ctrl+alt+q' # Key to exit completely
 
 # --- State Variables ---
 last_y = None
-last_action_time = 0
+# last_action_time = 0 # No longer needed, timing handled in perform_action
 
 # --- Helper Functions ---
 
@@ -65,20 +67,51 @@ def find_target_pixel(image_np):
     Needs implementation based on color or feature matching.
     Returns the y-coordinate (relative to the region) or None if not found.
     """
-    # Example: Find first pixel matching TARGET_COLOR
-    # This is a very basic example and likely needs refinement
+    # Convert target color (RGB) to NumPy array
     target_rgb = np.array(TARGET_COLOR, dtype=np.uint8)
+
+    # Calculate lower and upper bounds based on tolerance
+    # Clip values to ensure they stay within the valid 0-255 range
+    lower_bound = np.clip(target_rgb - COLOR_TOLERANCE, 0, 255)
+    upper_bound = np.clip(target_rgb + COLOR_TOLERANCE, 0, 255)
+
+    # image_np is BGRA from mss. We need to compare channels correctly:
+    # image B (idx 0) vs target B (idx 2)
+    # image G (idx 1) vs target G (idx 1)
+    # image R (idx 2) vs target R (idx 0)
+    in_range = np.logical_and.reduce((
+        image_np[:, :, 0] >= lower_bound[2], image_np[:, :, 0] <= upper_bound[2], # Blue check
+        image_np[:, :, 1] >= lower_bound[1], image_np[:, :, 1] <= upper_bound[1], # Green check
+        image_np[:, :, 2] >= lower_bound[0], image_np[:, :, 2] <= upper_bound[0]  # Red check
+    ))
+
+    # Find the coordinates of pixels within the tolerance range
+    matches = np.where(in_range)
+
+    # Example: Find first pixel matching TARGET_COLOR (within tolerance)
+    # This is a basic example and likely needs refinement
+    # target_rgb = np.array(TARGET_COLOR, dtype=np.uint8)
     # image_np is BGRA, so compare RGB channels
-    matches = np.where(np.all(image_np[:, :, :3] == target_rgb, axis=2))
+    # matches = np.where(np.all(image_np[:, :, :3] == target_rgb, axis=2))
+
     if matches[0].size > 0:
-        return matches[0][0] # Return the y-coordinate of the first match
+        # Consider returning the average y or the highest/lowest y if multiple matches are common
+        return matches[0][0] # Return the y-coordinate of the first match found
     return None
 
 def perform_action():
-    """Performs the desired action (e.g., right-click)."""
-    print("Action triggered!")
+    """Performs the fishing action sequence: Hook, Pause, Recast."""
+    print("\nAction Triggered! Hooking fish...")
     # pyautogui.rightClick()
-    # Consider adding small random delays before/after click if needed
+    print("- Right Click 1 (Hook)")
+
+    print(f"- Pausing for 2 seconds...")
+    time.sleep(2.0)
+
+    print("- Right Click 2 (Recast)")
+    # pyautogui.rightClick()
+    print("Action sequence complete.")
+    # Consider adding small random delays before/after clicks if needed
 
 # --- Main Loop ---
 
@@ -120,18 +153,28 @@ with mss.mss() as sct:
 
                 # 4. Threshold Trigger
                 if abs(delta_y) > MOVEMENT_THRESHOLD:
-                    print(f"\nMovement detected! Delta Y: {delta_y}")
-                    # 5. Action Execution (with cooldown)
-                    if current_time - last_action_time > COOLDOWN:
+                    # Ensure movement is downwards (positive delta_y)
+                    if delta_y > MOVEMENT_THRESHOLD:
+                        print(f"\nDrop detected! Delta Y: {delta_y}")
+                        # 5. Action Execution (Hook, Pause, Recast)
+                        # Cooldown check removed, handled by sleep within perform_action
+                        # if current_time - last_action_time > COOLDOWN:
                         perform_action()
-                        last_action_time = current_time
-                        last_y = None # Reset last_y after action to prevent immediate re-trigger
-                        print(f"Action performed. Cooling down for {COOLDOWN}s...")
-                        time.sleep(COOLDOWN) # Enforce cooldown strictly after action
+                        # last_action_time = current_time
+                        last_y = None # Reset last_y after action to look for new position
+                        # print(f"Action performed. Cooling down for {COOLDOWN}s...")
+                        # time.sleep(COOLDOWN) # Cooldown removed, handled by sleep within perform_action
+                        # else:
+                        #     print("Cooldown active...")
                     else:
-                        print("Cooldown active...")
+                        # Optional: Log upward movement if needed for debugging
+                        # print(f"\nUpward movement detected (ignored): {delta_y}")
+                        pass # Ignore upward movement exceeding threshold
+
             # Update last known position if it was valid
-            last_y = current_y
+            # Only update if no action was taken in this cycle
+            if current_y is not None: # Re-check current_y validity before assigning
+                last_y = current_y
         else:
             print("Target not found in region...", end='\r')
             last_y = None # Reset if target is lost
