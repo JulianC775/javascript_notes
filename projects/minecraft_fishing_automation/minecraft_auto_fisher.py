@@ -5,7 +5,8 @@ import numpy as np
 import keyboard  # Using 'keyboard' library for listening to key presses
 
 # --- Configuration ---
-BOX_SIZE = 400 # Size of the square region around the center to monitor
+# BOX_SIZE = 400 # Size of the square region around the center to monitor
+REGION_PERCENTAGE = 0.15 # Use 15% of screen width/height for the monitor box
 
 # Get screen dimensions
 try:
@@ -19,11 +20,13 @@ except Exception as e:
     monitor_width = 800
     monitor_height = 600
 else:
-    # Calculate the region centered on the screen
-    monitor_left = int(screenWidth / 2 - BOX_SIZE / 2)
-    monitor_top = int(screenHeight / 2 - BOX_SIZE / 2)
-    monitor_width = BOX_SIZE
-    monitor_height = BOX_SIZE
+    # Calculate the region centered on the screen based on percentage
+    monitor_width = int(screenWidth * REGION_PERCENTAGE)
+    monitor_height = int(screenHeight * REGION_PERCENTAGE)
+    monitor_left = int(screenWidth / 2 - monitor_width / 2)
+    monitor_top = int(screenHeight / 2 - monitor_height / 2)
+    # monitor_width = BOX_SIZE
+    # monitor_height = BOX_SIZE
 
 # Define the screen region to monitor (top-left x, y, width, height)
 # TODO: Determine these coordinates
@@ -134,6 +137,8 @@ with mss.mss() as sct:
             last_y = None # Reset if target is lost
 
         # Small delay to prevent high CPU usage
-        time.sleep(0.05)
+        # time.sleep(0.05)
+        # Check roughly 3 times per second
+        time.sleep(1/3)
 
 print("\nScript finished.") 
