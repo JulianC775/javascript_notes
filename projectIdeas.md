@@ -109,3 +109,36 @@
 9.  **Scalability & Deployment:** Consider server infrastructure, load balancing, database scaling, and deployment strategies (e.g., Docker, Kubernetes, cloud platforms).
 
 **Goal:** Replicate the core user experience of Discord, demonstrating proficiency in full-stack development, real-time technologies (WebSockets, WebRTC), database management, and complex application architecture. This is a portfolio-defining project due to its complexity.
+
+## Minecraft Fishing Automation Bot
+
+**Core Idea:** Create a Python script that automates the fishing process in Minecraft by monitoring screen pixels and simulating mouse actions.
+
+**Key Features/Components:**
+
+*   **Screen Monitoring:** Captures a specific region of the screen (dynamically centered, size configurable).
+*   **Pixel Detection:** Identifies a target pixel color (representing the fishing bobber's red line) within the monitored region, using color tolerance for robustness.
+*   **Movement Detection:** Tracks the vertical position of the target pixel and detects a sudden drop (downward movement exceeding a threshold).
+*   **Automated Action:** When a drop is detected, simulates a sequence of right-clicks: one to hook the fish, followed by a pause, and a second to recast the line.
+*   **Configuration:** Adjustable parameters for target color, color tolerance, movement threshold, monitoring region size (as a percentage of screen), and check frequency.
+*   **Control:** Uses keyboard hotkeys (e.g., `Ctrl+Alt+S`, `Ctrl+Alt+Q`) to start, stop, and exit the script safely.
+
+**Technology Stack:**
+
+*   **Language:** Python
+*   **Libraries:**
+    *   `mss`: Screen capture.
+    *   `pyautogui`: Mouse simulation (and screen size detection).
+    *   `numpy`: Image data manipulation and color comparison.
+    *   `keyboard`: Global hotkey listening for script control.
+    *   `Pillow`: Image handling (dependency of `mss`).
+
+**Goal:** Build a simple but effective automation tool for a repetitive in-game task, demonstrating skills in screen reading, image processing (basic pixel analysis), input simulation, and Python scripting.
+
+**Potential Challenges:**
+
+*   **Changing Game Visuals:** Lighting changes, weather, texture packs, or game updates could affect target color reliability.
+*   **Performance:** Screen capturing/processing can be CPU intensive.
+*   **Accuracy:** Timing the action precisely after detection.
+*   **Detection Robustness:** Simple color/tolerance matching might still fail in certain conditions (requiring more advanced techniques like OpenCV if needed).
+*   **Anti-Cheat:** Risk of detection on servers with strict anti-cheat measures.
