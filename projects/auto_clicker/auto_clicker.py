@@ -8,6 +8,8 @@ is_running = False
 click_thread = None
 listener_thread = None
 hotkey = keyboard.Key.f6 # Default hotkey
+mouse_controller = mouse.Controller() # Create mouse controller instance
+is_setting_hotkey = False # Flag to indicate if we are waiting for a new hotkey
 
 # --- GUI Setup ---
 ctk.set_appearance_mode("System") # Modes: "System" (default), "Dark", "Light"
@@ -22,22 +24,97 @@ app.grid_columnconfigure(0, weight=1)
 # Add row configurations as needed when adding more sections
 
 # --- Placeholder Functions (to be implemented) ---
+def get_key_name(key):
+    """Returns a user-friendly string representation of a pynput key."""
+    if isinstance(key, keyboard.KeyCode):
+        return key.char
+    elif isinstance(key, keyboard.Key):
+        # Capitalize special key names (e.g., f6, ctrl_l -> F6, Ctrl_L)
+        return key.name.capitalize()
+    return str(key)
+
 def set_hotkey():
-    print("Hotkey setting logic goes here")
+    global is_setting_hotkey
+    if is_setting_hotkey: # Avoid triggering multiple times
+        return
+
+    is_setting_hotkey = True
+    status_var.set("Status: Press the desired hotkey...")
+    set_hotkey_button.configure(state="disabled") # Disable button
+    print("Waiting for new hotkey...")
+
+def get_interval():
+    """Gets the click interval from GUI entries and returns it in seconds."""
+    try:
+        h = int(entry_hours.get())
+        m = int(entry_mins.get())
+        s = int(entry_secs.get())
+        ms = int(entry_ms.get())
+        # Prevent division by zero or negative intervals
+        interval = max(0.001, h * 3600 + m * 60 + s + ms / 1000)
+        return interval
+    except ValueError:
+        print("Invalid interval input. Please enter numbers.")
+        status_var.set("Status: Invalid Interval!") # Give feedback
+        return None # Indicate error
 
 def toggle_clicking():
-    global is_running
+    global is_running, click_thread
     is_running = not is_running
     status = "Running" if is_running else "Stopped"
     print(f"Clicker {status}")
     # Update GUI status label here later
+    status_var.set(f"Status: {status}") # Update the status label
 
 def click_loop():
-    print("Clicking loop logic goes here")
-    pass # Placeholder
+    """Main loop for the auto-clicking thread."""
+    global is_running
+    last_error_time = 0
+
+    while True:
+        if not is_running:
+            time.sleep(0.1) # Sleep briefly when stopped
+            continue
+
+        interval = get_interval()
+        if interval is None:
+            # Handle error - stop clicking if interval is invalid
+            # Debounce error message printing
+            current_time = time.time()
+            if current_time - last_error_time > 5:
+                print("Stopping due to invalid interval.")
+                last_error_time = current_time
+            is_running = False # Stop the loop
+            status_var.set("Status: Stopped (Invalid Interval)")
+            time.sleep(0.5) # Short sleep before checking again
+            continue
+
+        button_to_click = mouse.Button.left if mouse_button_var.get() == "Left" else mouse.Button.right
+
+        try:
+            mouse_controller.click(button_to_click, 1) # Click once
+            time.sleep(interval) # Wait for the specified interval
+        except Exception as e:
+            print(f"Error during click/sleep: {e}")
+            # Consider stopping or just logging
+            time.sleep(0.1) # Prevent tight loop on error
 
 def on_press(key):
-    global hotkey
+    global hotkey, is_setting_hotkey, is_running
+
+    if is_setting_hotkey:
+        hotkey = key # Set the new hotkey
+        hotkey_name = get_key_name(key)
+        hotkey_display_var.set(f"Hotkey: {hotkey_name}") # Update label
+        is_setting_hotkey = False # Reset flag
+        set_hotkey_button.configure(state="normal") # Re-enable button
+        # Reset status to current running state
+        current_status = "Running" if is_running else "Stopped"
+        status_var.set(f"Status: {current_status}")
+        print(f"New hotkey set to: {hotkey_name}")
+        return # Don't process as toggle
+
+    # --- Normal Hotkey Toggle --- (Only if not setting hotkey)
     if key == hotkey:
         toggle_clicking()
 
@@ -51,6 +128,10 @@ def start_hotkey_listener():
 # Start listener in a daemon thread so it exits when the main app closes
 listener_thread = threading.Thread(target=start_hotkey_listener, daemon=True)
 listener_thread.start()
+
+# Start the clicking thread
+click_thread = threading.Thread(target=click_loop, daemon=True)
+click_thread.start()
 
 # --- GUI Elements (to be added) ---
 
@@ -128,7 +209,16 @@ hotkey_value_label.grid(row=0, column=1, padx=5, pady=(5, 10), sticky="w")
 set_hotkey_button = ctk.CTkButton(master=hotkey_frame, text="Set Hotkey", command=set_hotkey)
 set_hotkey_button.grid(row=0, column=2, padx=10, pady=(5, 10), sticky="e")
 
-# Frame for Status/Control
+# --- Status Frame ---
+status_frame = ctk.CTkFrame(master=app)
+status_frame.grid(row=3, column=0, padx=20, pady=(10, 20), sticky="nsew")
+status_frame.grid_columnconfigure(0, weight=1)
+
+# Variable to store the status text
+status_var = ctk.StringVar(value="Status: Stopped") # Default value
+
+status_label = ctk.CTkLabel(master=status_frame, textvariable=status_var, font=ctk.CTkFont(weight="bold"))
+status_label.grid(row=0, column=0, padx=10, pady=10)
 
 # --- Run App ---
 app.mainloop() 
