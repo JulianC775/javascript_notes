@@ -5,23 +5,32 @@ from pynput import mouse, keyboard
 import json
 import os # For checking if foods.json exists
 
-# --- Global Variables ---
+# --- Global Variables (Non-GUI specific or initialized after app) ---
 is_running = False
 click_thread = None
 listener_thread = None
 hotkey = keyboard.Key.f6 # Default hotkey
-mouse_controller = mouse.Controller() # Create mouse controller instance
-is_setting_hotkey = False # Flag to indicate if we are waiting for a new hotkey
-foods_data = {} # To store food names and their eating durations
-selected_food_duration = ctk.StringVar(value="0.0s") # To display eating duration with unit
+mouse_controller = mouse.Controller()
+is_setting_hotkey = False
+foods_data = {}
+# selected_food_duration will be initialized after app is created
+# mouse_button_var will be initialized after app is created
+
+# List of widgets to disable/enable during hotkey setting
+interactive_widgets = []
+
 
 # --- GUI Setup ---
 ctk.set_appearance_mode("System") # Modes: "System" (default), "Dark", "Light"
 ctk.set_default_color_theme("blue") # Themes: "blue" (default), "green", "dark-blue"
 
-app = ctk.CTk()
+app = ctk.CTk() # Initialize the main application window FIRST
 app.title("Stylish Auto Clicker")
-app.geometry("500x500") # Adjusted height slightly after removing food slot entry
+app.geometry("500x500")
+
+# --- Initialize Tkinter Variables (Now that 'app' exists) ---
+selected_food_duration = ctk.StringVar(value="0.0s") # To display eating duration with unit
+mouse_button_var = ctk.StringVar(value="Left") # Default value for mouse button selection
 
 # Configure grid layout
 app.grid_columnconfigure(0, weight=1)
@@ -41,6 +50,7 @@ interval_label.grid(row=0, column=0, columnspan=8, padx=10, pady=(5, 10), sticky
 entry_hours = ctk.CTkEntry(master=interval_frame, width=50, justify='center')
 entry_hours.grid(row=1, column=1, padx=(0, 5), pady=5, sticky="ew")
 entry_hours.insert(0, "0")
+interactive_widgets.append(entry_hours)
 hours_label = ctk.CTkLabel(master=interval_frame, text="hours")
 hours_label.grid(row=1, column=2, padx=(0, 10), pady=5, sticky="w")
 
@@ -48,6 +58,7 @@ hours_label.grid(row=1, column=2, padx=(0, 10), pady=5, sticky="w")
 entry_mins = ctk.CTkEntry(master=interval_frame, width=50, justify='center')
 entry_mins.grid(row=1, column=3, padx=(0, 5), pady=5, sticky="ew")
 entry_mins.insert(0, "0")
+interactive_widgets.append(entry_mins)
 mins_label = ctk.CTkLabel(master=interval_frame, text="mins")
 mins_label.grid(row=1, column=4, padx=(0, 10), pady=5, sticky="w")
 
@@ -55,6 +66,7 @@ mins_label.grid(row=1, column=4, padx=(0, 10), pady=5, sticky="w")
 entry_secs = ctk.CTkEntry(master=interval_frame, width=50, justify='center')
 entry_secs.grid(row=1, column=5, padx=(0, 5), pady=5, sticky="ew")
 entry_secs.insert(0, "0")
+interactive_widgets.append(entry_secs)
 secs_label = ctk.CTkLabel(master=interval_frame, text="secs")
 secs_label.grid(row=1, column=6, padx=(0, 10), pady=5, sticky="w")
 
@@ -62,6 +74,7 @@ secs_label.grid(row=1, column=6, padx=(0, 10), pady=5, sticky="w")
 entry_ms = ctk.CTkEntry(master=interval_frame, width=50, justify='center')
 entry_ms.grid(row=1, column=7, padx=(0, 5), pady=5, sticky="ew")
 entry_ms.insert(0, "100")
+interactive_widgets.append(entry_ms)
 ms_label = ctk.CTkLabel(master=interval_frame, text="milliseconds")
 ms_label.grid(row=1, column=8, padx=(0, 10), pady=5, sticky="w")
 
@@ -73,14 +86,15 @@ mouse_button_frame.grid_columnconfigure(0, weight=1)
 mouse_label = ctk.CTkLabel(master=mouse_button_frame, text="Mouse Button", font=ctk.CTkFont(weight="bold"))
 mouse_label.grid(row=0, column=0, columnspan=2, padx=10, pady=(5, 10), sticky="w")
 
-# Variable to store the selected mouse button
-mouse_button_var = ctk.StringVar(value="Left") # Default value
+# Variable to store the selected mouse button (already initialized above)
 
-radio_left = ctk.CTkRadioButton(master=mouse_button_frame, text="Left Click", variable=mouse_button_var, value="Left")
-radio_left.grid(row=1, column=0, padx=20, pady=10, sticky="w")
+left_click_radio = ctk.CTkRadioButton(master=mouse_button_frame, text="Left Click", variable=mouse_button_var, value="Left")
+left_click_radio.grid(row=1, column=0, padx=20, pady=10, sticky="w")
+interactive_widgets.append(left_click_radio)
 
-radio_right = ctk.CTkRadioButton(master=mouse_button_frame, text="Right Click", variable=mouse_button_var, value="Right")
-radio_right.grid(row=1, column=1, padx=20, pady=10, sticky="w")
+right_click_radio = ctk.CTkRadioButton(master=mouse_button_frame, text="Right Click", variable=mouse_button_var, value="Right")
+right_click_radio.grid(row=1, column=1, padx=20, pady=10, sticky="w")
+interactive_widgets.append(right_click_radio)
 
 # --- Hotkey Frame ---
 hotkey_frame = ctk.CTkFrame(master=app)
@@ -112,6 +126,7 @@ food_type_label = ctk.CTkLabel(master=eating_frame, text="Food Type:")
 food_type_label.grid(row=1, column=0, padx=10, pady=5, sticky="w") # Adjusted row
 food_type_combobox = ctk.CTkComboBox(master=eating_frame, values=[], command=lambda choice: update_food_duration_display(choice))
 food_type_combobox.grid(row=1, column=1, columnspan=2, padx=(0,10), pady=5, sticky="ew") # Adjusted row
+interactive_widgets.append(food_type_combobox)
 
 eating_duration_label_text = ctk.CTkLabel(master=eating_frame, text="Eat Duration:")
 eating_duration_label_text.grid(row=2, column=0, padx=10, pady=5, sticky="w") # Adjusted row
@@ -120,6 +135,15 @@ eating_duration_label_value.grid(row=2, column=1, padx=(0,5), pady=5, sticky="w"
 
 eat_now_button = ctk.CTkButton(master=eating_frame, text="Eat Now (Hold Right Click)", command=lambda: perform_eat_action())
 eat_now_button.grid(row=3, column=0, columnspan=3, padx=10, pady=10, sticky="ew") # Adjusted row and columnspan
+interactive_widgets.append(eat_now_button)
+
+java_edition_disclaimer_label = ctk.CTkLabel(
+    master=eating_frame, 
+    text="(For Minecraft: Java Edition - Assumes food in off-hand)",
+    font=ctk.CTkFont(size=10),
+    text_color="gray50" # A common color that should look subdued
+)
+java_edition_disclaimer_label.grid(row=4, column=0, columnspan=3, padx=10, pady=(0, 10), sticky="ew")
 
 # --- Status Frame ---
 status_frame = ctk.CTkFrame(master=app)
@@ -161,6 +185,8 @@ def set_hotkey():
     # Safely update GUI from main thread or callback
     app.after(0, lambda: status_var.set("Status: Press the desired hotkey..."))
     app.after(0, lambda: set_hotkey_button.configure(state="disabled"))
+    for widget in interactive_widgets:
+        widget.configure(state="disabled")
     print("Waiting for new hotkey...")
 
 def get_interval():
@@ -225,6 +251,8 @@ def on_press(key):
         if key == keyboard.Key.esc: # Allow Esc to cancel setting hotkey
              is_setting_hotkey = False
              app.after(0, lambda: set_hotkey_button.configure(state="normal"))
+             for widget in interactive_widgets:
+                 widget.configure(state="normal")
              # Restore status based on whether clicker is running or stopped
              current_status = "Running" if is_running else "Stopped"
              app.after(0, lambda: status_var.set(f"Status: {current_status}"))
@@ -237,6 +265,8 @@ def on_press(key):
         app.after(0, lambda: hotkey_display_var.set(f"Hotkey: {hotkey_name}"))
         is_setting_hotkey = False
         app.after(0, lambda: set_hotkey_button.configure(state="normal"))
+        for widget in interactive_widgets:
+            widget.configure(state="normal")
         # Restore status based on whether clicker is running or stopped
         current_status = "Running" if is_running else "Stopped"
         app.after(0, lambda: status_var.set(f"Status: {current_status}"))

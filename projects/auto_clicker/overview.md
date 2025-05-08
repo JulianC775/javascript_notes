@@ -62,7 +62,12 @@ To create a visually appealing desktop application (GUI) for automating mouse cl
     *   A function `toggle_clicking()` that flips the `is_running` flag and updates the GUI status label.
     *   A function `on_press(key)` for the listener. Checks if the pressed key matches the configured hotkey. If yes, call `toggle_clicking()`.
     *   A function `start_hotkey_listener()` to run the `pynput.keyboard.Listener` in a separate thread.
-    *   Mechanism for the "Set Hotkey" button: Temporarily stops the main listener, starts a temporary listener that records the next keypress, updates the hotkey setting, and restarts the main listener.
+    *   Mechanism for the "Set Hotkey" button: 
+        *   Temporarily stops the main listener.
+        *   Starts a temporary listener that records the next keypress.
+        *   Updates the hotkey setting.
+        *   Restarts the main listener.
+        *   Crucially, upon entering the "listening" state for a new hotkey, all other interactive GUI elements (especially text input fields like click interval) should be temporarily disabled or unfocused. This prevents any key presses intended for the hotkey from being accidentally entered into other fields. Once the hotkey is set or the action is cancelled, these elements should revert to their normal state.
 5.  **State Management:**
     *   Use a global boolean variable (`is_running`) controlled by the hotkey/button.
     *   Ensure thread safety if needed, although simple flag toggling might be okay here.
