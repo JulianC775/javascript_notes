@@ -27,6 +27,10 @@ To create a visually appealing desktop application (GUI) for automating mouse cl
 ## GUI Layout Plan
 
 *   **Main Window:** Themed using `CustomTkinter` (e.g., dark mode).
+*   **Control & Status (Top of Window):**
+    *   `CTkLabel` for Status: "Status: Stopped" / "Status: Running".
+    *   This label should have a noticeable background color (e.g., a shade of blue) to clearly indicate the current status.
+    *   Optional: A main `CTkButton` for Start/Stop as an alternative to the hotkey (can mirror hotkey state).
 *   **Click Interval Section:**
     *   Label: "Click Interval"
     *   Four `CTkEntry` widgets arranged horizontally.
@@ -38,15 +42,20 @@ To create a visually appealing desktop application (GUI) for automating mouse cl
 *   **Hotkey Section:**
     *   Label displaying the current hotkey (e.g., "Hotkey: F6"). Default to a sensible key (like F6).
     *   `CTkButton`: "Set Hotkey". Clicking this enters a "listening" state until the user presses the desired key combination.
-*   **Control & Status:**
-    *   `CTkLabel` for Status: "Status: Stopped" / "Status: Running" (Color change optional).
-    *   Optional: A main `CTkButton` for Start/Stop as an alternative to the hotkey (can mirror hotkey state).
+*   **Eating Feature Section (V2):**
+    *   Label: "Eating Feature (Off-Hand - Java Edition only)"
+    *   `CTkComboBox` for food type selection.
+    *   Label to display selected food's eating duration.
+    *   `CTkEntry` for "Eating Interval (minutes)" - for automated periodic eating.
+    *   `CTkButton` to trigger the eat action (manual eat now).
+    *   A small disclaimer label: "(For Minecraft: Java Edition only - Assumes food in off-hand)".
 
 ## Core Logic Outline
 
 1.  **GUI Setup (`CustomTkinter`):**
-    *   Create the main window and arrange widgets as planned.
-    *   Link input fields and radio buttons to variables.
+    *   Create the main window (`app = ctk.CTk()`) **before** defining any Tkinter/CustomTkinter variables (e.g., `ctk.StringVar`, `ctk.IntVar`). This is crucial to avoid `RuntimeError: Too early to create variable`.
+    *   Arrange widgets as planned according to the GUI Layout Plan.
+    *   Link input fields and radio buttons to their respective Tkinter variables after both the main window and variables are defined.
 2.  **Interval Calculation:**
     *   Function to read values from the four interval entry boxes.
     *   Validate input (ensure numbers).
@@ -95,8 +104,12 @@ To create a visually appealing desktop application (GUI) for automating mouse cl
 
 ### New Features
 
-#### 1. Eating Feature (Assumes Food in Off-Hand)
+#### 1. Eating Feature (Assumes Food in Off-Hand - Minecraft: Java Edition only)
+    *   This feature is designed specifically for Minecraft: Java Edition, assuming food is in the player's off-hand.
     *   **Automated Eating Action:** When triggered, the script will simulate holding the right mouse button for a duration specific to the selected off-hand food item.
+    *   **Eating Interval:**
+        *   A `CTkEntry` will allow the user to specify an interval in minutes.
+        *   This interval is intended for an automated process that triggers the eating action periodically (implementation of this timer/loop is a further step).
     *   **Off-Hand Food Type Selection:**
         *   A GUI element (e.g., `CTkComboBox`) for the user to select their current off-hand food type from a list defined in a configuration file.
     *   **Data Storage:** Store food types and their eating durations in a JSON file (e.g., `foods.json`). This allows for easy viewing and manual modification of food data (e.g., `{"Most Foods": 1.61, "Kelp": 0.865}`).

@@ -38,10 +38,30 @@ app.grid_columnconfigure(0, weight=1)
 
 # --- GUI Elements (Define BEFORE functions that use them) ---
 
+# --- Status Frame (Moved to top) ---
+status_frame = ctk.CTkFrame(master=app)
+status_frame.grid(row=0, column=0, padx=20, pady=(10, 10), sticky="new") # Adjusted row and pady
+status_frame.grid_columnconfigure(0, weight=1)
+
+# Variable to store the status text
+status_var = ctk.StringVar(value="Status: Stopped") # Default value
+
+status_label = ctk.CTkLabel(
+    master=status_frame, 
+    textvariable=status_var, 
+    font=ctk.CTkFont(weight="bold"),
+    fg_color=("blue", "dodgerblue"), # Example blue background (dark_mode, light_mode)
+    text_color="white",
+    corner_radius=8,
+    padx=10,
+    pady=5
+)
+status_label.grid(row=0, column=0, padx=0, pady=0, sticky="ew") # Label sticks to frame edges
+
 # --- Interval Frame ---
 interval_frame = ctk.CTkFrame(master=app)
-interval_frame.grid(row=0, column=0, padx=20, pady=(20, 10), sticky="new") # Place it top, stretch horizontally
-interval_frame.grid_columnconfigure((1, 3, 5, 7), weight=1) # Make entry columns expand slightly
+interval_frame.grid(row=1, column=0, padx=20, pady=(0, 10), sticky="new") # Row 1, pady adjusted
+interval_frame.grid_columnconfigure((1, 3, 5, 7), weight=1)
 
 interval_label = ctk.CTkLabel(master=interval_frame, text="Click Interval", font=ctk.CTkFont(weight="bold"))
 interval_label.grid(row=0, column=0, columnspan=8, padx=10, pady=(5, 10), sticky="w")
@@ -80,7 +100,7 @@ ms_label.grid(row=1, column=8, padx=(0, 10), pady=5, sticky="w")
 
 # --- Mouse Button Frame ---
 mouse_button_frame = ctk.CTkFrame(master=app)
-mouse_button_frame.grid(row=1, column=0, padx=20, pady=10, sticky="new")
+mouse_button_frame.grid(row=2, column=0, padx=20, pady=10, sticky="new") # Row 2
 mouse_button_frame.grid_columnconfigure(0, weight=1)
 
 mouse_label = ctk.CTkLabel(master=mouse_button_frame, text="Mouse Button", font=ctk.CTkFont(weight="bold"))
@@ -98,7 +118,7 @@ interactive_widgets.append(right_click_radio)
 
 # --- Hotkey Frame ---
 hotkey_frame = ctk.CTkFrame(master=app)
-hotkey_frame.grid(row=2, column=0, padx=20, pady=10, sticky="new")
+hotkey_frame.grid(row=3, column=0, padx=20, pady=10, sticky="new") # Row 3
 hotkey_frame.grid_columnconfigure(1, weight=1)
 
 # Label to display the current hotkey
@@ -116,7 +136,7 @@ set_hotkey_button.grid(row=0, column=2, padx=10, pady=(5, 10), sticky="e")
 
 # --- Eating Feature Frame ---
 eating_frame = ctk.CTkFrame(master=app)
-eating_frame.grid(row=3, column=0, padx=20, pady=10, sticky="new")
+eating_frame.grid(row=4, column=0, padx=20, pady=10, sticky="new") # Row 4
 eating_frame.grid_columnconfigure(1, weight=1)
 
 eating_label = ctk.CTkLabel(master=eating_frame, text="Eating Feature (Off-Hand)", font=ctk.CTkFont(weight="bold"))
@@ -133,28 +153,25 @@ eating_duration_label_text.grid(row=2, column=0, padx=10, pady=5, sticky="w") # 
 eating_duration_label_value = ctk.CTkLabel(master=eating_frame, textvariable=selected_food_duration)
 eating_duration_label_value.grid(row=2, column=1, padx=(0,5), pady=5, sticky="w") # Adjusted row
 
+# Eating Interval
+eat_interval_label = ctk.CTkLabel(master=eating_frame, text="Eat Interval (mins):")
+eat_interval_label.grid(row=3, column=0, padx=10, pady=5, sticky="w")
+entry_eat_interval = ctk.CTkEntry(master=eating_frame, width=60, justify='center')
+entry_eat_interval.grid(row=3, column=1, padx=(0,10), pady=5, sticky="ew")
+entry_eat_interval.insert(0, "10") # Default to 10 minutes
+interactive_widgets.append(entry_eat_interval)
+
 eat_now_button = ctk.CTkButton(master=eating_frame, text="Eat Now (Hold Right Click)", command=lambda: perform_eat_action())
-eat_now_button.grid(row=3, column=0, columnspan=3, padx=10, pady=10, sticky="ew") # Adjusted row and columnspan
+eat_now_button.grid(row=4, column=0, columnspan=3, padx=10, pady=10, sticky="ew") # Adjusted row
 interactive_widgets.append(eat_now_button)
 
 java_edition_disclaimer_label = ctk.CTkLabel(
     master=eating_frame, 
-    text="(For Minecraft: Java Edition - Assumes food in off-hand)",
+    text="(For Minecraft: Java Edition only - Assumes food in off-hand)", # Added "only"
     font=ctk.CTkFont(size=10),
-    text_color="gray50" # A common color that should look subdued
+    text_color="gray50"
 )
-java_edition_disclaimer_label.grid(row=4, column=0, columnspan=3, padx=10, pady=(0, 10), sticky="ew")
-
-# --- Status Frame ---
-status_frame = ctk.CTkFrame(master=app)
-status_frame.grid(row=4, column=0, padx=20, pady=(10, 20), sticky="nsew") # Adjusted row for new frame
-status_frame.grid_columnconfigure(0, weight=1)
-
-# Variable to store the status text
-status_var = ctk.StringVar(value="Status: Stopped") # Default value
-
-status_label = ctk.CTkLabel(master=status_frame, textvariable=status_var, font=ctk.CTkFont(weight="bold"))
-status_label.grid(row=0, column=0, padx=10, pady=10)
+java_edition_disclaimer_label.grid(row=5, column=0, columnspan=3, padx=10, pady=(0, 10), sticky="ew") # Adjusted row
 
 # --- Helper Functions ---
 def get_key_name(key):
