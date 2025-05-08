@@ -90,16 +90,12 @@ To create a visually appealing desktop application (GUI) for automating mouse cl
 
 ### New Features
 
-#### 1. Eating Feature
-    *   **Food Slot Selection:** Allow the user to specify a hotkey slot number (e.g., 1-9) where their food item is located in-game.
-    *   **Automated Eating Action:** When triggered, the script will simulate:
-        *   Pressing the corresponding number key to select the food slot.
-        *   Holding the right mouse button for a duration specific to the food item.
-    *   **Food Type Configuration:**
-        *   A GUI element (e.g., `CTkComboBox` or `CTkOptionMenu`) for the user to select their current food type from a predefined list.
-        *   An entry box or a dedicated interface for managing food types and their respective "eating durations".
-    *   **Data Storage:** Store food types and their eating durations. JSON is a viable option for this, allowing for easy addition and modification of food data (e.g., `{"Steak": 5.2, "Cooked Fish": 3.5}`).
-    *   **Activation:** This feature could be triggered by a separate global hotkey or integrated into the main clicker logic (e.g., eat when idle).
+#### 1. Eating Feature (Assumes Food in Off-Hand)
+    *   **Automated Eating Action:** When triggered, the script will simulate holding the right mouse button for a duration specific to the selected off-hand food item.
+    *   **Off-Hand Food Type Selection:**
+        *   A GUI element (e.g., `CTkComboBox`) for the user to select their current off-hand food type from a list defined in a configuration file.
+    *   **Data Storage:** Store food types and their eating durations in a JSON file (e.g., `foods.json`). This allows for easy viewing and manual modification of food data (e.g., `{"Most Foods": 1.61, "Kelp": 0.865}`).
+    *   **Activation:** This feature can be triggered by a dedicated button in the GUI. (Future enhancement: could be a global hotkey).
 
 #### 2. Improved Click Logic
     *   **Minimum Click Interval:** Refine the click scheduling logic to reliably support very short intervals, with a target minimum of approximately 3 milliseconds. This may involve optimizing the sleep mechanism or using a more precise timer if `time.sleep()` proves insufficient for such high frequencies.

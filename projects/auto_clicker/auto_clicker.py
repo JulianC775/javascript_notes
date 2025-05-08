@@ -2,6 +2,8 @@ import customtkinter as ctk
 import threading
 import time
 from pynput import mouse, keyboard
+import json
+import os # For checking if foods.json exists
 
 # --- Global Variables ---
 is_running = False
@@ -10,6 +12,8 @@ listener_thread = None
 hotkey = keyboard.Key.f6 # Default hotkey
 mouse_controller = mouse.Controller() # Create mouse controller instance
 is_setting_hotkey = False # Flag to indicate if we are waiting for a new hotkey
+foods_data = {} # To store food names and their eating durations
+selected_food_duration = ctk.StringVar(value="0.0s") # To display eating duration with unit
 
 # --- GUI Setup ---
 ctk.set_appearance_mode("System") # Modes: "System" (default), "Dark", "Light"
@@ -17,11 +21,11 @@ ctk.set_default_color_theme("blue") # Themes: "blue" (default), "green", "dark-b
 
 app = ctk.CTk()
 app.title("Stylish Auto Clicker")
-app.geometry("500x350") # Initial size, adjust as needed
+app.geometry("500x500") # Adjusted height slightly after removing food slot entry
 
 # Configure grid layout
 app.grid_columnconfigure(0, weight=1)
-# Add row configurations as needed when adding more sections
+# app.grid_rowconfigure(4, weight=1) # Add this if status_frame should be at the bottom and expand
 
 # --- GUI Elements (Define BEFORE functions that use them) ---
 
@@ -96,9 +100,30 @@ hotkey_value_label.grid(row=0, column=1, padx=5, pady=(5, 10), sticky="w")
 set_hotkey_button = ctk.CTkButton(master=hotkey_frame, text="Set Hotkey", command=lambda: set_hotkey())
 set_hotkey_button.grid(row=0, column=2, padx=10, pady=(5, 10), sticky="e")
 
+# --- Eating Feature Frame ---
+eating_frame = ctk.CTkFrame(master=app)
+eating_frame.grid(row=3, column=0, padx=20, pady=10, sticky="new")
+eating_frame.grid_columnconfigure(1, weight=1)
+
+eating_label = ctk.CTkLabel(master=eating_frame, text="Eating Feature (Off-Hand)", font=ctk.CTkFont(weight="bold"))
+eating_label.grid(row=0, column=0, columnspan=3, padx=10, pady=(5, 10), sticky="w") # Adjusted columnspan
+
+food_type_label = ctk.CTkLabel(master=eating_frame, text="Food Type:")
+food_type_label.grid(row=1, column=0, padx=10, pady=5, sticky="w") # Adjusted row
+food_type_combobox = ctk.CTkComboBox(master=eating_frame, values=[], command=lambda choice: update_food_duration_display(choice))
+food_type_combobox.grid(row=1, column=1, columnspan=2, padx=(0,10), pady=5, sticky="ew") # Adjusted row
+
+eating_duration_label_text = ctk.CTkLabel(master=eating_frame, text="Eat Duration:")
+eating_duration_label_text.grid(row=2, column=0, padx=10, pady=5, sticky="w") # Adjusted row
+eating_duration_label_value = ctk.CTkLabel(master=eating_frame, textvariable=selected_food_duration)
+eating_duration_label_value.grid(row=2, column=1, padx=(0,5), pady=5, sticky="w") # Adjusted row
+
+eat_now_button = ctk.CTkButton(master=eating_frame, text="Eat Now (Hold Right Click)", command=lambda: perform_eat_action())
+eat_now_button.grid(row=3, column=0, columnspan=3, padx=10, pady=10, sticky="ew") # Adjusted row and columnspan
+
 # --- Status Frame ---
 status_frame = ctk.CTkFrame(master=app)
-status_frame.grid(row=3, column=0, padx=20, pady=(10, 20), sticky="nsew")
+status_frame.grid(row=4, column=0, padx=20, pady=(10, 20), sticky="nsew") # Adjusted row for new frame
 status_frame.grid_columnconfigure(0, weight=1)
 
 # Variable to store the status text
@@ -114,10 +139,15 @@ def get_key_name(key):
         # Prefer key.char if it exists and is not None
         char = getattr(key, 'char', None)
         if char:
-            return char
+            # Ensure key.char is a valid character to be used (e.g. not None or special unprintable chars if any)
+            # This check is a bit tricky as pynput might give 'char' for some special keys too.
+            # A more robust way might be to check its type or if it's in a known set of 'printable' chars.
+            # For now, we assume if getattr gives a non-None char, it's intended as the character representation.
+            if hasattr(key, 'char') and key.char is not None:
+                 return key.char # Prefer char for letter/number keys
         # Otherwise use key.name for special keys
         if isinstance(key, keyboard.Key):
-            return key.name.capitalize()
+            return key.name.capitalize() # Fallback to name for special keys like F6, Shift_L etc.
     except Exception:
         pass # Fallback if any attribute access fails
     return str(key)
@@ -140,7 +170,7 @@ def get_interval():
         m = int(entry_mins.get())
         s = int(entry_secs.get())
         ms = int(entry_ms.get())
-        interval = max(0.001, h * 3600 + m * 60 + s + ms / 1000)
+        interval = max(0.003, h * 3600 + m * 60 + s + ms / 1000) # Changed minimum to 0.003
         return interval
     except ValueError:
         print("Invalid interval input. Please enter numbers.")
@@ -195,17 +225,19 @@ def on_press(key):
         if key == keyboard.Key.esc: # Allow Esc to cancel setting hotkey
              is_setting_hotkey = False
              app.after(0, lambda: set_hotkey_button.configure(state="normal"))
+             # Restore status based on whether clicker is running or stopped
              current_status = "Running" if is_running else "Stopped"
              app.after(0, lambda: status_var.set(f"Status: {current_status}"))
              print("Hotkey setting cancelled.")
              return
 
         hotkey = key
-        hotkey_name = get_key_name(key)
+        hotkey_name = get_key_name(key) # Use the refined get_key_name
         # Safely update GUI from listener thread
         app.after(0, lambda: hotkey_display_var.set(f"Hotkey: {hotkey_name}"))
         is_setting_hotkey = False
         app.after(0, lambda: set_hotkey_button.configure(state="normal"))
+        # Restore status based on whether clicker is running or stopped
         current_status = "Running" if is_running else "Stopped"
         app.after(0, lambda: status_var.set(f"Status: {current_status}"))
         print(f"New hotkey set to: {hotkey_name}")
@@ -219,7 +251,101 @@ def start_hotkey_listener():
     with keyboard.Listener(on_press=on_press) as listener:
         listener.join()
 
-# --- Start Threads ---
+# --- Eating Feature Functions ---
+def load_food_data():
+    """Loads food data from a JSON file (placeholder for now)."""
+    global foods_data
+    foods_file = "projects/auto_clicker/foods.json"
+    default_foods = {
+        "Most Foods": 1.61,
+        "Kelp": 0.865
+    }
+
+    if os.path.exists(foods_file):
+        try:
+            with open(foods_file, 'r') as f:
+                foods_data = json.load(f)
+            print(f"Loaded food data from {foods_file}")
+        except json.JSONDecodeError:
+            print(f"Error decoding {foods_file}. Using default foods.")
+            foods_data = default_foods
+            _save_default_foods(foods_file, default_foods) # Attempt to save defaults if file was corrupt
+        except Exception as e:
+            print(f"Error loading {foods_file}: {e}. Using default foods.")
+            foods_data = default_foods
+    else:
+        print(f"'{foods_file}' not found. Creating with default foods.")
+        foods_data = default_foods
+        _save_default_foods(foods_file, default_foods)
+
+    if food_type_combobox: # Check if GUI element exists
+        food_names = list(foods_data.keys())
+        food_type_combobox.configure(values=food_names)
+        if food_names:
+            food_type_combobox.set(food_names[0])
+            update_food_duration_display(food_names[0])
+        else:
+            food_type_combobox.set("") # Clear if no food data
+            selected_food_duration.set("N/A")
+
+def _save_default_foods(file_path, data):
+    """Helper to save default food data to JSON."""
+    try:
+        with open(file_path, 'w') as f:
+            json.dump(data, f, indent=4)
+        print(f"Saved default food data to {file_path}")
+    except Exception as e:
+        print(f"Error saving default food data to {file_path}: {e}")
+
+def update_food_duration_display(selected_food_name):
+    """Updates the eating duration label based on selected food."""
+    global foods_data, selected_food_duration
+    if selected_food_name and selected_food_name in foods_data:
+        duration = foods_data[selected_food_name]
+        selected_food_duration.set(f"{duration:.3f}s") # Display with 3 decimal places and unit
+    else:
+        selected_food_duration.set("N/A")
+
+def perform_eat_action():
+    """Simulates holding right-click to eat food from off-hand."""
+    food_type = food_type_combobox.get()
+
+    if not food_type or food_type not in foods_data:
+        print("No valid food type selected or food data missing.")
+        app.after(0, lambda: status_var.set("Status: Select Food Type!"))
+        return
+
+    try:
+        duration = foods_data[food_type]
+    except KeyError:
+        print(f"Error: Food type '{food_type}' not found in data.")
+        app.after(0, lambda: status_var.set("Status: Food Data Error!"))
+        return
+
+    print(f"Attempting to eat: '{food_type}' for {duration:.3f}s")
+    app.after(0, lambda: status_var.set(f"Status: Eating {food_type}..."))
+
+    def _eat_action_thread():
+        try:
+            mouse_controller.press(mouse.Button.right)
+            time.sleep(duration) # Hold right click for the food's duration
+            mouse_controller.release(mouse.Button.right)
+            print(f"Finished eating '{food_type}'.")
+            # Update status on main thread after action
+            app.after(0, lambda: status_var.set(f"Status: Finished Eating {food_type}"))
+        except Exception as e:
+            print(f"Error during eat action: {e}")
+            app.after(0, lambda: status_var.set("Status: Error Eating!"))
+        finally:
+            # Revert to main clicker status after a short delay, or if eating was quick
+            app.after(1000, lambda: app.after(0, lambda: status_var.set(f"Status: {'Running' if is_running else 'Stopped'}")) )
+
+    threading.Thread(target=_eat_action_thread, daemon=True).start()
+
+
+# --- Initialize & Start Threads ---
+load_food_data() # Load food data on startup
+
 listener_thread = threading.Thread(target=start_hotkey_listener, daemon=True)
 listener_thread.start()
 click_thread = threading.Thread(target=click_loop, daemon=True)
