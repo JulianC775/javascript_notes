@@ -13,11 +13,16 @@ hotkey = keyboard.Key.f6 # Default hotkey
 mouse_controller = mouse.Controller()
 is_setting_hotkey = False
 foods_data = {}
+is_auto_eating = False # Flag for auto-eating state
+auto_eat_thread = None   # Thread for auto-eating loop
 # selected_food_duration will be initialized after app is created
 # mouse_button_var will be initialized after app is created
 
 # List of widgets to disable/enable during hotkey setting
 interactive_widgets = []
+
+# List of entry widgets for mutual focus handling
+focusable_entry_widgets = []
 
 
 # --- GUI Setup ---
@@ -71,6 +76,7 @@ entry_hours = ctk.CTkEntry(master=interval_frame, width=50, justify='center')
 entry_hours.grid(row=1, column=1, padx=(0, 5), pady=5, sticky="ew")
 entry_hours.insert(0, "0")
 interactive_widgets.append(entry_hours)
+focusable_entry_widgets.append(entry_hours)
 hours_label = ctk.CTkLabel(master=interval_frame, text="hours")
 hours_label.grid(row=1, column=2, padx=(0, 10), pady=5, sticky="w")
 
@@ -79,6 +85,7 @@ entry_mins = ctk.CTkEntry(master=interval_frame, width=50, justify='center')
 entry_mins.grid(row=1, column=3, padx=(0, 5), pady=5, sticky="ew")
 entry_mins.insert(0, "0")
 interactive_widgets.append(entry_mins)
+focusable_entry_widgets.append(entry_mins)
 mins_label = ctk.CTkLabel(master=interval_frame, text="mins")
 mins_label.grid(row=1, column=4, padx=(0, 10), pady=5, sticky="w")
 
@@ -87,6 +94,7 @@ entry_secs = ctk.CTkEntry(master=interval_frame, width=50, justify='center')
 entry_secs.grid(row=1, column=5, padx=(0, 5), pady=5, sticky="ew")
 entry_secs.insert(0, "0")
 interactive_widgets.append(entry_secs)
+focusable_entry_widgets.append(entry_secs)
 secs_label = ctk.CTkLabel(master=interval_frame, text="secs")
 secs_label.grid(row=1, column=6, padx=(0, 10), pady=5, sticky="w")
 
@@ -95,6 +103,7 @@ entry_ms = ctk.CTkEntry(master=interval_frame, width=50, justify='center')
 entry_ms.grid(row=1, column=7, padx=(0, 5), pady=5, sticky="ew")
 entry_ms.insert(0, "100")
 interactive_widgets.append(entry_ms)
+focusable_entry_widgets.append(entry_ms)
 ms_label = ctk.CTkLabel(master=interval_frame, text="milliseconds")
 ms_label.grid(row=1, column=8, padx=(0, 10), pady=5, sticky="w")
 
@@ -160,9 +169,19 @@ entry_eat_interval = ctk.CTkEntry(master=eating_frame, width=60, justify='center
 entry_eat_interval.grid(row=3, column=1, padx=(0,10), pady=5, sticky="ew")
 entry_eat_interval.insert(0, "10") # Default to 10 minutes
 interactive_widgets.append(entry_eat_interval)
+focusable_entry_widgets.append(entry_eat_interval)
+
+# Auto-Eat Switch
+auto_eat_label = ctk.CTkLabel(master=eating_frame, text="Auto-Eat Every Interval:")
+auto_eat_label.grid(row=4, column=0, padx=10, pady=5, sticky="w")
+auto_eat_switch_var = ctk.StringVar(value="off") # Variable for the switch state
+auto_eat_switch = ctk.CTkSwitch(master=eating_frame, text="", variable=auto_eat_switch_var, 
+                                  onvalue="on", offvalue="off", command=lambda: toggle_auto_eating())
+auto_eat_switch.grid(row=4, column=1, padx=(0,10), pady=5, sticky="w")
+interactive_widgets.append(auto_eat_switch)
 
 eat_now_button = ctk.CTkButton(master=eating_frame, text="Eat Now (Hold Right Click)", command=lambda: perform_eat_action())
-eat_now_button.grid(row=4, column=0, columnspan=3, padx=10, pady=10, sticky="ew") # Adjusted row
+eat_now_button.grid(row=5, column=0, columnspan=3, padx=10, pady=10, sticky="ew") # Adjusted row
 interactive_widgets.append(eat_now_button)
 
 java_edition_disclaimer_label = ctk.CTkLabel(
@@ -171,7 +190,34 @@ java_edition_disclaimer_label = ctk.CTkLabel(
     font=ctk.CTkFont(size=10),
     text_color="gray50"
 )
-java_edition_disclaimer_label.grid(row=5, column=0, columnspan=3, padx=10, pady=(0, 10), sticky="ew") # Adjusted row
+java_edition_disclaimer_label.grid(row=6, column=0, columnspan=3, padx=10, pady=(0, 10), sticky="ew") # Adjusted row
+
+# --- Focus Handling Functions for Entry Widgets ---
+def on_entry_focus_in(focused_widget):
+    # Ensure the focused widget itself is normal, in case it was disabled by another process
+    # (like hotkey setting, though that should re-enable it before focus can be gained)
+    if focused_widget.cget("state") == "disabled":
+        focused_widget.configure(state="normal")
+
+    for widget in focusable_entry_widgets:
+        if widget is not focused_widget and widget.winfo_exists(): # Check if widget still exists
+            widget.configure(state="disabled")
+
+def on_entry_focus_out(event_widget):
+    # When focus leaves an entry, re-enable all of them
+    # This handles tabbing out or clicking elsewhere.
+    # We also need to ensure that if we are in hotkey setting mode, they stay disabled.
+    if not is_setting_hotkey: # Only enable if not in hotkey setting mode
+        for widget in focusable_entry_widgets:
+            if widget.winfo_exists(): # Check if widget still exists
+                 widget.configure(state="normal")
+    # Special case: if auto-eat switch is off, its entry might need to be re-evaluated for state
+    # However, the general enable should cover most cases. Fine-tuning if needed later.
+
+# Bind focus events to entry widgets
+for entry_widget in focusable_entry_widgets:
+    entry_widget.bind("<FocusIn>", lambda event, w=entry_widget: on_entry_focus_in(w), add="+")
+    entry_widget.bind("<FocusOut>", lambda event, w=entry_widget: on_entry_focus_out(w), add="+")
 
 # --- Helper Functions ---
 def get_key_name(key):
@@ -283,9 +329,18 @@ def on_press(key):
         is_setting_hotkey = False
         app.after(0, lambda: set_hotkey_button.configure(state="normal"))
         for widget in interactive_widgets:
-            widget.configure(state="normal")
-        # Restore status based on whether clicker is running or stopped
+            # Ensure focusable entries are re-enabled if not setting hotkey
+            if widget in focusable_entry_widgets and not is_setting_hotkey:
+                 widget.configure(state="normal")
+            elif widget not in focusable_entry_widgets:
+                 widget.configure(state="normal")
+            
         current_status = "Running" if is_running else "Stopped"
+        if is_auto_eating and is_running:
+            current_status += " (Auto-Eating)"
+        elif is_auto_eating and not is_running:
+             current_status = "Stopped (Auto-Eat Paused)"
+
         app.after(0, lambda: status_var.set(f"Status: {current_status}"))
         print(f"New hotkey set to: {hotkey_name}")
         return
@@ -385,9 +440,82 @@ def perform_eat_action():
             app.after(0, lambda: status_var.set("Status: Error Eating!"))
         finally:
             # Revert to main clicker status after a short delay, or if eating was quick
-            app.after(1000, lambda: app.after(0, lambda: status_var.set(f"Status: {'Running' if is_running else 'Stopped'}")) )
+            current_main_status = "Running" if is_running else "Stopped"
+            if is_auto_eating and is_running:
+                current_main_status += " (Auto-Eating)"
+            elif is_auto_eating and not is_running:
+                current_main_status = "Stopped (Auto-Eat Paused)"
+            app.after(1000, lambda: app.after(0, lambda: status_var.set(f"Status: {current_main_status}")) )
 
     threading.Thread(target=_eat_action_thread, daemon=True).start()
+
+# --- Auto-Eating Logic ---
+def toggle_auto_eating():
+    global is_auto_eating
+    if auto_eat_switch_var.get() == "on":
+        is_auto_eating = True
+        status_message = "Auto-Eat Enabled"
+        if not is_running:
+            status_message += " (Paused - Clicker Stopped)"
+        print("Auto-eating enabled.")
+    else:
+        is_auto_eating = False
+        status_message = "Auto-Eat Disabled"
+        print("Auto-eating disabled.")
+    
+    app.after(0, lambda: status_var.set(f"Status: {status_message}"))
+
+def auto_eat_loop():
+    global is_auto_eating, is_running
+    last_eat_error_time = 0
+
+    while True:
+        time.sleep(0.5) # Main loop check interval
+
+        if not is_auto_eating or not is_running:
+            continue
+
+        try:
+            interval_minutes_str = entry_eat_interval.get()
+            interval_minutes = float(interval_minutes_str)
+            if interval_minutes <= 0.01: # Minimum interval to avoid issues (e.g. 0.01 min = 0.6s)
+                raise ValueError("Eat interval too short or zero.")
+        except ValueError as e:
+            current_time = time.time()
+            if current_time - last_eat_error_time > 5: # Avoid spamming console/status
+                print(f"Invalid auto-eat interval: {interval_minutes_str}. Error: {e}")
+                app.after(0, lambda: status_var.set("Status: Invalid Eat Interval!"))
+                last_eat_error_time = current_time
+            
+            is_auto_eating = False # Turn off auto-eating
+            app.after(0, lambda: auto_eat_switch_var.set("off"))
+            # Consider also updating status_var to show auto-eat is now off due to error
+            app.after(0, lambda: status_var.set("Status: Auto-Eat Off (Invalid Interval)"))
+            continue
+
+        interval_seconds = interval_minutes * 60
+        
+        print(f"Auto-eat: Triggering eat. Next eat in approx {interval_minutes:.2f} minutes.")
+        perform_eat_action() # This is already threaded and handles its own status updates during eating
+        
+        # Sleep for the interval AFTER attempting to eat
+        # We need to account for the time it takes to eat. 
+        # However, perform_eat_action is async. This sleep is for the time *between* eat attempts.
+        # We also need to be ables to interrupt this sleep if is_auto_eating or is_running changes.
+        sleep_chunk = 0.2 # Check every 0.2s
+        slept_time = 0
+        while slept_time < interval_seconds:
+            if not is_auto_eating or not is_running: # Check flags during sleep
+                print("Auto-eating or main clicker stopped during sleep, breaking wait.")
+                break
+            time.sleep(sleep_chunk)
+            slept_time += sleep_chunk
+        else: # Executed if the loop completed without a break
+            print(f"Finished waiting {interval_seconds:.2f}s for auto-eat.")
+            continue # Go to next iteration to potentially eat again
+        
+        # If we broke from the sleep loop, just continue to re-evaluate at the top of the main while True
+        print("Auto-eat sleep interrupted. Re-evaluating.")
 
 
 # --- Initialize & Start Threads ---
@@ -397,6 +525,8 @@ listener_thread = threading.Thread(target=start_hotkey_listener, daemon=True)
 listener_thread.start()
 click_thread = threading.Thread(target=click_loop, daemon=True)
 click_thread.start()
+auto_eat_thread = threading.Thread(target=auto_eat_loop, daemon=True) # Create and start auto-eat thread
+auto_eat_thread.start()
 
 # --- Run App ---
 app.mainloop() 
