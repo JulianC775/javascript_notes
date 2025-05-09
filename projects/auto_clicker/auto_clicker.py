@@ -180,9 +180,18 @@ auto_eat_switch = ctk.CTkSwitch(master=eating_frame, text="", variable=auto_eat_
 auto_eat_switch.grid(row=4, column=1, padx=(0,10), pady=5, sticky="w")
 interactive_widgets.append(auto_eat_switch)
 
-eat_now_button = ctk.CTkButton(master=eating_frame, text="Eat Now (Hold Right Click)", command=lambda: perform_eat_action())
-eat_now_button.grid(row=5, column=0, columnspan=3, padx=10, pady=10, sticky="ew") # Adjusted row
-interactive_widgets.append(eat_now_button)
+# New styled label replacing the eat_now_button
+off_hand_info_label = ctk.CTkLabel(
+    master=eating_frame,
+    text="Your food must be in your off hand",
+    font=ctk.CTkFont(size=12), # Slightly smaller or normal size
+    fg_color=("blue", "dodgerblue"),
+    text_color="white",
+    corner_radius=8,
+    padx=10,
+    pady=5
+)
+off_hand_info_label.grid(row=5, column=0, columnspan=3, padx=10, pady=10, sticky="ew")
 
 java_edition_disclaimer_label = ctk.CTkLabel(
     master=eating_frame, 
@@ -194,30 +203,26 @@ java_edition_disclaimer_label.grid(row=6, column=0, columnspan=3, padx=10, pady=
 
 # --- Focus Handling Functions for Entry Widgets ---
 def on_entry_focus_in(focused_widget):
-    # Ensure the focused widget itself is normal, in case it was disabled by another process
-    # (like hotkey setting, though that should re-enable it before focus can be gained)
-    if focused_widget.cget("state") == "disabled":
-        focused_widget.configure(state="normal")
+    # Ensure the focused widget itself is normal and gets focus
+    focused_widget.configure(state="normal")
+    focused_widget.focus_set() # Explicitly set focus to this widget
 
     for widget in focusable_entry_widgets:
-        if widget is not focused_widget and widget.winfo_exists(): # Check if widget still exists
+        if widget is not focused_widget and widget.winfo_exists():
             widget.configure(state="disabled")
 
-def on_entry_focus_out(event_widget):
-    # When focus leaves an entry, re-enable all of them
-    # This handles tabbing out or clicking elsewhere.
-    # We also need to ensure that if we are in hotkey setting mode, they stay disabled.
-    if not is_setting_hotkey: # Only enable if not in hotkey setting mode
+def on_entry_focus_out(event): # Tkinter passes an event object
+    # When focus leaves an entry, re-enable all focusable entries 
+    # UNLESS we are in the process of setting a hotkey.
+    if not is_setting_hotkey:
         for widget in focusable_entry_widgets:
-            if widget.winfo_exists(): # Check if widget still exists
+            if widget.winfo_exists():
                  widget.configure(state="normal")
-    # Special case: if auto-eat switch is off, its entry might need to be re-evaluated for state
-    # However, the general enable should cover most cases. Fine-tuning if needed later.
 
 # Bind focus events to entry widgets
 for entry_widget in focusable_entry_widgets:
     entry_widget.bind("<FocusIn>", lambda event, w=entry_widget: on_entry_focus_in(w), add="+")
-    entry_widget.bind("<FocusOut>", lambda event, w=entry_widget: on_entry_focus_out(w), add="+")
+    entry_widget.bind("<FocusOut>", lambda event: on_entry_focus_out(event), add="+") # Simplified lambda
 
 # --- Helper Functions ---
 def get_key_name(key):
@@ -329,11 +334,8 @@ def on_press(key):
         is_setting_hotkey = False
         app.after(0, lambda: set_hotkey_button.configure(state="normal"))
         for widget in interactive_widgets:
-            # Ensure focusable entries are re-enabled if not setting hotkey
-            if widget in focusable_entry_widgets and not is_setting_hotkey:
-                 widget.configure(state="normal")
-            elif widget not in focusable_entry_widgets:
-                 widget.configure(state="normal")
+            # This loop correctly re-enables all interactive widgets, including the focusable entries.
+            widget.configure(state="normal") 
             
         current_status = "Running" if is_running else "Stopped"
         if is_auto_eating and is_running:
@@ -454,6 +456,20 @@ def toggle_auto_eating():
     global is_auto_eating
     if auto_eat_switch_var.get() == "on":
         is_auto_eating = True
+        # Check if entry_eat_interval exists and is valid before enabling
+        try:
+            interval_minutes = float(entry_eat_interval.get())
+            if interval_minutes <= 0.01:
+                app.after(0, lambda: status_var.set("Status: Auto-Eat Off (Invalid Interval)"))
+                app.after(0, lambda: auto_eat_switch_var.set("off"))
+                is_auto_eating = False
+                return # Do not proceed if interval is invalid
+        except ValueError:
+            app.after(0, lambda: status_var.set("Status: Auto-Eat Off (Invalid Interval)"))
+            app.after(0, lambda: auto_eat_switch_var.set("off"))
+            is_auto_eating = False
+            return # Do not proceed if interval is not a number
+            
         status_message = "Auto-Eat Enabled"
         if not is_running:
             status_message += " (Paused - Clicker Stopped)"
