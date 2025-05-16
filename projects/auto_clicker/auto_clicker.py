@@ -3,7 +3,22 @@ import threading
 import time
 from pynput import mouse, keyboard
 import json
-import os # For checking if foods.json exists
+import os
+import sys # For resource_path function
+
+# --- Helper function to find resources (like foods.json) ----
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        # _MEIPASS is not set, running in development, so use current script's dir or CWD
+        # If your foods.json is in the same directory as auto_clicker.py, then this is fine.
+        # If auto_clicker.py is in projects/auto_clicker and foods.json is also there, use os.path.dirname(__file__)
+        # For simplicity with current structure, assuming foods.json is next to script or found via relative path from CWD
+        base_path = os.path.abspath(".") 
+    return os.path.join(base_path, relative_path)
 
 # --- Global Variables (Non-GUI specific or initialized after app) ---
 is_running = False
@@ -358,8 +373,9 @@ def start_hotkey_listener():
 # --- Eating Feature Functions ---
 def load_food_data():
     """Loads food data from a JSON file (placeholder for now)."""
-    global foods_data
-    foods_file = "projects/auto_clicker/foods.json"
+    global foods_data, selected_food_duration
+    # Use resource_path to find foods.json, assuming it will be bundled at the root
+    foods_file = resource_path("foods.json") 
     default_foods = {
         "Most Foods": 1.61,
         "Kelp": 0.865
