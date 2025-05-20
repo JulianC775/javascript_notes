@@ -756,3 +756,339 @@ button.grid(row=1, column=0)
 
 # This covers key advanced topics and patterns from the AutoClicker project, integrating
 # GUI development, concurrency, system interaction, and robust data handling.
+
+# =======================================================================
+#  22. SCREEN CAPTURE & IMAGE PROCESSING
+# =======================================================================
+# This section covers libraries and techniques for screen capture and image analysis
+# as used in automation projects like the Minecraft Fishing Bot.
+
+# --- A. Screen Capture Libraries ---
+# 1. MSS (Multi-Screen-Shot) - Fast screen capture
+"""
+import mss
+with mss.mss() as sct:
+    # Capture entire screen
+    screenshot = sct.grab(sct.monitors[0])
+    
+    # Capture specific region
+    region = {'top': 100, 'left': 100, 'width': 400, 'height': 300}
+    region_screenshot = sct.grab(region)
+"""
+
+# 2. PyAutoGUI - Screen capture and control
+"""
+import pyautogui
+# Get screen dimensions
+screen_width, screen_height = pyautogui.size()
+
+# Capture screen region
+screenshot = pyautogui.screenshot(region=(100, 100, 400, 300))
+"""
+
+# --- B. Image Processing with NumPy ---
+# Converting screenshots to NumPy arrays for analysis
+"""
+import numpy as np
+from mss import mss
+
+with mss() as sct:
+    # Capture and convert to numpy array (BGRA format)
+    img = sct.grab(region)
+    img_np = np.array(img)
+    
+    # Access color channels
+    blue_channel = img_np[:, :, 0]  # Blue
+    green_channel = img_np[:, :, 1]  # Green
+    red_channel = img_np[:, :, 2]   # Red
+    alpha_channel = img_np[:, :, 3]  # Alpha
+"""
+
+# --- C. Color Detection ---
+# Finding pixels matching a target color with tolerance
+"""
+def find_target_pixel(image_np, target_color, tolerance=20):
+    # Convert target color to numpy array
+    target_rgb = np.array(target_color, dtype=np.uint8)
+    
+    # Calculate bounds with tolerance
+    lower_bound = np.clip(target_rgb - tolerance, 0, 255)
+    upper_bound = np.clip(target_rgb + tolerance, 0, 255)
+    
+    # Check if pixels are within bounds
+    in_range = np.logical_and.reduce((
+        image_np[:, :, 0] >= lower_bound[2],  # Blue
+        image_np[:, :, 1] >= lower_bound[1],  # Green
+        image_np[:, :, 2] >= lower_bound[0],  # Red
+        image_np[:, :, 0] <= upper_bound[2],
+        image_np[:, :, 1] <= upper_bound[1],
+        image_np[:, :, 2] <= upper_bound[0]
+    ))
+    
+    # Find matching pixels
+    matches = np.where(in_range)
+    return matches[0][0] if matches[0].size > 0 else None
+"""
+
+# =======================================================================
+#  23. ADVANCED GUI DEVELOPMENT
+# =======================================================================
+# This section expands on GUI development with CustomTkinter, focusing on
+# advanced features used in the AutoClicker project.
+
+# --- A. Additional CustomTkinter Widgets ---
+"""
+import customtkinter as ctk
+
+# ComboBox (Dropdown)
+combo = ctk.CTkComboBox(
+    master=app,
+    values=["Option 1", "Option 2", "Option 3"],
+    command=lambda choice: print(f"Selected: {choice}")
+)
+
+# Switch (Toggle)
+switch_var = ctk.StringVar(value="off")
+switch = ctk.CTkSwitch(
+    master=app,
+    text="Toggle Feature",
+    variable=switch_var,
+    onvalue="on",
+    offvalue="off",
+    command=lambda: print(f"Switch: {switch_var.get()}")
+)
+
+# Progress Bar
+progress = ctk.CTkProgressBar(master=app)
+progress.set(0.5)  # Set to 50%
+"""
+
+# --- B. Focus Management ---
+"""
+def on_entry_focus_in(focused_widget, all_entries):
+    # Disable all other entries
+    for widget in all_entries:
+        if widget is not focused_widget:
+            widget.configure(state="disabled")
+    # Enable and focus the selected entry
+    focused_widget.configure(state="normal")
+    focused_widget.focus_set()
+
+def on_entry_focus_out(event, all_entries):
+    # Re-enable all entries
+    for widget in all_entries:
+        widget.configure(state="normal")
+
+# Usage:
+entries = [entry1, entry2, entry3]
+for entry in entries:
+    entry.bind("<FocusIn>", lambda e, w=entry: on_entry_focus_in(w, entries))
+    entry.bind("<FocusOut>", lambda e: on_entry_focus_out(e, entries))
+"""
+
+# --- C. Event Binding ---
+"""
+# Bind multiple events to a widget
+widget.bind("<Button-1>", lambda e: print("Left click"))
+widget.bind("<Button-3>", lambda e: print("Right click"))
+widget.bind("<Enter>", lambda e: print("Mouse entered"))
+widget.bind("<Leave>", lambda e: print("Mouse left"))
+
+# Bind with add="+" to add to existing bindings
+widget.bind("<Key>", lambda e: print(f"Key pressed: {e.char}"), add="+")
+"""
+
+# =======================================================================
+#  24. ADVANCED THREADING & CONCURRENCY
+# =======================================================================
+# This section covers advanced threading concepts used in automation projects.
+
+# --- A. Thread Synchronization ---
+"""
+import threading
+from threading import Lock, Event
+
+# Using Lock for thread-safe operations
+counter_lock = Lock()
+counter = 0
+
+def increment_counter():
+    global counter
+    with counter_lock:
+        counter += 1
+
+# Using Event for thread coordination
+stop_event = Event()
+
+def worker_thread():
+    while not stop_event.is_set():
+        # Do work
+        pass
+    print("Thread stopping")
+
+# Signal thread to stop
+stop_event.set()
+"""
+
+# --- B. Thread-Safe GUI Updates ---
+"""
+def update_gui_from_thread():
+    # WRONG: Direct GUI update from thread
+    # label.configure(text="New text")  # Don't do this!
+    
+    # CORRECT: Use app.after to schedule update on main thread
+    app.after(0, lambda: label.configure(text="New text"))
+    
+    # For multiple updates
+    app.after(0, lambda: [
+        label1.configure(text="Update 1"),
+        label2.configure(text="Update 2")
+    ])
+"""
+
+# --- C. Thread Communication ---
+"""
+# Using Queue for thread-safe communication
+from queue import Queue
+
+message_queue = Queue()
+
+def producer_thread():
+    message_queue.put("New message")
+
+def consumer_thread():
+    while True:
+        message = message_queue.get()
+        if message == "STOP":
+            break
+        print(f"Received: {message}")
+        message_queue.task_done()
+"""
+
+# =======================================================================
+#  25. RESOURCE MANAGEMENT & BUNDLING
+# =======================================================================
+# This section covers handling resources in both development and bundled applications.
+
+# --- A. Resource Path Handling ---
+"""
+import os
+import sys
+
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        # Running in development
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, relative_path)
+
+# Usage:
+icon_path = resource_path("assets/icon.ico")
+config_path = resource_path("config.json")
+"""
+
+# --- B. Configuration Management ---
+"""
+import json
+
+def load_config():
+    config_path = resource_path("config.json")
+    default_config = {
+        "setting1": "default_value",
+        "setting2": 100
+    }
+    
+    try:
+        with open(config_path, 'r') as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        # Save and return default config if file missing or invalid
+        with open(config_path, 'w') as f:
+            json.dump(default_config, f, indent=4)
+        return default_config
+"""
+
+# --- C. Error Handling & Logging ---
+"""
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('app.log'),
+        logging.StreamHandler()
+    ]
+)
+
+def safe_operation():
+    try:
+        # Risky operation
+        result = perform_operation()
+        logging.info(f"Operation successful: {result}")
+    except Exception as e:
+        logging.error(f"Operation failed: {str(e)}", exc_info=True)
+        # Handle error appropriately
+"""
+
+# =======================================================================
+#  26. SCREEN REGION & PIXEL ANALYSIS
+# =======================================================================
+# This section covers techniques for screen region monitoring and pixel analysis.
+
+# --- A. Screen Region Management ---
+"""
+def calculate_monitor_region(screen_width, screen_height, percentage=0.15):
+    """Calculate a centered region based on screen dimensions"""
+    region_width = int(screen_width * percentage)
+    region_height = int(screen_height * percentage)
+    left = int(screen_width / 2 - region_width / 2)
+    top = int(screen_height / 2 - region_height / 2)
+    
+    return {
+        'top': top,
+        'left': left,
+        'width': region_width,
+        'height': region_height
+    }
+"""
+
+# --- B. Movement Detection ---
+"""
+def detect_movement(current_y, last_y, threshold=3):
+    """Detect significant vertical movement"""
+    if last_y is None:
+        return False, None
+    
+    delta_y = current_y - last_y
+    if abs(delta_y) > threshold:
+        return True, delta_y
+    return False, delta_y
+"""
+
+# --- C. Continuous Monitoring ---
+"""
+def monitor_region(region, target_color, tolerance=20):
+    with mss.mss() as sct:
+        while True:
+            # Capture and analyze region
+            img = sct.grab(region)
+            img_np = np.array(img)
+            
+            # Find target pixel
+            current_y = find_target_pixel(img_np, target_color, tolerance)
+            
+            if current_y is not None:
+                # Process movement
+                movement_detected, delta_y = detect_movement(current_y, last_y)
+                if movement_detected:
+                    handle_movement(delta_y)
+            
+            # Small delay to prevent high CPU usage
+            time.sleep(1/30)  # 30 FPS
+"""
