@@ -203,7 +203,7 @@ else:
 
 # Function definition
 def greet(name):
-    """This is a docstring explaining the function."""
+    # This is a docstring explaining the function.
     return f"Hello, {name}!"
 
 # Function with default parameters
@@ -335,10 +335,8 @@ import random as rnd
 
 # Creating modules
 # Save as mymodule.py
-"""
-def greet(name):
-    return f"Hello, {name}!"
-"""
+# def greet(name):
+#     return f"Hello, {name}!"
 
 # Using modules
 # import mymodule
@@ -489,174 +487,146 @@ parsed_data = json.loads(json_string)
 #    - Set appearance mode and default color theme.
 #    - Create the main application window (ctk.CTk).
 #    - Set window title and initial geometry.
-"""
-ctk.set_appearance_mode("System")
-ctk.set_default_color_theme("blue")
-app = ctk.CTk()
-app.title("Auto Clicker Example")
-app.geometry("400x300")
-"""
+# ctk.set_appearance_mode("System")
+# ctk.set_default_color_theme("blue")
+# app = ctk.CTk()
+# app.title("Auto Clicker Example")
+# app.geometry("400x300")
 
 # 2. Tkinter Variables (e.g., ctk.StringVar)
 #    - Used to link Python variables with widget properties (e.g., label text, entry content).
 #    - Changes to the StringVar automatically update the widget, and vice-versa.
-"""
-status_var = ctk.StringVar(value="Status: Stopped")
-status_label = ctk.CTkLabel(master=app, textvariable=status_var)
+# status_var = ctk.StringVar(value="Status: Stopped")
+# status_label = ctk.CTkLabel(master=app, textvariable=status_var)
 # To update the label: status_var.set("New Status")
-"""
 
 # 3. Widgets and Layout
 #    - CustomTkinter offers various widgets: CTkFrame, CTkLabel, CTkEntry, CTkButton,
 #      CTkRadioButton, CTkComboBox, CTkSwitch.
 #    - The .grid() layout manager is used to arrange widgets in rows and columns.
-#    - `sticky="ew"` makes a widget expand horizontally to fill its grid cell.
-#    - `padx`, `pady` add padding around widgets.
-#    - `columnspan` allows a widget to span multiple columns.
-#    - `columnconfigure` and `rowconfigure` with `weight=1` allow grid cells to expand
+#    - sticky="ew" makes a widget expand horizontally to fill its grid cell.
+#    - padx, pady add padding around widgets.
+#    - columnspan allows a widget to span multiple columns.
+#    - columnconfigure and rowconfigure with weight=1 allow grid cells to expand
 #      when the window is resized.
-"""
-frame = ctk.CTkFrame(master=app)
-frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew") # Sticky on all sides
-app.grid_columnconfigure(0, weight=1) # Make column 0 expandable
-app.grid_rowconfigure(0, weight=1)    # Make row 0 expandable
-
-label = ctk.CTkLabel(master=frame, text="Click Interval:")
-label.grid(row=0, column=0, padx=5, pady=5)
-
-entry = ctk.CTkEntry(master=frame)
-entry.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
-frame.grid_columnconfigure(1, weight=1) # Make column 1 in frame expandable
-"""
+# frame = ctk.CTkFrame(master=app)
+# frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew") # Sticky on all sides
+# app.grid_columnconfigure(0, weight=1) # Make column 0 expandable
+# app.grid_rowconfigure(0, weight=1)    # Make row 0 expandable
+# label = ctk.CTkLabel(master=frame, text="Click Interval:")
+# label.grid(row=0, column=0, padx=5, pady=5)
+# entry = ctk.CTkEntry(master=frame)
+# entry.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
+# frame.grid_columnconfigure(1, weight=1) # Make column 1 in frame expandable
 
 # 4. Event Handling (Widget Commands)
 #    - Widgets like buttons or comboboxes can trigger functions when an event occurs
 #      (e.g., button click, selection change).
-#    - The `command` parameter is often used, typically with a lambda function for simple actions
+#    - The command parameter is often used, typically with a lambda function for simple actions
 #      or to pass arguments.
-"""
-def on_button_click():
-    print("Button clicked!")
-
-button = ctk.CTkButton(master=app, text="Click Me", command=on_button_click)
-button.grid(row=1, column=0)
-
+# def on_button_click():
+#     print("Button clicked!")
+# button = ctk.CTkButton(master=app, text="Click Me", command=on_button_click)
+# button.grid(row=1, column=0)
 # Command with lambda to pass arguments or call methods:
 # item_var = ctk.StringVar()
 # combobox = ctk.CTkComboBox(master=app, values=["A", "B"], variable=item_var,
 #                            command=lambda choice: print(f"Selected: {choice}"))
-"""
 
 # 5. Updating GUI from Other Threads (app.after)
 #    - Tkinter (and CustomTkinter) GUI updates must happen on the main thread.
 #    - If a background thread needs to update the GUI (e.g., change a label),
-#      it must use `app.after(delay_ms, callback_function)`.
-#    - `delay_ms = 0` schedules the callback to run as soon as possible in the main event loop.
-"""
+#      it must use app.after(delay_ms, callback_function).
+#    - delay_ms = 0 schedules the callback to run as soon as possible in the main event loop.
 # # In a background thread:
 # def update_status_from_thread(new_status):
 #     app.after(0, lambda: status_var.set(new_status)) # status_var is a ctk.StringVar
-
 # # Example usage from a thread:
 # import threading
 # def worker_thread():
 #     time.sleep(2)
 #     update_status_from_thread("Updated from thread!")
 # threading.Thread(target=worker_thread).start()
-"""
 
 # 6. Managing Widget States
-#    - Widgets can be enabled or disabled using `widget.configure(state="disabled")` or
-#      `widget.configure(state="normal")`.
+#    - Widgets can be enabled or disabled using widget.configure(state="disabled") or
+#      widget.configure(state="normal").
 #    - Useful for preventing user interaction during certain operations (e.g., setting a hotkey).
-"""
 # entry_widget.configure(state="disabled")
 # entry_widget.configure(state="normal")
-"""
 
 # 7. Focus Management
 #    - The AutoClicker manages focus for entry fields to ensure only one is active,
 #      disabling others to guide input.
-#    - Uses `<FocusIn>` and `<FocusOut>` event bindings.
-"""
+#    - Uses <FocusIn> and <FocusOut> event bindings.
 # def on_entry_focus_in(focused_widget, all_entries_list):
 #     for widget in all_entries_list:
 #         if widget is not focused_widget and widget.winfo_exists():
 #             widget.configure(state="disabled")
 #     focused_widget.configure(state="normal") # Ensure the focused one is normal
 #     focused_widget.focus_set()
-
 # def on_entry_focus_out(event, all_entries_list): # event object is passed by Tkinter
 #     for widget in all_entries_list:
 #         if widget.winfo_exists():
 #             widget.configure(state="normal")
-
-# # entry_hours.bind("<FocusIn>", lambda event, w=entry_hours: on_entry_focus_in(w, focusable_entry_widgets))
-# # entry_hours.bind("<FocusOut>", lambda event: on_entry_focus_out(event, focusable_entry_widgets))
-"""
+# entry_hours.bind("<FocusIn>", lambda event, w=entry_hours: on_entry_focus_in(w, focusable_entry_widgets))
+# entry_hours.bind("<FocusOut>", lambda event: on_entry_focus_out(event, focusable_entry_widgets))
 
 # --- B. Multithreading for Concurrent Tasks ---
-# The `threading` module allows concurrent execution of different parts of the program.
+# The threading module allows concurrent execution of different parts of the program.
 # AutoClicker uses threads for:
-#   - The main click loop (`click_loop`).
-#   - The hotkey listener (`start_hotkey_listener`).
-#   - The auto-eat loop (`auto_eat_loop`).
+#   - The main click loop (click_loop).
+#   - The hotkey listener (start_hotkey_listener).
+#   - The auto-eat loop (auto_eat_loop).
 
 # 1. Creating and Starting Threads
-#    - `threading.Thread(target=function_name, daemon=True)`
-#    - `target` is the function the thread will execute.
-#    - `daemon=True` means the thread will exit automatically when the main program exits.
+#    - threading.Thread(target=function_name, daemon=True)
+#    - target is the function the thread will execute.
+#    - daemon=True means the thread will exit automatically when the main program exits.
 #      This is crucial for GUI applications so background threads don't keep the app alive.
-#    - `thread.start()` begins execution of the thread.
-"""
+#    - thread.start() begins execution of the thread.
 # def my_task():
 #     for i in range(5):
 #         print(f"Task running: {i}")
 #         time.sleep(1)
-
 # task_thread = threading.Thread(target=my_task, daemon=True)
 # task_thread.start()
-# # task_thread.join() # Use join() if the main thread needs to wait for this thread to complete
-"""
+# task_thread.join() # Use join() if the main thread needs to wait for this thread to complete
 
 # 2. Shared State and GUI Updates
-#    - Global variables (e.g., `is_running`, `is_auto_eating`) are used to communicate state
+#    - Global variables (e.g., is_running, is_auto_eating) are used to communicate state
 #      between threads and the main GUI.
 #    - CAUTION: Modifying shared data from multiple threads can lead to race conditions.
-#      For complex applications, use `threading.Lock` or other synchronization primitives.
+#      For complex applications, use threading.Lock or other synchronization primitives.
 #      In AutoClicker, shared boolean flags are often read by multiple threads and written
 #      by one or in response to GUI events, which is simpler but still requires care.
-#    - As mentioned, GUI updates from threads MUST use `app.after()`.
+#    - As mentioned, GUI updates from threads MUST use app.after().
 
 # --- C. System Input Control with Pynput ---
-# The `pynput` library allows controlling and monitoring input devices (mouse and keyboard).
+# The pynput library allows controlling and monitoring input devices (mouse and keyboard).
 
-# 1. Mouse Control (`pynput.mouse`)
-#    - `mouse.Controller()` creates an object to control the mouse.
-#    - `mouse_controller.click(mouse.Button.left, 1)` simulates a single left-click.
-#    - `mouse_controller.press(mouse.Button.right)` simulates pressing the right mouse button.
-#    - `mouse_controller.release(mouse.Button.right)` simulates releasing it.
+# 1. Mouse Control (pynput.mouse)
+#    - mouse.Controller() creates an object to control the mouse.
+#    - mouse_controller.click(mouse.Button.left, 1) simulates a single left-click.
+#    - mouse_controller.press(mouse.Button.right) simulates pressing the right mouse button.
+#    - mouse_controller.release(mouse.Button.right) simulates releasing it.
 #      (Used in AutoClicker for the eating action).
-"""
 # from pynput import mouse
 # mouse_ctrl = mouse.Controller()
 # mouse_ctrl.press(mouse.Button.left)
 # time.sleep(0.1) # Hold click for a short duration
 # mouse_ctrl.release(mouse.Button.left)
-"""
 
-# 2. Keyboard Listening (`pynput.keyboard`)
-#    - `keyboard.Listener(on_press=callback_function)` creates a listener that calls
-#      `callback_function` whenever a key is pressed.
-#    - The callback `on_press(key)` receives the pressed key as an argument.
-#    - `listener.join()` blocks the current thread until the listener stops. This is why
+# 2. Keyboard Listening (pynput.keyboard)
+#    - keyboard.Listener(on_press=callback_function) creates a listener that calls
+#      callback_function whenever a key is pressed.
+#    - The callback on_press(key) receives the pressed key as an argument.
+#    - listener.join() blocks the current thread until the listener stops. This is why
 #      the hotkey listener runs in its own dedicated thread.
-#    - Keys can be special (e.g., `keyboard.Key.f6`, `keyboard.Key.esc`) or character keys.
-#    - `key.name` (e.g., 'f6', 'esc') or `key.char` (e.g., 'a', '1') can be used to identify keys.
-#      The AutoClicker includes a `get_key_name(key)` helper for a user-friendly display.
-"""
+#    - Keys can be special (e.g., keyboard.Key.f6, keyboard.Key.esc) or character keys.
+#    - key.name (e.g., 'f6', 'esc') or key.char (e.g., 'a', '1') can be used to identify keys.
+#      The AutoClicker includes a get_key_name(key) helper for a user-friendly display.
 # from pynput import keyboard
-
 # def on_key_press(key):
 #     try:
 #         print(f"Key pressed: {key.char}")
@@ -665,23 +635,21 @@ button.grid(row=1, column=0)
 #     if key == keyboard.Key.esc:
 #         print("Escape pressed, stopping listener.")
 #         return False # Stop listener
+# This would typically run in a separate thread:
+# with keyboard.Listener(on_press=on_key_press) as listener:
+#     listener.join()
 
-# # This would typically run in a separate thread:
-# # with keyboard.Listener(on_press=on_key_press) as listener:
-# #     listener.join()
-"""
-
-# --- D. Handling Bundled Resources (PyInstaller & `sys._MEIPASS`) ---
+# --- D. Handling Bundled Resources (PyInstaller & sys._MEIPASS) ---
 # When a Python script is bundled into an executable (e.g., using PyInstaller),
 # resource files (like images, data files) need to be accessed correctly.
-# PyInstaller unpacks files to a temporary folder (`_MEIPASS`) at runtime.
+# PyInstaller unpacks files to a temporary folder (_MEIPASS) at runtime.
 
-# The `resource_path` function in AutoClicker addresses this:
+# The resource_path function in AutoClicker addresses this:
 import os
 import sys
 
 def resource_path(relative_path):
-    """Get absolute path to resource, works for dev and PyInstaller."""
+    # Get absolute path to resource, works for dev and PyInstaller.
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
@@ -695,18 +663,17 @@ def resource_path(relative_path):
 # foods_json_path = resource_path("foods.json")
 # icon_path = resource_path("my_icon.ico")
 
-# `sys._MEIPASS`: An attribute set by PyInstaller at runtime, pointing to the temporary folder.
+# _MEIPASS: An attribute set by PyInstaller at runtime, pointing to the temporary folder.
 
 # --- E. Advanced JSON Usage (Configuration & Default Data) ---
 # While basic JSON loading/dumping is covered in section 19, AutoClicker shows a practical use:
-# - Loading application data (food types and durations) from `foods.json`.
+# - Loading application data (food types and durations) from foods.json.
 # - Handling cases where the JSON file might be missing or corrupted:
-#   - If `foods.json` doesn't exist, create it with default values.
-#   - If `foods.json` is unreadable (e.g., `json.JSONDecodeError`), use default values and
+#   - If foods.json doesn't exist, create it with default values.
+#   - If foods.json is unreadable (e.g., json.JSONDecodeError), use default values and
 #     attempt to save these defaults back to the file.
 # This pattern makes the application more resilient.
 
-"""
 # # Simplified from AutoClicker's load_food_data:
 # foods_data_global = {}
 # default_foods_global = {"DefaultFood": 1.0}
@@ -742,7 +709,6 @@ def resource_path(relative_path):
 # # Call at startup:
 # # load_app_data()
 # # Then use foods_data_global in the application.
-"""
 
 # This covers key advanced topics and patterns from the AutoClicker project, integrating
 # GUI development, concurrency, system interaction, and robust data handling.
@@ -755,7 +721,6 @@ def resource_path(relative_path):
 
 # --- A. Screen Capture Libraries ---
 # 1. MSS (Multi-Screen-Shot) - Fast screen capture
-"""
 import mss
 with mss.mss() as sct:
     # Capture entire screen
@@ -764,21 +729,17 @@ with mss.mss() as sct:
     # Capture specific region
     region = {'top': 100, 'left': 100, 'width': 400, 'height': 300}
     region_screenshot = sct.grab(region)
-"""
 
 # 2. PyAutoGUI - Screen capture and control
-"""
 import pyautogui
 # Get screen dimensions
 screen_width, screen_height = pyautogui.size()
 
 # Capture screen region
 screenshot = pyautogui.screenshot(region=(100, 100, 400, 300))
-"""
 
 # --- B. Image Processing with NumPy ---
 # Converting screenshots to NumPy arrays for analysis
-"""
 import numpy as np
 from mss import mss
 
@@ -792,11 +753,9 @@ with mss() as sct:
     green_channel = img_np[:, :, 1]  # Green
     red_channel = img_np[:, :, 2]   # Red
     alpha_channel = img_np[:, :, 3]  # Alpha
-"""
 
 # --- C. Color Detection ---
 # Finding pixels matching a target color with tolerance
-"""
 def find_target_pixel(image_np, target_color, tolerance=20):
     # Convert target color to numpy array
     target_rgb = np.array(target_color, dtype=np.uint8)
@@ -818,7 +777,6 @@ def find_target_pixel(image_np, target_color, tolerance=20):
     # Find matching pixels
     matches = np.where(in_range)
     return matches[0][0] if matches[0].size > 0 else None
-"""
 
 # =======================================================================
 #  23. ADVANCED GUI DEVELOPMENT
@@ -827,7 +785,6 @@ def find_target_pixel(image_np, target_color, tolerance=20):
 # advanced features used in the AutoClicker project.
 
 # --- A. Additional CustomTkinter Widgets ---
-"""
 import customtkinter as ctk
 
 # ComboBox (Dropdown)
@@ -851,10 +808,8 @@ switch = ctk.CTkSwitch(
 # Progress Bar
 progress = ctk.CTkProgressBar(master=app)
 progress.set(0.5)  # Set to 50%
-"""
 
 # --- B. Focus Management ---
-"""
 def on_entry_focus_in(focused_widget, all_entries):
     # Disable all other entries
     for widget in all_entries:
@@ -874,10 +829,8 @@ entries = [entry1, entry2, entry3]
 for entry in entries:
     entry.bind("<FocusIn>", lambda e, w=entry: on_entry_focus_in(w, entries))
     entry.bind("<FocusOut>", lambda e: on_entry_focus_out(e, entries))
-"""
 
 # --- C. Event Binding ---
-"""
 # Bind multiple events to a widget
 widget.bind("<Button-1>", lambda e: print("Left click"))
 widget.bind("<Button-3>", lambda e: print("Right click"))
@@ -886,7 +839,6 @@ widget.bind("<Leave>", lambda e: print("Mouse left"))
 
 # Bind with add="+" to add to existing bindings
 widget.bind("<Key>", lambda e: print(f"Key pressed: {e.char}"), add="+")
-"""
 
 # =======================================================================
 #  24. ADVANCED THREADING & CONCURRENCY
@@ -959,7 +911,7 @@ import os
 import sys
 
 def resource_path(relative_path):
-    """Get absolute path to resource, works for dev and PyInstaller."""
+    # Get absolute path to resource, works for dev and PyInstaller.
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
@@ -1022,7 +974,7 @@ def safe_operation():
 # --- A. Screen Region Management ---
 
 def calculate_monitor_region(screen_width, screen_height, percentage=0.15):
-    """Calculate a centered region based on screen dimensions"""
+    # Calculate a centered region based on screen dimensions
     region_width = int(screen_width * percentage)
     region_height = int(screen_height * percentage)
     left = int(screen_width / 2 - region_width / 2)
@@ -1036,7 +988,7 @@ def calculate_monitor_region(screen_width, screen_height, percentage=0.15):
     }
 
 def detect_movement(current_y, last_y, threshold=3):
-    """Detect significant vertical movement"""
+    # Detect significant vertical movement
     if last_y is None:
         return False, None
     
