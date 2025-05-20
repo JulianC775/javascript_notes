@@ -677,35 +677,25 @@ button.grid(row=1, column=0)
 # PyInstaller unpacks files to a temporary folder (`_MEIPASS`) at runtime.
 
 # The `resource_path` function in AutoClicker addresses this:
-"""
-# import sys
-# import os
+import os
+import sys
 
-# def resource_path(relative_path):
-#     \"\"\" Get absolute path to resource, works for dev and for PyInstaller \"\"\"
-#     try:
-#         # PyInstaller creates a temp folder and stores path in _MEIPASS
-#         base_path = sys._MEIPASS
-#     except AttributeError: # Changed from generic Exception for specificity
-#         # _MEIPASS is not set, running in development
-#         base_path = os.path.abspath(".") # Use current working directory or script's directory
-#         # If script is in projects/auto_clicker and json is also there,
-#         # os.path.dirname(__file__) would be more robust for development.
-#         # For AutoClicker's structure, os.path.abspath(".") works if run from project root
-#         # or if foods.json is relative to CWD.
-#         # A common pattern for dev: base_path = os.path.dirname(os.path.abspath(__file__))
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and PyInstaller."""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except AttributeError:
+        # Running in development
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, relative_path)
 
-#     return os.path.join(base_path, relative_path)
+# Usage examples:
+# foods_json_path = resource_path("foods.json")
+# icon_path = resource_path("my_icon.ico")
 
-# # Usage:
-# # foods_json_path = resource_path("foods.json")
-# # icon_path = resource_path("my_icon.ico")
-"""
-# - `sys._MEIPASS`: An attribute set by PyInstaller at runtime, pointing to the temporary folder.
-# - If `sys._MEIPASS` doesn't exist (AttributeError), it means the script is running in a normal
-#   Python environment (development mode).
-# - `os.path.abspath(".")` gives the path to the current working directory.
-# - `os.path.join()` correctly combines paths for different operating systems.
+# `sys._MEIPASS`: An attribute set by PyInstaller at runtime, pointing to the temporary folder.
 
 # --- E. Advanced JSON Usage (Configuration & Default Data) ---
 # While basic JSON loading/dumping is covered in section 19, AutoClicker shows a practical use:
@@ -904,7 +894,6 @@ widget.bind("<Key>", lambda e: print(f"Key pressed: {e.char}"), add="+")
 # This section covers advanced threading concepts used in automation projects.
 
 # --- A. Thread Synchronization ---
-"""
 import threading
 from threading import Lock, Event
 
@@ -928,10 +917,8 @@ def worker_thread():
 
 # Signal thread to stop
 stop_event.set()
-"""
 
 # --- B. Thread-Safe GUI Updates ---
-"""
 def update_gui_from_thread():
     # WRONG: Direct GUI update from thread
     # label.configure(text="New text")  # Don't do this!
@@ -944,10 +931,8 @@ def update_gui_from_thread():
         label1.configure(text="Update 1"),
         label2.configure(text="Update 2")
     ])
-"""
 
 # --- C. Thread Communication ---
-"""
 # Using Queue for thread-safe communication
 from queue import Queue
 
@@ -963,7 +948,6 @@ def consumer_thread():
             break
         print(f"Received: {message}")
         message_queue.task_done()
-"""
 
 # =======================================================================
 #  25. RESOURCE MANAGEMENT & BUNDLING
@@ -971,12 +955,11 @@ def consumer_thread():
 # This section covers handling resources in both development and bundled applications.
 
 # --- A. Resource Path Handling ---
-"""
 import os
 import sys
 
 def resource_path(relative_path):
-    """Get absolute path to resource, works for dev and PyInstaller"""
+    """Get absolute path to resource, works for dev and PyInstaller."""
     try:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
@@ -986,13 +969,11 @@ def resource_path(relative_path):
     
     return os.path.join(base_path, relative_path)
 
-# Usage:
-icon_path = resource_path("assets/icon.ico")
-config_path = resource_path("config.json")
-"""
+# Usage examples:
+# icon_path = resource_path("assets/icon.ico")
+# config_path = resource_path("config.json")
 
 # --- B. Configuration Management ---
-"""
 import json
 
 def load_config():
@@ -1010,10 +991,8 @@ def load_config():
         with open(config_path, 'w') as f:
             json.dump(default_config, f, indent=4)
         return default_config
-"""
 
 # --- C. Error Handling & Logging ---
-"""
 import logging
 
 # Configure logging
@@ -1034,7 +1013,6 @@ def safe_operation():
     except Exception as e:
         logging.error(f"Operation failed: {str(e)}", exc_info=True)
         # Handle error appropriately
-"""
 
 # =======================================================================
 #  26. SCREEN REGION & PIXEL ANALYSIS
@@ -1042,7 +1020,7 @@ def safe_operation():
 # This section covers techniques for screen region monitoring and pixel analysis.
 
 # --- A. Screen Region Management ---
-"""
+
 def calculate_monitor_region(screen_width, screen_height, percentage=0.15):
     """Calculate a centered region based on screen dimensions"""
     region_width = int(screen_width * percentage)
@@ -1056,10 +1034,7 @@ def calculate_monitor_region(screen_width, screen_height, percentage=0.15):
         'width': region_width,
         'height': region_height
     }
-"""
 
-# --- B. Movement Detection ---
-"""
 def detect_movement(current_y, last_y, threshold=3):
     """Detect significant vertical movement"""
     if last_y is None:
@@ -1069,10 +1044,9 @@ def detect_movement(current_y, last_y, threshold=3):
     if abs(delta_y) > threshold:
         return True, delta_y
     return False, delta_y
-"""
 
 # --- C. Continuous Monitoring ---
-"""
+
 def monitor_region(region, target_color, tolerance=20):
     with mss.mss() as sct:
         while True:
@@ -1091,4 +1065,4 @@ def monitor_region(region, target_color, tolerance=20):
             
             # Small delay to prevent high CPU usage
             time.sleep(1/30)  # 30 FPS
-"""
+
