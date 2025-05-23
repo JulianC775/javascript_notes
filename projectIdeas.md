@@ -142,3 +142,24 @@
 *   **Accuracy:** Timing the action precisely after detection.
 *   **Detection Robustness:** Simple color/tolerance matching might still fail in certain conditions (requiring more advanced techniques like OpenCV if needed).
 *   **Anti-Cheat:** Risk of detection on servers with strict anti-cheat measures.
+
+## Mobile Game (iOS with Dart/Flutter)
+
+**Core Idea:** Develop mobile games for iOS using the Dart programming language and Flutter framework.
+
+**Starting Project: Snake Game**
+*   **Concept:** Classic Snake game where the player controls a growing snake, eating food and avoiding collisions with itself and the walls.
+*   **Key Features (Snake):**
+    *   Smooth snake movement and controls (swipe or D-pad).
+    *   Random food generation.
+    *   Score tracking.
+    *   Game over conditions (collision).
+    *   Simple UI for score and game state.
+*   **Future Game Ideas:** (Placeholder for now, to be expanded later)
+
+**Technology Stack:**
+*   **Language:** Dart
+*   **Framework:** Flutter
+*   **Platform:** iOS (initially, with potential for Android)
+
+**Goal:** Gain experience in mobile game development using Dart and Flutter, starting with a simple, well-known game and potentially expanding to more complex projects.
