@@ -35,65 +35,88 @@
 ## Development Plan
 
 ### Phase 1: Basic UI and Task Input
+**Status:** In Progress
 
-1.  **Project Setup (Already Done):**
+1.  **Project Setup**
+    *   **Status:** Completed
     *   Expo project `To_do_list` created.
     *   Development environment for testing on a physical device (via Expo Go) or emulator/simulator is ready.
-2.  **Basic App Structure:**
+2.  **Basic App Structure**
+    *   **Status:** Pending
     *   Set up the main app component (`App.js`).
     *   Create a basic layout for the to-do list screen.
-3.  **Task Input Component:**
+3.  **Task Input Component**
+    *   **Status:** Pending
     *   Create a component with a `TextInput` for users to enter new task titles.
     *   Add a button ("Add Task") to submit the new task.
-4.  **Initial Task Display (Static):**
+4.  **Initial Task Display (Static)**
+    *   **Status:** Pending
     *   Display a few hardcoded tasks in a list to visualize the UI.
     *   Use React Native components like `<View>`, `<Text>`, `<TextInput>`, `<Button>` (or `<TouchableOpacity>` for custom buttons).
 
 ### Phase 2: State Management and Core Task Operations
+**Status:** Pending
 
-1.  **State for Tasks:**
+1.  **State for Tasks**
+    *   **Status:** Pending
     *   Use React's `useState` hook to manage an array of task objects in the `App` component or a dedicated screen component. Each task object could have properties like `id`, `title`, `completed`.
-2.  **Adding Tasks:**
+2.  **Adding Tasks**
+    *   **Status:** Pending
     *   Implement the logic to add a new task (from the input component) to the tasks array in the state.
     *   Ensure each new task gets a unique ID.
-3.  **Rendering Tasks Dynamically:**
+3.  **Rendering Tasks Dynamically**
+    *   **Status:** Pending
     *   Use `<FlatList>` or `map()` to render the tasks from the state array.
     *   Each task in the list should be a separate component (`TaskItem.js`).
-4.  **Toggling Task Completion:**
+4.  **Toggling Task Completion**
+    *   **Status:** Pending
     *   In `TaskItem.js`, add a way to mark a task as complete/incomplete (e.g., a checkbox or a tappable area).
     *   Update the `completed` status of the corresponding task in the main state.
     *   Visually differentiate completed tasks (e.g., strikethrough text).
-5.  **Deleting Tasks:**
+5.  **Deleting Tasks**
+    *   **Status:** Pending
     *   Add a delete button to each `TaskItem.js`.
     *   Implement logic to remove the selected task from the tasks array in the state.
 
 ### Phase 3: Data Persistence with AsyncStorage
+**Status:** Pending
 
-1.  **Saving Tasks:**
+1.  **Saving Tasks**
+    *   **Status:** Pending
     *   Whenever the tasks array in the state changes (add, toggle, delete), save the entire array to `AsyncStorage`. Remember to stringify the array before saving.
-2.  **Loading Tasks:**
+2.  **Loading Tasks**
+    *   **Status:** Pending
     *   When the app starts, load the tasks from `AsyncStorage`.
     *   If tasks are found, initialize the app's state with these tasks. Remember to parse the stringified data.
-3.  **Error Handling:**
+3.  **Error Handling**
+    *   **Status:** Pending
     *   Basic error handling for `AsyncStorage` operations (though it's generally reliable for simple data).
 
 ### Phase 4: UI Refinements & Basic Styling
+**Status:** Pending
 
-1.  **Styling:**
+1.  **Styling**
+    *   **Status:** Pending
     *   Apply styles using `StyleSheet` to make the app look presentable.
     *   Focus on readability and ease of use.
-2.  **User Feedback:**
+2.  **User Feedback**
+    *   **Status:** Pending
     *   Provide some visual feedback for actions (e.g., when a task is added or deleted, though Fast Refresh often handles this visually during development).
-3.  **Empty State:**
+3.  **Empty State**
+    *   **Status:** Pending
     *   Display a message when there are no tasks to show.
 
 ### Phase 5: Further Enhancements (Optional)
+**Status:** Pending
 
-1.  **Task Editing:**
+1.  **Task Editing**
+    *   **Status:** Pending
     *   Implement functionality to edit the title/description of an existing task (e.g., tapping a task opens a modal or navigates to an edit screen).
-2.  **Filtering:**
+2.  **Filtering**
+    *   **Status:** Pending
     *   Add controls to filter tasks (e.g., show all, only pending, only completed).
-3.  **Improved Styling and UX:**
+3.  **Improved Styling and UX**
+    *   **Status:** Pending
     *   More advanced styling, animations, or gestures.
 
 ## File Structure (Initial Thoughts)
