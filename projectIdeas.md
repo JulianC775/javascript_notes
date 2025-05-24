@@ -273,3 +273,59 @@
 5.  **Week 9+:** Expand to multi-agent systems or complex workflows
 
 **Goal:** Master the fundamentals of AI agent development, from simple chatbots to sophisticated autonomous systems that can reason, plan, and execute complex tasks. This is a rapidly growing field with significant career opportunities.
+
+## Minimalistic Daily Photo Social Media App
+
+**Core Idea:** Develop a social media platform focused on authentic, mindful sharing by limiting users to posting only one photo per day.
+
+**Key Features:**
+
+*   **Daily Photo Limit:** Each user can upload exactly one photo every 24 hours, encouraging thoughtful content curation.
+*   **Simple Feed:** Clean, chronological timeline showing friends' daily photos without algorithmic manipulation.
+*   **Minimal Interactions:**
+    *   Simple "heart" or "like" system (no complex reactions).
+    *   Optional brief text captions (character limit: 100-200).
+    *   No comments or shares to reduce social pressure and comparison.
+*   **Streak Tracking:** Visual indicators for consecutive days of posting to encourage daily engagement.
+*   **Photo Quality Focus:**
+    *   Built-in camera with simple, high-quality filters.
+    *   Encourages original photography over reposts.
+    *   Optional location tagging.
+*   **Friend System:**
+    *   Follow/unfollow friends (no follower counts displayed).
+    *   Private accounts by default.
+    *   Small friend circles to maintain intimacy.
+*   **Mindful Features:**
+    *   "Moments" - view your own photo history as a personal journal.
+    *   Weekly/monthly photo compilations.
+    *   No endless scrolling - limited daily viewing time.
+*   **Privacy-First:**
+    *   Photos automatically delete after 30 days (optional setting).
+    *   No data selling or targeted advertising.
+    *   Minimal user data collection.
+
+**Technology Stack Options:**
+
+*   **Mobile:** React Native, Flutter, or native iOS/Android
+*   **Backend:** Node.js/Express, Python/Django, or Firebase
+*   **Database:** PostgreSQL, MongoDB, or Firestore
+*   **Image Storage:** AWS S3, Google Cloud Storage, or Firebase Storage
+*   **Authentication:** Firebase Auth, Auth0, or custom JWT
+
+**Core Challenges:**
+
+*   **Time Zone Handling:** Ensuring fair 24-hour limits across different time zones.
+*   **Image Processing:** Compression, filtering, and storage optimization.
+*   **Engagement Balance:** Keeping users engaged without addiction-inducing features.
+*   **Moderation:** Content filtering while maintaining privacy.
+*   **Monetization:** Sustainable business model without compromising core values.
+
+**Development Phases:**
+
+1.  **MVP:** Basic photo upload, daily limit enforcement, simple feed
+2.  **Social Features:** Friend system, likes, basic profiles
+3.  **Enhanced UX:** Filters, streak tracking, photo memories
+4.  **Community:** Discovery features, privacy controls, reporting system
+5.  **Monetization:** Premium features (extended history, advanced filters, etc.)
+
+**Goal:** Create a healthier social media experience that promotes authentic sharing, reduces social comparison, and encourages users to be more intentional about their digital presence. Focus on quality over quantity and genuine connections over viral content.
